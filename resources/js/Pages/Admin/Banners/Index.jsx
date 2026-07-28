@@ -9,16 +9,19 @@ import InputError from '@/Components/InputError';
 // `bento` and `whats_new` are legacy slots the current homepage no longer renders —
 // kept so existing rows still edit/save, but flagged so nobody uploads into a dead slot.
 const BANNER_POSITIONS = [
-    { value: 'hero', label: '1. Hero Slideshow' },
-    { value: 'spotlight', label: '4. Promotional Banner #1' },
-    { value: 'zigzag', label: '6. Promotional Banner #2' },
-    { value: 'footer', label: '8. Footer Banner (every page)' },
-    { value: 'bento', label: 'Bento grid (unused — not shown on homepage)' },
-    { value: 'whats_new', label: "What's New shelf (unused — not shown on homepage)" },
+    { value: 'hero', label: '1. Hero Slideshow', hint: 'Wide 2:1 artwork — 1600×800 or larger. Cropped to fill, so keep key detail centred.' },
+    { value: 'spotlight', label: '4. Promotional Banner #1', hint: 'Slim strip, about 3.2:1 — 1333×417. Shown full width below Latest Offers.' },
+    { value: 'zigzag', label: '6. Promotional Banner #2', hint: 'Slim strip, about 3.2:1 — 1333×417. Shown above the accessories shelf.' },
+    { value: 'footer', label: '8. Footer Banner (every page)', hint: 'Slim strip, about 3.2:1 — 1333×417. Appears above the footer links on every page.' },
+    { value: 'bento', label: 'Bento grid (unused — not shown on homepage)', hint: 'Legacy slot. Nothing on the site renders it.' },
+    { value: 'whats_new', label: "What's New shelf (unused — not shown on homepage)", hint: 'Legacy slot. Nothing on the site renders it.' },
 ];
 
 const positionLabel = (value) =>
     BANNER_POSITIONS.find((pos) => pos.value === value)?.label ?? value;
+
+const positionHint = (value) =>
+    BANNER_POSITIONS.find((pos) => pos.value === value)?.hint ?? '';
 
 export default function Index({ banners }) {
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -233,6 +236,8 @@ export default function Index({ banners }) {
                                                 if (!file) return;
                                                 const formData = new FormData();
                                                 formData.append('file', file);
+                                                // File banner art under banners/, not the products folder.
+                                                formData.append('folder', 'banners');
                                                 try {
                                                     const res = await fetch(route('admin.products.upload'), {
                                                         method: 'POST',
@@ -285,6 +290,11 @@ export default function Index({ banners }) {
                                         ))}
                                     </select>
                                     <InputError message={errors.position} className="mt-1" />
+                                    {positionHint(data.position) && (
+                                        <p className="text-[10px] text-gray-500 dark:text-gray-400 mt-1.5 leading-relaxed">
+                                            {positionHint(data.position)}
+                                        </p>
+                                    )}
                                 </div>
 
                                 <div>

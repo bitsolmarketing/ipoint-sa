@@ -274,6 +274,13 @@ class AdminProductController extends Controller
             return response()->json(['error' => $validator->errors()->first('file')], 422);
         }
 
+        // Which subfolder to file this image under. Allowlisted rather than taken
+        // verbatim — the value becomes a path segment and a public URL.
+        $folder = $request->input('folder', 'products');
+        if (! in_array($folder, ['products', 'banners', 'categories'], true)) {
+            $folder = 'products';
+        }
+
         try {
             $file = $request->file('file');
             $ext = strtolower($file->getClientOriginalExtension() ?: $file->guessExtension() ?: 'jpg');
@@ -283,7 +290,7 @@ class AdminProductController extends Controller
             // Git deploy replaces public_html (= app root) wholesale, wiping anything
             // uploaded inside it — the parent domain folder survives every deploy.
             // Served back via the /media/{path} route.
-            $persistentDir = dirname(base_path()) . '/media/products';
+            $persistentDir = dirname(base_path()) . '/media/' . $folder;
             if (! is_dir($persistentDir)) {
                 @mkdir($persistentDir, 0755, true);
             }
@@ -291,25 +298,25 @@ class AdminProductController extends Controller
             if (is_dir($persistentDir) && is_writable($persistentDir)) {
                 $file->move($persistentDir, $filename);
 
-                return response()->json(['url' => '/media/products/' . $filename]);
+                return response()->json(['url' => '/media/' . $folder . '/' . $filename]);
             }
 
             // Fallback: the web root's uploads folder (works everywhere, but is
             // replaced on each Git redeploy).
-            $dir = public_path('uploads/products');
+            $dir = public_path('uploads/' . $folder);
             if (! is_dir($dir)) {
                 @mkdir($dir, 0755, true);
             }
 
             if (! is_writable($dir)) {
                 return response()->json([
-                    'error' => 'Neither the persistent media folder nor uploads/products is writable on the server. Set permissions to 755.',
+                    'error' => "Neither the persistent media folder nor uploads/{$folder} is writable on the server. Set permissions to 755.",
                 ], 500);
             }
 
             $file->move($dir, $filename);
 
-            return response()->json(['url' => '/uploads/products/' . $filename]);
+            return response()->json(['url' => '/uploads/' . $folder . '/' . $filename]);
         } catch (\Throwable $e) {
             return response()->json(['error' => 'Upload failed: ' . $e->getMessage()], 500);
         }
