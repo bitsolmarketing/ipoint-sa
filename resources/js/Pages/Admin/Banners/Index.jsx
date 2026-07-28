@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Head, useForm } from '@inertiajs/react';
 import AdminLayout from '@/Layouts/AdminLayout';
-import { Plus, Pencil, Trash2, X, Eye, EyeOff } from 'lucide-react';
+import { Plus, Pencil, Trash2, X, Eye, EyeOff, UploadCloud, Loader2 } from 'lucide-react';
 import InputError from '@/Components/InputError';
 
 // Banner slots, labelled by where they actually appear in the homepage running order.
@@ -26,6 +26,9 @@ const positionHint = (value) =>
 export default function Index({ banners }) {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [editBanner, setEditBanner] = useState(null);
+    const [uploading, setUploading] = useState(false);
+    const [uploadError, setUploadError] = useState(null);
+    const [isDragging, setIsDragging] = useState(false);
 
     const { data, setData, post, put, delete: destroy, reset, processing, errors } = useForm({
         title: '',
@@ -37,14 +40,57 @@ export default function Index({ banners }) {
         is_active: true
     });
 
+    // Shared by the file picker and the drop zone. Errors render inline rather
+    // than as an alert() — an alert inside the modal reads as the save failing.
+    const uploadFile = async (file) => {
+        if (!file) return;
+
+        if (!file.type.startsWith('image/')) {
+            setUploadError('That file is not an image.');
+            return;
+        }
+
+        setUploadError(null);
+        setUploading(true);
+
+        const formData = new FormData();
+        formData.append('file', file);
+        // File banner art under banners/, not the products folder.
+        formData.append('folder', 'banners');
+
+        try {
+            const res = await fetch(route('admin.products.upload'), {
+                method: 'POST',
+                headers: {
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
+                    'Accept': 'application/json',
+                },
+                body: formData,
+            });
+            const resData = await res.json();
+
+            if (resData.url) {
+                setData('image_path', resData.url);
+            } else {
+                setUploadError(resData.error || 'Upload failed.');
+            }
+        } catch (err) {
+            setUploadError('Upload failed — check your connection and try again.');
+        } finally {
+            setUploading(false);
+        }
+    };
+
     const openAddModal = () => {
         reset();
         setEditBanner(null);
+        setUploadError(null);
         setIsModalOpen(true);
     };
 
     const openEditModal = (banner) => {
         setEditBanner(banner);
+        setUploadError(null);
         setData({
             title: banner.title || '',
             subtitle: banner.subtitle || '',
@@ -215,50 +261,71 @@ export default function Index({ banners }) {
                             </div>
 
                              <div>
-                                <label className="block text-[10px] font-bold text-gray-400 uppercase mb-1.5">Image Path URL (Upload file or paste URL)</label>
-                                <div className="flex space-x-2">
-                                    <input 
-                                        type="text" 
-                                        value={data.image_path}
-                                        onChange={(e) => setData('image_path', e.target.value)}
-                                        className="flex-1 text-xs border border-gray-200 dark:border-gray-800 rounded-xl px-3.5 py-2.5 bg-gray-50 dark:bg-gray-850 text-[#1d1d1f] dark:text-white"
-                                        placeholder="Paste image URL here..."
-                                        required
+                                <label className="block text-[10px] font-bold text-gray-400 uppercase mb-1.5">Banner image</label>
+
+                                {/* Drop zone — the primary way to set the image. The URL field
+                                    below stays for pasting an already-hosted image. */}
+                                <label
+                                    onDragOver={(e) => { e.preventDefault(); setIsDragging(true); }}
+                                    onDragLeave={() => setIsDragging(false)}
+                                    onDrop={(e) => { e.preventDefault(); setIsDragging(false); uploadFile(e.dataTransfer.files[0]); }}
+                                    className={`relative flex flex-col items-center justify-center gap-2 w-full rounded-2xl border-2 border-dashed px-4 py-7 cursor-pointer transition-colors ${
+                                        isDragging
+                                            ? 'border-[#0066CC] bg-[#F0F7FF] dark:bg-blue-950/20'
+                                            : 'border-gray-300 dark:border-gray-700 hover:border-[#0066CC] hover:bg-gray-50 dark:hover:bg-gray-800/40'
+                                    } ${uploading ? 'pointer-events-none opacity-60' : ''}`}
+                                >
+                                    {uploading ? (
+                                        <>
+                                            <Loader2 className="w-6 h-6 text-[#0066CC] animate-spin" />
+                                            <span className="text-xs font-semibold text-gray-700 dark:text-gray-200">Uploading…</span>
+                                        </>
+                                    ) : (
+                                        <>
+                                            <UploadCloud className="w-6 h-6 text-[#0066CC]" />
+                                            <span className="text-xs font-semibold text-gray-800 dark:text-gray-100">
+                                                Click to upload, or drag an image here
+                                            </span>
+                                            <span className="text-[10px] text-gray-500 dark:text-gray-400">
+                                                JPG, PNG, WebP or AVIF · up to 10 MB
+                                            </span>
+                                        </>
+                                    )}
+                                    <input
+                                        type="file"
+                                        className="hidden"
+                                        accept="image/*"
+                                        disabled={uploading}
+                                        onChange={(e) => uploadFile(e.target.files[0])}
                                     />
-                                    <label className="bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 text-gray-800 dark:text-gray-200 text-xs font-semibold px-4 rounded-xl flex items-center justify-center cursor-pointer border border-gray-300 dark:border-gray-700 transition-colors">
-                                        <span>Choose File</span>
-                                        <input 
-                                            type="file"
-                                            className="hidden"
-                                            accept="image/*"
-                                            onChange={async (e) => {
-                                                const file = e.target.files[0];
-                                                if (!file) return;
-                                                const formData = new FormData();
-                                                formData.append('file', file);
-                                                // File banner art under banners/, not the products folder.
-                                                formData.append('folder', 'banners');
-                                                try {
-                                                    const res = await fetch(route('admin.products.upload'), {
-                                                        method: 'POST',
-                                                        headers: {
-                                                            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
-                                                        },
-                                                        body: formData
-                                                    });
-                                                    const resData = await res.json();
-                                                    if (resData.url) {
-                                                        setData('image_path', resData.url);
-                                                    } else {
-                                                        alert(resData.error || 'Upload failed');
-                                                    }
-                                                } catch (err) {
-                                                    alert('Image upload failed');
-                                                }
-                                            }}
+                                </label>
+
+                                {uploadError && (
+                                    <p className="text-[11px] text-red-600 dark:text-red-400 mt-2">{uploadError}</p>
+                                )}
+
+                                {/* Preview of whatever is currently set */}
+                                {data.image_path && !uploading && (
+                                    <div className="mt-3 flex items-center gap-3 rounded-xl border border-gray-200 dark:border-gray-800 p-2.5">
+                                        <img
+                                            src={data.image_path}
+                                            alt="Banner preview"
+                                            className="h-12 w-24 object-cover rounded-lg bg-gray-100 dark:bg-gray-800 flex-shrink-0"
                                         />
-                                    </label>
-                                </div>
+                                        <span className="text-[10px] text-gray-500 dark:text-gray-400 break-all leading-relaxed">
+                                            {data.image_path}
+                                        </span>
+                                    </div>
+                                )}
+
+                                <input
+                                    type="text"
+                                    value={data.image_path}
+                                    onChange={(e) => setData('image_path', e.target.value)}
+                                    className="w-full text-xs border border-gray-200 dark:border-gray-800 rounded-xl px-3.5 py-2.5 bg-gray-50 dark:bg-gray-850 text-[#1d1d1f] dark:text-white mt-3"
+                                    placeholder="…or paste an image URL / path"
+                                    required
+                                />
                                 <InputError message={errors.image_path} className="mt-1" />
                             </div>
 
