@@ -302,6 +302,20 @@ export default function Navigation() {
                     {/* Right: search, account, cart */}
                     <div className="flex items-center gap-1.5 sm:gap-2 ml-auto lg:ml-0 flex-shrink-0">
 
+                        {/* Track Order — prominent green CTA (styled like the Locate Reseller button) */}
+                        <button
+                            onClick={() => {
+                                setTrackOrderId('');
+                                setTrackOrderResult(null);
+                                setTrackingError(null);
+                                setIsTrackingModalOpen(true);
+                            }}
+                            className="hidden lg:inline-flex items-center gap-2 bg-[#7CBA3F] hover:bg-[#6BA831] text-white text-[13px] font-bold px-5 py-2.5 rounded-lg transition-colors whitespace-nowrap focus:outline-none"
+                        >
+                            <Truck className="w-4 h-4" />
+                            <span>Track Order</span>
+                        </button>
+
                         {/* Search toggle */}
                         <button
                             onClick={() => setIsSearchOpen((open) => !open)}

@@ -43,6 +43,26 @@ class StorefrontController extends Controller
         // Admin-managed "Latest Offers" carousel (Redesign Guide §4.4)
         $offers = Offer::live()->orderBy('sort_order')->orderBy('id')->get();
 
+        // Promotional banner strips between homepage sections (admin-managed).
+        // Each slot renders the first active banner for its position and hides when empty.
+        $promoBannerPrimary = Banner::where('is_active', true)
+            ->where('position', 'spotlight')
+            ->orderBy('sort_order')
+            ->first();
+
+        $promoBannerSecondary = Banner::where('is_active', true)
+            ->where('position', 'zigzag')
+            ->orderBy('sort_order')
+            ->first();
+
+        // "Apple Authorized Accessories" shelf — genuine accessory products
+        $accessories = Product::whereHas('category', fn ($q) => $q->where('slug', 'accessories'))
+            ->with(['variants.color', 'variants.size'])
+            ->orderByDesc('is_featured')
+            ->orderByDesc('created_at')
+            ->take(8)
+            ->get();
+
         // Tabbed "Product Categories" browser — 3 products per category tab
         $categoryTabs = Category::orderBy('nav_order')
             ->get()
@@ -65,6 +85,9 @@ class StorefrontController extends Controller
             'newProducts' => $newProducts,
             'offers' => $offers,
             'categoryTabs' => $categoryTabs,
+            'promoBannerPrimary' => $promoBannerPrimary,
+            'promoBannerSecondary' => $promoBannerSecondary,
+            'accessories' => $accessories,
         ]);
     }
 

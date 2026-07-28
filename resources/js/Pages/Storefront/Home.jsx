@@ -2,15 +2,58 @@ import React, { useState, useEffect, useRef } from 'react';
 import { Head, Link } from '@inertiajs/react';
 import StorefrontLayout from '@/Layouts/StorefrontLayout';
 import ScrollReveal from '@/Components/ScrollReveal';
-import { ChevronLeft, ChevronRight, ArrowRight, CheckCircle } from 'lucide-react';
+import {
+    ChevronLeft,
+    ChevronRight,
+    ArrowRight,
+    CheckCircle,
+    BadgeCheck,
+    Truck,
+    Lock,
+    ShieldCheck,
+    Headphones,
+} from 'lucide-react';
+
+// Trust badges shown in the "Buy with Confidence" disclaimer block
+const TRUST_BADGES = [
+    { icon: BadgeCheck, label: 'Genuine Products' },
+    { icon: Truck, label: 'Nationwide Delivery' },
+    { icon: Lock, label: 'Secure Payments' },
+    { icon: ShieldCheck, label: 'Warranty Support' },
+    { icon: Headphones, label: 'Dedicated Customer Support' },
+];
+
+// Full-width promotional banner strip (admin-managed via Banner positions).
+// Renders nothing when there is no active banner for the slot.
+function PromoStrip({ banner }) {
+    if (!banner) return null;
+    const Wrapper = banner.link_url ? Link : 'div';
+    return (
+        <ScrollReveal>
+            <section className="max-w-7xl mx-auto px-4 sm:px-6 md:px-8 py-6 sm:py-8">
+                <Wrapper
+                    href={banner.link_url || undefined}
+                    className="block relative rounded-3xl overflow-hidden group border border-gray-150 dark:border-gray-800"
+                >
+                    <img
+                        src={banner.image_path}
+                        alt={banner.title || 'Promotion'}
+                        className="w-full h-auto object-cover transition-transform duration-700 group-hover:scale-[1.02]"
+                    />
+                </Wrapper>
+            </section>
+        </ScrollReveal>
+    );
+}
 
 export default function Home({
     heroBanners = [],
     featuredProducts = [],
-    promoProducts = [],
-    newProducts = [],
     offers = [],
     categoryTabs = [],
+    promoBannerPrimary = null,
+    promoBannerSecondary = null,
+    accessories = [],
 }) {
     const [currentHeroSlide, setCurrentHeroSlide] = useState(0);
     const [email, setEmail] = useState('');
@@ -39,15 +82,12 @@ export default function Home({
 
     // Horizontal carousel scroll controls
     const offersRef = useRef(null);
-    const popularRef = useRef(null);
+    const accessoriesRef = useRef(null);
     const scrollRow = (ref, dir) => {
         if (ref.current) {
             ref.current.scrollBy({ left: dir * 360, behavior: 'smooth' });
         }
     };
-
-    // "Popular" shelf falls back through the available product sets so it is never empty
-    const popularProducts = (newProducts.length ? newProducts : promoProducts.length ? promoProducts : featuredProducts);
 
     // Products for the currently selected category pill
     const activeProducts = categoryTabs.find((tab) => tab.slug === activeTab)?.products ?? [];
@@ -65,7 +105,7 @@ export default function Home({
             <Head title="Apple Premium Partner" />
 
             {/* ============================================================
-                1. HERO BANNER — full-bleed Mercantile-style slideshow
+                1. HERO SLIDESHOW — full-bleed Mercantile-style slideshow
                ============================================================ */}
             {heroBanners.length > 0 && (
                 <section className="relative w-full h-[46vw] min-h-[260px] max-h-[600px] bg-white dark:bg-black overflow-hidden group">
@@ -125,7 +165,9 @@ export default function Home({
                 </section>
             )}
 
-            {/* 1b. Latest Offers — admin-managed carousel, part of the hero block */}
+            {/* ============================================================
+                2. LATEST OFFERS — admin-managed carousel
+               ============================================================ */}
             {offers.length > 0 && (
                 <ScrollReveal>
                     <section className="max-w-7xl mx-auto px-4 sm:px-6 md:px-8 py-16">
@@ -179,7 +221,7 @@ export default function Home({
             )}
 
             {/* ============================================================
-                2. PRODUCT CATEGORIES — tabbed browser
+                3. PRODUCT CATEGORIES — tabbed browser
                ============================================================ */}
             {categoryTabs.length > 0 && (
                 <section className="bg-white dark:bg-[#1D1D1F] py-16 border-t border-b border-[#D2D2D7] dark:border-gray-800">
@@ -279,7 +321,12 @@ export default function Home({
             )}
 
             {/* ============================================================
-                3. FEATURED APPLE PRODUCTS
+                4. PROMOTIONAL BANNER #1 — admin-managed (spotlight)
+               ============================================================ */}
+            <PromoStrip banner={promoBannerPrimary} />
+
+            {/* ============================================================
+                5. FEATURED APPLE PRODUCTS
                ============================================================ */}
             {featuredProducts.length > 0 && (
                 <ScrollReveal>
@@ -331,30 +378,35 @@ export default function Home({
             )}
 
             {/* ============================================================
-                4. POPULAR PRODUCTS SLIDER
+                6. PROMOTIONAL BANNER #2 — admin-managed (zigzag)
                ============================================================ */}
-            {popularProducts.length > 0 && (
+            <PromoStrip banner={promoBannerSecondary} />
+
+            {/* ============================================================
+                7. APPLE AUTHORIZED ACCESSORIES — genuine accessory shelf
+               ============================================================ */}
+            {accessories.length > 0 && (
                 <ScrollReveal>
                     <section className="max-w-7xl mx-auto px-4 sm:px-6 md:px-8 py-16">
                         <div className="flex justify-between items-end mb-8">
                             <div>
-                                <span className="text-[10px] font-bold text-[#0066CC] uppercase tracking-wider">Trending now</span>
+                                <span className="text-[10px] font-bold text-[#0066CC] uppercase tracking-wider">Genuine & certified</span>
                                 <h2 className="text-2xl sm:text-3xl font-extrabold text-[#1D1D1F] dark:text-white tracking-tight mt-1">
-                                    Popular products.
+                                    Apple authorized accessories.
                                 </h2>
                             </div>
                             <div className="hidden sm:flex items-center space-x-2">
-                                <button onClick={() => scrollRow(popularRef, -1)} aria-label="Scroll products left" className="p-2 rounded-full bg-white dark:bg-[#1D1D1F] border border-gray-200 dark:border-gray-800 text-gray-700 dark:text-gray-200 hover:bg-gray-50 transition-colors">
+                                <button onClick={() => scrollRow(accessoriesRef, -1)} aria-label="Scroll accessories left" className="p-2 rounded-full bg-white dark:bg-[#1D1D1F] border border-gray-200 dark:border-gray-800 text-gray-700 dark:text-gray-200 hover:bg-gray-50 transition-colors">
                                     <ChevronLeft className="w-4 h-4" />
                                 </button>
-                                <button onClick={() => scrollRow(popularRef, 1)} aria-label="Scroll products right" className="p-2 rounded-full bg-white dark:bg-[#1D1D1F] border border-gray-200 dark:border-gray-800 text-gray-700 dark:text-gray-200 hover:bg-gray-50 transition-colors">
+                                <button onClick={() => scrollRow(accessoriesRef, 1)} aria-label="Scroll accessories right" className="p-2 rounded-full bg-white dark:bg-[#1D1D1F] border border-gray-200 dark:border-gray-800 text-gray-700 dark:text-gray-200 hover:bg-gray-50 transition-colors">
                                     <ChevronRight className="w-4 h-4" />
                                 </button>
                             </div>
                         </div>
 
-                        <div ref={popularRef} className="flex space-x-6 overflow-x-auto pb-4 scroll-smooth scrollbar-none [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
-                            {popularProducts.map((prod) => (
+                        <div ref={accessoriesRef} className="flex space-x-6 overflow-x-auto pb-4 scroll-smooth scrollbar-none [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+                            {accessories.map((prod) => (
                                 <Link
                                     key={prod.id}
                                     href={`/products/${prod.slug}`}
@@ -384,12 +436,54 @@ export default function Home({
                                 </Link>
                             ))}
                         </div>
+
+                        <div className="mt-8 flex justify-center sm:justify-start">
+                            <Link
+                                href="/category/accessories"
+                                className="inline-flex items-center gap-2 text-sm font-bold text-[#0066CC] hover:text-[#0077ED] transition-colors"
+                            >
+                                Shop all accessories <ArrowRight className="w-4 h-4" />
+                            </Link>
+                        </div>
                     </section>
                 </ScrollReveal>
             )}
 
             {/* ============================================================
-                5. NEWSLETTER SUBSCRIPTION
+                8. DISCLAIMER / TRUST — "Buy with Confidence"
+               ============================================================ */}
+            <ScrollReveal>
+                <section className="bg-[#F5F5F7] dark:bg-black border-t border-[#D2D2D7] dark:border-gray-800">
+                    <div className="max-w-5xl mx-auto px-4 sm:px-6 md:px-8 py-16 text-center">
+                        <span className="text-[10px] font-bold text-[#0066CC] uppercase tracking-wider">Shop with peace of mind</span>
+                        <h2 className="text-2xl sm:text-3xl font-extrabold text-[#1D1D1F] dark:text-white tracking-tight mt-1">
+                            Buy with Confidence
+                        </h2>
+                        <p className="text-sm text-gray-500 dark:text-gray-400 mt-4 max-w-2xl mx-auto leading-relaxed">
+                            We offer genuine Apple products and premium accessories. Product availability, pricing, and
+                            promotions are subject to change without prior notice. Images are for illustration purposes only.
+                            Warranty coverage varies by product. Please review product details before placing your order.
+                        </p>
+
+                        <div className="mt-10 grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4">
+                            {TRUST_BADGES.map(({ icon: Icon, label }) => (
+                                <div
+                                    key={label}
+                                    className="flex flex-col items-center justify-center gap-2 bg-white dark:bg-[#1D1D1F] border border-gray-200 dark:border-gray-800 rounded-2xl px-4 py-5"
+                                >
+                                    <Icon className="w-6 h-6 text-[#7CBA3F]" />
+                                    <span className="text-xs font-semibold text-[#1D1D1F] dark:text-white text-center leading-snug">
+                                        {label}
+                                    </span>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+                </section>
+            </ScrollReveal>
+
+            {/* ============================================================
+                9. NEWSLETTER SUBSCRIPTION
                ============================================================ */}
             <ScrollReveal>
                 <section className="bg-white dark:bg-[#1D1D1F] border-t border-[#D2D2D7] dark:border-gray-800">

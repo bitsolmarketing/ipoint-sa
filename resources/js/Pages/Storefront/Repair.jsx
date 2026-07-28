@@ -3,7 +3,8 @@ import { Head, useForm } from '@inertiajs/react';
 import StorefrontLayout from '@/Layouts/StorefrontLayout';
 import {
     Wrench, ShieldCheck, XCircle, Smartphone, BatteryCharging, Layers,
-    CloudUpload, LockKeyhole, BatteryFull, Check, ChevronRight, MapPin, CalendarDays
+    CloudUpload, LockKeyhole, BatteryFull, Check, ChevronRight, MapPin, CalendarDays,
+    ClipboardCheck, PackageCheck, AlertTriangle
 } from 'lucide-react';
 
 const CATEGORY_ICON = { screen: Smartphone, battery: BatteryCharging, rear_housing: Layers };
@@ -63,6 +64,34 @@ export default function Repair({ categories, locations }) {
                 </div>
             </section>
 
+            {/* How it works */}
+            <section className="max-w-7xl mx-auto px-4 sm:px-6 md:px-8 pt-16">
+                <div className="text-center mb-10">
+                    <span className="inline-flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-widest text-[#0066CC]">
+                        <Wrench className="w-3.5 h-3.5" /> How it works
+                    </span>
+                    <h2 className="text-2xl font-extrabold text-[#1D1D1F] dark:text-white tracking-tight mt-2">Book your repair in four steps</h2>
+                </div>
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                    {[
+                        { icon: CalendarDays, title: 'Book online', body: 'Choose your repair type, model, store and a time slot that suits you.' },
+                        { icon: ClipboardCheck, title: 'We assess', body: 'A technician evaluates your device and confirms the repair and any cost.' },
+                        { icon: Wrench, title: 'We repair', body: 'Genuine parts are fitted and your device is fully tested before it leaves us.' },
+                        { icon: PackageCheck, title: 'Collect', body: 'Pick up your restored device, backed by our workmanship warranty.' },
+                    ].map((step, i) => {
+                        const Icon = step.icon;
+                        return (
+                            <div key={i} className="relative bg-white dark:bg-[#1D1D1F] border border-gray-150 dark:border-gray-800 rounded-3xl p-6">
+                                <span className="absolute top-4 right-6 text-3xl font-extrabold text-gray-100 dark:text-gray-800 leading-none select-none">{i + 1}</span>
+                                <span className="w-11 h-11 rounded-2xl bg-[#F0F7FF] dark:bg-blue-950/30 text-[#0066CC] flex items-center justify-center"><Icon className="w-5 h-5" /></span>
+                                <h3 className="text-sm font-bold text-gray-900 dark:text-white mt-4">{step.title}</h3>
+                                <p className="text-xs text-gray-500 dark:text-gray-400 mt-2 leading-relaxed">{step.body}</p>
+                            </div>
+                        );
+                    })}
+                </div>
+            </section>
+
             {/* Eligible vs Ineligible */}
             <section className="max-w-7xl mx-auto px-4 sm:px-6 md:px-8 py-16">
                 <h2 className="text-2xl font-extrabold text-[#1D1D1F] dark:text-white tracking-tight text-center mb-10">What we can repair</h2>
@@ -92,6 +121,29 @@ export default function Repair({ categories, locations }) {
                             A flat additional levy applies to restore an ineligible device to standard condition before repair.
                             The exact amount is confirmed on inspection.
                         </p>
+                    </div>
+                </div>
+
+                {/* Damage restrictions */}
+                <div className="mt-6 rounded-3xl border border-amber-200 dark:border-amber-900/40 bg-amber-50/60 dark:bg-amber-950/10 p-8">
+                    <div className="flex items-center gap-2 text-amber-700 dark:text-amber-300">
+                        <AlertTriangle className="w-6 h-6" />
+                        <h3 className="text-sm font-bold uppercase tracking-wider">Damage restrictions</h3>
+                    </div>
+                    <p className="text-sm text-gray-700 dark:text-gray-300 mt-4">
+                        A device with any of the following will not qualify for a screen replacement:
+                    </p>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-3 mt-4 text-sm text-gray-700 dark:text-gray-300">
+                        {[
+                            'Severe housing damage — light dents and scratches are fine',
+                            'A bent chassis',
+                            'Multiple simultaneous faults — e.g. screen damage plus water damage or no power',
+                            'Cracked or smashed rear housing glass',
+                        ].map((t) => (
+                            <div key={t} className="flex gap-2">
+                                <XCircle className="w-4 h-4 text-amber-500 flex-shrink-0 mt-0.5" /> {t}
+                            </div>
+                        ))}
                     </div>
                 </div>
             </section>

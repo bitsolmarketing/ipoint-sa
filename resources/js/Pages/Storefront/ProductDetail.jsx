@@ -647,48 +647,6 @@ export default function ProductDetail({ product, relatedProducts }) {
                 </div>
             </section>
 
-            {/* Mercantile Authenticity Trust Banner */}
-            <section className="bg-[#10341B] text-white py-12 px-4 sm:px-6 md:px-8 border-t border-b border-[#0D2514]">
-                <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-center gap-12 md:gap-24 space-y-8 md:space-y-0">
-                    {/* Left side: Image only (contains both seal stamp and text) */}
-                    <img 
-                        src="/uploads/mercantile_exact_banner_left.png" 
-                        alt="Mercantile Apple Authorized Distributor Pakistan Seal" 
-                        className="h-24 md:h-32 object-contain"
-                    />
-
-                    {/* Middle Vertical Divider Line */}
-                    <div className="hidden md:block h-20 w-[1px] bg-white/20" />
-
-                    {/* Right side: Genuineness section layout */}
-                    <div className="flex flex-col items-center md:items-start space-y-4">
-                        <h4 className="text-xl md:text-2xl font-bold tracking-tight text-center md:text-left">A Symbol of Genuineness</h4>
-                        <div className="flex items-center space-x-12">
-                            <div className="flex flex-col items-center text-center space-y-2">
-                                <div className="w-12 h-12 rounded-full bg-white/10 flex items-center justify-center border border-white/10 hover:bg-white/15 transition-colors">
-                                    <svg viewBox="0 0 50 50" className="w-8 h-8 text-white fill-none stroke-current" strokeWidth="2">
-                                        <path d="M18 16 h10 l6 6 v12 h-16 z" stroke="currentColor" strokeWidth="2" fill="none" strokeLinejoin="round" />
-                                        <rect x="21" y="22" width="8" height="8" rx="1" stroke="currentColor" strokeWidth="1.5" />
-                                        <line x1="25" y1="22" x2="25" y2="30" stroke="currentColor" strokeWidth="1" />
-                                        <line x1="21" y1="26" x2="29" y2="26" stroke="currentColor" strokeWidth="1" />
-                                    </svg>
-                                </div>
-                                <span className="text-[10px] font-bold tracking-wide uppercase text-gray-300">Physical SIM & eSIM</span>
-                            </div>
-                            <div className="flex flex-col items-center text-center space-y-2">
-                                <div className="w-12 h-12 rounded-full bg-white/10 flex items-center justify-center border border-white/10 hover:bg-white/15 transition-colors">
-                                    <svg viewBox="0 0 50 50" className="w-8 h-8 text-white fill-none stroke-current" strokeWidth="2">
-                                        <path d="M15 23 C 20 17, 30 17, 35 23" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" />
-                                        <text x="25" y="35" fontSize="11" fontWeight="bold" fontFamily="sans-serif" textAnchor="middle" fill="currentColor" letterSpacing="1">PTA</text>
-                                    </svg>
-                                </div>
-                                <span className="text-[10px] font-bold tracking-wide uppercase text-gray-300">Duty Paid & PTA Approved</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </section>
-
             {/* Specifications Tab (Summary vs Technical Specs) */}
             <section className="bg-white dark:bg-[#1D1D1F] py-16 px-4 sm:px-6 md:px-8 border-b border-gray-100 dark:border-gray-800">
                 <div className="max-w-4xl mx-auto space-y-8 font-sans">
