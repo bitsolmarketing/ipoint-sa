@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Link } from '@inertiajs/react';
+import { Link, usePage } from '@inertiajs/react';
 
 // Apple glyph as an inline SVG — the private-use character does not render off Apple devices.
 const AppleIcon = (props) => (
@@ -23,6 +23,9 @@ const WhatsappIcon = (props) => (
 );
 
 export default function Footer() {
+    // Admin-managed strip above the footer columns (Banner position `footer`).
+    // Shared from HandleInertiaRequests so it shows on every page; null hides it.
+    const { footerBanner } = usePage().props;
     const year = new Date().getFullYear();
     const [email, setEmail] = useState('');
     const [subscribed, setSubscribed] = useState(false);
@@ -75,6 +78,24 @@ export default function Footer() {
     return (
         <footer className="bg-black text-white pt-16 pb-8 px-6 sm:px-12 font-sans">
             <div className="max-w-7xl mx-auto">
+                {/* Footer banner strip — admin-managed, hidden when unset */}
+                {footerBanner?.image_path && (() => {
+                    const Wrapper = footerBanner.link_url ? Link : 'div';
+                    return (
+                        <Wrapper
+                            href={footerBanner.link_url || undefined}
+                            className="block rounded-2xl overflow-hidden mb-14 group"
+                        >
+                            <img
+                                src={footerBanner.image_path}
+                                alt={footerBanner.title || 'Promotion'}
+                                loading="lazy"
+                                className="w-full h-auto object-cover transition-transform duration-700 group-hover:scale-[1.02]"
+                            />
+                        </Wrapper>
+                    );
+                })()}
+
                 {/* Top: link columns + subscribe + socials */}
                 <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-12 gap-x-8 gap-y-10">
                     {columns.map((col) => (
@@ -144,14 +165,9 @@ export default function Footer() {
                             <span className="text-white">i</span>
                             <span className="text-[#0066CC]">Point</span>
                         </Link>
-                        <span className="h-6 w-px bg-white/25" aria-hidden="true" />
-                        <div className="flex items-center gap-2 text-white/90">
+                        <div className="inline-flex items-center gap-2 rounded-lg border border-white/25 px-2.5 py-1 text-white/90">
                             <AppleIcon className="w-4 h-4 flex-shrink-0" />
-                            <span className="text-[9px] leading-[1.15] font-semibold uppercase tracking-wide">Authorised<br />Distributor</span>
-                        </div>
-                        <div className="flex items-center gap-2 text-white/90">
-                            <AppleIcon className="w-4 h-4 flex-shrink-0" />
-                            <span className="text-[9px] leading-[1.15] font-semibold uppercase tracking-wide">Authorised<br />Service Provider</span>
+                            <span className="text-[9px] leading-[1.15] font-semibold uppercase tracking-wide">Authorised<br />Reseller</span>
                         </div>
                     </div>
                     <p className="text-sm text-gray-400 text-center">

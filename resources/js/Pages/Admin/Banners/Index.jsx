@@ -4,6 +4,22 @@ import AdminLayout from '@/Layouts/AdminLayout';
 import { Plus, Pencil, Trash2, X, Eye, EyeOff } from 'lucide-react';
 import InputError from '@/Components/InputError';
 
+// Banner slots, labelled by where they actually appear in the homepage running order.
+// Values must stay in sync with the `position` enum in AdminBannerController.
+// `bento` and `whats_new` are legacy slots the current homepage no longer renders —
+// kept so existing rows still edit/save, but flagged so nobody uploads into a dead slot.
+const BANNER_POSITIONS = [
+    { value: 'hero', label: '1. Hero Slideshow' },
+    { value: 'spotlight', label: '4. Promotional Banner #1' },
+    { value: 'zigzag', label: '6. Promotional Banner #2' },
+    { value: 'footer', label: '8. Footer Banner (every page)' },
+    { value: 'bento', label: 'Bento grid (unused — not shown on homepage)' },
+    { value: 'whats_new', label: "What's New shelf (unused — not shown on homepage)" },
+];
+
+const positionLabel = (value) =>
+    BANNER_POSITIONS.find((pos) => pos.value === value)?.label ?? value;
+
 export default function Index({ banners }) {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [editBanner, setEditBanner] = useState(null);
@@ -110,8 +126,8 @@ export default function Index({ banners }) {
                                             <p className="text-[10px] text-gray-400 mt-0.5 line-clamp-1 max-w-xs">{banner.subtitle || 'No subtitle'}</p>
                                             <p className="text-[9px] text-[#0066CC] font-mono mt-1 select-all">{banner.link_url || 'No redirect link'}</p>
                                         </td>
-                                        <td className="py-4 px-6 font-semibold uppercase text-[10px] tracking-wider text-gray-700 dark:text-gray-300">
-                                            {banner.position}
+                                        <td className="py-4 px-6 font-semibold text-[10px] tracking-wider text-gray-700 dark:text-gray-300">
+                                            {positionLabel(banner.position)}
                                         </td>
                                         <td className="py-4 px-6 text-center font-bold text-gray-800 dark:text-gray-200">
                                             {banner.sort_order}
@@ -262,11 +278,11 @@ export default function Index({ banners }) {
                                         className="w-full text-xs border border-gray-200 dark:border-gray-800 rounded-xl px-3 py-2 bg-gray-50 dark:bg-gray-850 text-[#1d1d1f] dark:text-white"
                                         required
                                     >
-                                        <option value="hero">Hero Slideshow</option>
-                                        <option value="bento">Bento grid feature</option>
-                                        <option value="zigzag">Zigzag details row</option>
-                                        <option value="spotlight">Spotlight banner</option>
-                                        <option value="whats_new">What's New Shelf Card</option>
+                                        {BANNER_POSITIONS.map((pos) => (
+                                            <option key={pos.value} value={pos.value}>
+                                                {pos.label}
+                                            </option>
+                                        ))}
                                     </select>
                                     <InputError message={errors.position} className="mt-1" />
                                 </div>

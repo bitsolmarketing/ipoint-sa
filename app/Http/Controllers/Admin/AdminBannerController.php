@@ -30,7 +30,7 @@ class AdminBannerController extends Controller
             'subtitle' => 'nullable|string|max:200',
             'image_path' => 'required|string',
             'link_url' => 'nullable|string',
-            'position' => 'required|in:hero,bento,zigzag,spotlight,whats_new',
+            'position' => 'required|in:hero,bento,zigzag,spotlight,whats_new,footer',
             'sort_order' => 'integer|min:0',
             'is_active' => 'boolean'
         ]);
@@ -68,7 +68,7 @@ class AdminBannerController extends Controller
             'subtitle' => 'nullable|string|max:200',
             'image_path' => 'required|string',
             'link_url' => 'nullable|string',
-            'position' => 'required|in:hero,bento,zigzag,spotlight,whats_new',
+            'position' => 'required|in:hero,bento,zigzag,spotlight,whats_new,footer',
             'sort_order' => 'integer|min:0',
             'is_active' => 'boolean'
         ]);

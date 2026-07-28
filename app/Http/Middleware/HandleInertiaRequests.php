@@ -5,6 +5,7 @@ namespace App\Http\Middleware;
 use Illuminate\Http\Request;
 use Inertia\Middleware;
 
+use App\Models\Banner;
 use App\Models\Category;
 
 class HandleInertiaRequests extends Middleware
@@ -39,6 +40,12 @@ class HandleInertiaRequests extends Middleware
             // Guard against the categories table not existing yet (e.g. before the
             // one-time /__setup migration runs) so the app can still bootstrap.
             'categories' => rescue(fn () => Category::orderBy('nav_order')->get(), collect(), false),
+            // Footer banner strip — rendered by <Footer /> in the layout, so it has to
+            // be shared rather than passed per-page. Null when no active banner exists.
+            'footerBanner' => rescue(fn () => Banner::where('is_active', true)
+                ->where('position', 'footer')
+                ->orderBy('sort_order')
+                ->first(), null, false),
             'cart' => session()->get('cart', []),
             'compareCount' => count($request->session()->get('compare', [])),
             'hereApiKey' => env('HERE_API_KEY', ''),
