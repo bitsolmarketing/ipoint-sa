@@ -127,7 +127,7 @@ export default function Dashboard({ stats, recentOrders, monthlySales }) {
                             <span className="text-[10px] font-bold uppercase text-gray-400 tracking-wider">System Info</span>
                             <h3 className="text-base font-bold text-white mt-1">Platform Operations</h3>
                             <p className="text-xs text-gray-400 mt-2 font-normal leading-relaxed">
-                                You are connected to the central iStore administration. Product variant adjustments, colors, capacity constraints, and order shipments are logged live.
+                                You are connected to the central iPoint administration. Product variant adjustments, colors, capacity constraints, and order shipments are logged live.
                             </p>
                         </div>
                         <div className="border-t border-white/10 pt-6 space-y-4 text-xs">

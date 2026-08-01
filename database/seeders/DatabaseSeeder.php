@@ -26,14 +26,14 @@ class DatabaseSeeder extends Seeder
     {
         // 1. Create Test Users
         User::create([
-            'name' => 'iStore Admin',
+            'name' => 'iPoint Admin',
             'email' => 'admin@istore.co.za',
             'password' => Hash::make('Password123!'),
             'is_admin' => true,
         ]);
 
         User::create([
-            'name' => 'iStore Client',
+            'name' => 'iPoint Client',
             'email' => 'client@istore.co.za',
             'password' => Hash::make('Password123!'),
             'is_admin' => false,

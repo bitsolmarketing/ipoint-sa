@@ -133,7 +133,7 @@ export default function AdminLayout({ children }) {
                         >
                             <Menu className="w-5 h-5 text-gray-400" />
                         </button>
-                        <h2 className="text-sm font-bold text-gray-900 dark:text-white">iStore Admin Control Panel</h2>
+                        <h2 className="text-sm font-bold text-gray-900 dark:text-white">iPoint Admin Control Panel</h2>
                     </div>
 
                     <div className="flex items-center space-x-3 text-xs">

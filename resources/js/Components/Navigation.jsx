@@ -303,18 +303,15 @@ export default function Navigation() {
                     <div className="flex items-center gap-1.5 sm:gap-2 ml-auto lg:ml-0 flex-shrink-0">
 
                         {/* Track Order — prominent green CTA (styled like the Locate Reseller button) */}
-                        <button
-                            onClick={() => {
-                                setTrackOrderId('');
-                                setTrackOrderResult(null);
-                                setTrackingError(null);
-                                setIsTrackingModalOpen(true);
-                            }}
+                        <a
+                            href="https://www.postnet.co.za/tracker"
+                            target="_blank"
+                            rel="noopener noreferrer"
                             className="hidden lg:inline-flex items-center gap-2 bg-[#7CBA3F] hover:bg-[#6BA831] text-white text-[13px] font-bold px-5 py-2.5 rounded-lg transition-colors whitespace-nowrap focus:outline-none"
                         >
                             <Truck className="w-4 h-4" />
                             <span>Track Order</span>
-                        </button>
+                        </a>
 
                         {/* Search toggle */}
                         <button
@@ -388,19 +385,16 @@ export default function Navigation() {
                                             <Store className="w-4 h-4 text-gray-400" />
                                             <span>Pickup: {selectedStore || 'Select Store'}</span>
                                         </button>
-                                        <button
-                                            onClick={() => {
-                                                setIsProfileOpen(false);
-                                                setTrackOrderId('');
-                                                setTrackOrderResult(null);
-                                                setTrackingError(null);
-                                                setIsTrackingModalOpen(true);
-                                            }}
+                                        <a
+                                            href="https://www.postnet.co.za/tracker"
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                            onClick={() => setIsProfileOpen(false)}
                                             className="w-full text-left px-4 py-2 text-xs hover:bg-gray-50 dark:hover:bg-gray-855 flex items-center space-x-2.5 text-gray-700 dark:text-gray-200 font-semibold"
                                         >
                                             <Truck className="w-4 h-4 text-gray-400" />
                                             <span>Track Order</span>
-                                        </button>
+                                        </a>
                                         <Link
                                             href="/apple-product-repair"
                                             className="px-4 py-2 text-xs hover:bg-gray-50 dark:hover:bg-gray-855 flex items-center space-x-2.5 text-gray-700 dark:text-gray-200 font-semibold"
@@ -538,10 +532,16 @@ export default function Navigation() {
                             <Store className="w-4 h-4" />
                             <span>Pickup: {selectedStore || 'Select Store'}</span>
                         </button>
-                        <button onClick={() => { setIsMobileMenuOpen(false); setIsTrackingModalOpen(true); }} className="flex items-center space-x-2 text-gray-300">
+                        <a
+                            href="https://www.postnet.co.za/tracker"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            onClick={() => setIsMobileMenuOpen(false)}
+                            className="flex items-center space-x-2 text-gray-300"
+                        >
                             <Truck className="w-4 h-4" />
                             <span>Track Order</span>
-                        </button>
+                        </a>
 
                         {auth.user ? (
                             <button onClick={handleLogout} className="text-[#E30000] flex items-center space-x-2 border-t border-white/10 pt-4 w-full font-bold">
