@@ -9,7 +9,9 @@ class RepairBooking extends Model
     protected $fillable = [
         'reference',
         'repair_type',
+        'service_mode',
         'device_model',
+        'device_variant',
         'repair_location_id',
         'booking_date',
         'time_slot',

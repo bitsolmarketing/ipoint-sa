@@ -10,6 +10,8 @@ use App\Models\Banner;
 use App\Models\Offer;
 use App\Models\Color;
 use App\Models\Size;
+use App\Models\RepairLocation;
+use App\Support\RepairCatalogue;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
@@ -296,7 +298,11 @@ class StorefrontController extends Controller
      */
     public function services()
     {
-        return Inertia::render('Storefront/Services');
+        return Inertia::render('Storefront/Services', [
+            'products' => RepairCatalogue::products(),
+            'ineligibleLevy' => RepairCatalogue::INELIGIBLE_LEVY,
+            'locationCount' => RepairLocation::where('is_active', true)->count(),
+        ]);
     }
 
     /**

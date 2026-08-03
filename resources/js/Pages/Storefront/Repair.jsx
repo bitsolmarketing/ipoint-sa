@@ -4,18 +4,28 @@ import StorefrontLayout from '@/Layouts/StorefrontLayout';
 import {
     Wrench, ShieldCheck, XCircle, Smartphone, BatteryCharging, Layers,
     CloudUpload, LockKeyhole, BatteryFull, Check, ChevronRight, MapPin, CalendarDays,
-    ClipboardCheck, PackageCheck, AlertTriangle
+    ClipboardCheck, PackageCheck, AlertTriangle, Store, Truck
 } from 'lucide-react';
 
 const CATEGORY_ICON = { screen: Smartphone, battery: BatteryCharging, rear_housing: Layers };
 const TIME_SLOTS = ['09:00', '10:00', '11:00', '12:00', '13:00', '14:00', '15:00', '16:00'];
 
-export default function Repair({ categories, locations }) {
+// Labels for repair types that exist in the /services price list but aren't one
+// of the three headline categories shown further up this page.
+const EXTRA_TYPE_LABEL = {
+    camera: 'Camera module',
+    charging_port: 'Charging port',
+    keyboard: 'Keyboard',
+};
+
+export default function Repair({ categories, locations, prefill = {} }) {
     const [activeCategory, setActiveCategory] = useState(categories[0]?.key || 'screen');
 
     const { data, setData, post, processing, errors, reset, recentlySuccessful } = useForm({
-        repair_type: categories[0]?.key || 'screen',
-        device_model: '',
+        repair_type: prefill.repair_type || categories[0]?.key || 'screen',
+        service_mode: prefill.service_mode || 'in_store',
+        device_model: prefill.device_model || '',
+        device_variant: prefill.device_variant || '',
         repair_location_id: locations[0]?.id || '',
         booking_date: '',
         time_slot: '',
@@ -25,17 +35,41 @@ export default function Repair({ categories, locations }) {
         notes: '',
     });
 
+    // A customer arriving from the /services price selector may have picked a
+    // repair type or model outside the three headline categories — add it so
+    // their choice survives the hand-off instead of silently resetting.
+    const bookableCategories = useMemo(() => {
+        if (!prefill.repair_type || categories.some((c) => c.key === prefill.repair_type)) {
+            return categories;
+        }
+        return [
+            ...categories,
+            {
+                key: prefill.repair_type,
+                title: EXTRA_TYPE_LABEL[prefill.repair_type] || prefill.repair_type,
+                description: 'Selected from the repair price list.',
+                models: prefill.device_model ? [prefill.device_model] : [],
+            },
+        ];
+    }, [categories, prefill.repair_type, prefill.device_model]);
+
     // Models available for the currently selected repair type.
     const modelsForType = useMemo(() => {
-        const cat = categories.find((c) => c.key === data.repair_type);
-        return cat ? cat.models : [];
-    }, [data.repair_type, categories]);
+        const cat = bookableCategories.find((c) => c.key === data.repair_type);
+        const models = cat ? [...cat.models] : [];
+
+        if (prefill.device_model && data.repair_type === prefill.repair_type && !models.includes(prefill.device_model)) {
+            models.unshift(prefill.device_model);
+        }
+
+        return models;
+    }, [data.repair_type, bookableCategories, prefill.device_model, prefill.repair_type]);
 
     const submit = (e) => {
         e.preventDefault();
         post(route('repair.book'), {
             preserveScroll: true,
-            onSuccess: () => reset('device_model', 'booking_date', 'time_slot', 'customer_name', 'email', 'phone', 'notes'),
+            onSuccess: () => reset('device_model', 'device_variant', 'booking_date', 'time_slot', 'customer_name', 'email', 'phone', 'notes'),
         });
     };
 
@@ -227,11 +261,37 @@ export default function Repair({ categories, locations }) {
                     )}
 
                     <form onSubmit={submit} className="bg-white dark:bg-[#1D1D1F] border border-gray-150 dark:border-gray-800 rounded-3xl p-6 sm:p-8 space-y-5 font-sans">
+                        {/* Service mode */}
+                        <div>
+                            <label className="block text-[10px] font-bold text-gray-400 uppercase mb-2">How would you like to be serviced?</label>
+                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                                {[
+                                    { key: 'in_store', label: 'In-store appointment', icon: Store, hint: 'Drop your device off at a store' },
+                                    { key: 'home_collection', label: 'Home collection', icon: Truck, hint: 'We collect and return it to you' },
+                                ].map((mode) => {
+                                    const Icon = mode.icon;
+                                    const selected = data.service_mode === mode.key;
+                                    return (
+                                        <button type="button" key={mode.key}
+                                            onClick={() => setData('service_mode', mode.key)}
+                                            className={`flex items-start gap-3 p-3.5 rounded-2xl border text-left transition-all ${selected ? 'border-[#0066CC] bg-[#F0F7FF]/40 dark:bg-blue-950/20' : 'border-gray-200 dark:border-gray-800'}`}>
+                                            <Icon className={`w-4 h-4 mt-0.5 flex-shrink-0 ${selected ? 'text-[#0066CC]' : 'text-gray-400'}`} />
+                                            <span>
+                                                <span className={`block text-xs font-bold ${selected ? 'text-[#0066CC]' : 'text-gray-700 dark:text-gray-300'}`}>{mode.label}</span>
+                                                <span className="block text-[10px] text-gray-400 mt-0.5">{mode.hint}</span>
+                                            </span>
+                                        </button>
+                                    );
+                                })}
+                            </div>
+                            {errors.service_mode && <p className="text-[#E30000] text-[10px] mt-1">{errors.service_mode}</p>}
+                        </div>
+
                         {/* Repair type */}
                         <div>
                             <label className="block text-[10px] font-bold text-gray-400 uppercase mb-2">Repair type</label>
                             <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-                                {categories.map((cat) => (
+                                {bookableCategories.map((cat) => (
                                     <button type="button" key={cat.key}
                                         onClick={() => { setData('repair_type', cat.key); setData('device_model', ''); setActiveCategory(cat.key); }}
                                         className={`p-3 rounded-2xl border text-xs font-bold text-left transition-all ${data.repair_type === cat.key ? 'border-[#0066CC] bg-[#F0F7FF]/40 text-[#0066CC] dark:bg-blue-950/20' : 'border-gray-200 dark:border-gray-800 text-gray-700 dark:text-gray-300'}`}>
@@ -242,8 +302,8 @@ export default function Repair({ categories, locations }) {
                             {errors.repair_type && <p className="text-[#E30000] text-[10px] mt-1">{errors.repair_type}</p>}
                         </div>
 
-                        {/* Device model + location */}
-                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        {/* Device model + storage + location */}
+                        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                             <div>
                                 <label className="block text-[10px] font-bold text-gray-400 uppercase mb-2">Device model</label>
                                 <select value={data.device_model} onChange={(e) => setData('device_model', e.target.value)} required
@@ -254,7 +314,15 @@ export default function Repair({ categories, locations }) {
                                 {errors.device_model && <p className="text-[#E30000] text-[10px] mt-1">{errors.device_model}</p>}
                             </div>
                             <div>
-                                <label className="block text-[10px] font-bold text-gray-400 uppercase mb-2">Store / location</label>
+                                <label className="block text-[10px] font-bold text-gray-400 uppercase mb-2">Storage / size</label>
+                                <input type="text" value={data.device_variant} onChange={(e) => setData('device_variant', e.target.value)}
+                                    className="w-full text-xs border border-gray-200 dark:border-gray-800 rounded-xl px-3 py-2.5 bg-gray-50 dark:bg-gray-850 text-gray-900 dark:text-white" placeholder="256GB (optional)" />
+                                {errors.device_variant && <p className="text-[#E30000] text-[10px] mt-1">{errors.device_variant}</p>}
+                            </div>
+                            <div>
+                                <label className="block text-[10px] font-bold text-gray-400 uppercase mb-2">
+                                    {data.service_mode === 'home_collection' ? 'Servicing branch' : 'Store / location'}
+                                </label>
                                 <select value={data.repair_location_id} onChange={(e) => setData('repair_location_id', e.target.value)} required
                                     className="w-full text-xs border border-gray-200 dark:border-gray-800 rounded-xl px-3 py-2.5 bg-gray-50 dark:bg-gray-850 text-gray-900 dark:text-white">
                                     <option value="">Select store…</option>
@@ -263,6 +331,12 @@ export default function Repair({ categories, locations }) {
                                 {errors.repair_location_id && <p className="text-[#E30000] text-[10px] mt-1">{errors.repair_location_id}</p>}
                             </div>
                         </div>
+                        {data.service_mode === 'home_collection' && (
+                            <p className="text-[10px] text-gray-500 dark:text-gray-400 flex items-start gap-1.5 -mt-2">
+                                <Truck className="w-3 h-3 mt-0.5 flex-shrink-0" />
+                                Add your collection address in the notes below. The chosen branch is where your device will be serviced.
+                            </p>
+                        )}
 
                         {/* Date + slot */}
                         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">

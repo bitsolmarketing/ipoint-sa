@@ -4,8 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Models\RepairBooking;
 use App\Models\RepairLocation;
+use App\Support\RepairCatalogue;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
+use Illuminate\Validation\Rule;
 use Inertia\Inertia;
 
 /**
@@ -40,19 +42,37 @@ class RepairController extends Controller
         ],
     ];
 
-    public function index()
+    public function index(Request $request)
     {
         return Inertia::render('Storefront/Repair', [
             'categories' => self::REPAIR_CATEGORIES,
             'locations' => RepairLocation::where('is_active', true)->orderBy('name')->get(['id', 'name', 'city', 'address']),
+            // Populated when the customer arrives from the /services price
+            // selector, so they don't re-pick what they already chose.
+            'prefill' => [
+                'repair_type' => in_array($request->query('type'), RepairCatalogue::repairTypeKeys(), true)
+                    ? $request->query('type')
+                    : null,
+                'service_mode' => in_array($request->query('mode'), ['in_store', 'home_collection'], true)
+                    ? $request->query('mode')
+                    : null,
+                'device_model' => in_array($request->query('model'), RepairCatalogue::modelNames(), true)
+                    ? $request->query('model')
+                    : null,
+                'device_variant' => is_string($request->query('variant'))
+                    ? substr($request->query('variant'), 0, 60)
+                    : null,
+            ],
         ]);
     }
 
     public function book(Request $request)
     {
         $validated = $request->validate([
-            'repair_type' => 'required|in:screen,battery,rear_housing',
+            'repair_type' => ['required', Rule::in(RepairCatalogue::repairTypeKeys())],
+            'service_mode' => ['required', Rule::in(['in_store', 'home_collection'])],
             'device_model' => 'required|string|max:100',
+            'device_variant' => 'nullable|string|max:60',
             'repair_location_id' => 'required|exists:repair_locations,id',
             'booking_date' => 'required|date|after_or_equal:today',
             'time_slot' => 'required|string|max:20',
