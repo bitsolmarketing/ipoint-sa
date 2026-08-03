@@ -79,6 +79,12 @@ export default function Services({ products = [], ineligibleLevy = 750, location
             {/* ── Hero ─────────────────────────────────────────────── */}
             <section className="bg-white dark:bg-[#1D1D1F] px-4 sm:px-6 md:px-8 pt-16 pb-20">
                 <div className="max-w-4xl mx-auto text-center">
+                    {/* Breadcrumb */}
+                    <nav className="flex items-center justify-center space-x-1.5 text-[11px] text-gray-400 mb-4" aria-label="Breadcrumb">
+                        <Link href="/" className="hover:text-[#0066CC] transition-colors font-medium">Home</Link>
+                        <span className="text-gray-300">›</span>
+                        <span className="text-[#1D1D1F] dark:text-white font-semibold">Repairs &amp; Services</span>
+                    </nav>
                     <span className="text-[10px] font-bold text-[#0066CC] uppercase tracking-widest">iPoint Service Centre</span>
                     <h1 className="text-3xl sm:text-5xl font-extrabold text-[#1D1D1F] dark:text-white tracking-tight mt-3 leading-tight">
                         Professional repairs and technical support for Apple products
