@@ -185,7 +185,7 @@ export default function Category({
                 >
                     <span>{title}</span>
                     <ChevronDown
-                        className={`w-4 h-4 text-gray-400 transition-transform duration-200 ${isOpen ? 'rotate-180' : ''}`}
+                        className={`w-4 h-4 text-subtle transition-transform duration-200 ${isOpen ? 'rotate-180' : ''}`}
                     />
                 </button>
                 {isOpen && <div className="pb-4">{children}</div>}
@@ -198,18 +198,18 @@ export default function Category({
             <Head title={`${category.name} — Shop Apple`} />
 
             {/* Category Jumbotron Header */}
-            <section className="bg-white dark:bg-[#1D1D1F] border-b border-[#D2D2D7] dark:border-gray-800 py-10 px-6 sm:px-12 text-center">
+            <section className="bg-white dark:bg-surface-dark border-b border-line dark:border-gray-800 py-10 px-6 sm:px-12 text-center">
                 <div className="max-w-3xl mx-auto">
                     {/* Breadcrumb */}
-                    <nav className="flex items-center justify-center space-x-1.5 text-[11px] text-gray-400 mb-4" aria-label="Breadcrumb">
-                        <Link href="/" className="hover:text-[#0066CC] transition-colors font-medium">Home</Link>
+                    <nav className="flex items-center justify-center space-x-1.5 text-[11px] text-subtle mb-4" aria-label="Breadcrumb">
+                        <Link href="/" className="hover:text-brand transition-colors font-medium">Home</Link>
                         <span className="text-gray-300">›</span>
-                        <span className="text-[#1D1D1F] dark:text-white font-semibold">{category.name}</span>
+                        <span className="text-heading dark:text-white font-semibold">{category.name}</span>
                     </nav>
-                    <h1 className="text-4xl sm:text-5xl font-extrabold text-[#1D1D1F] dark:text-white tracking-tight">
+                    <h1 className="text-4xl sm:text-5xl font-extrabold text-heading dark:text-white tracking-tight">
                         {category.name}
                     </h1>
-                    <p className="text-sm sm:text-base text-gray-500 dark:text-gray-400 mt-4 leading-relaxed font-normal">
+                    <p className="text-sm sm:text-base text-muted dark:text-subtle mt-4 leading-relaxed font-normal">
                         {category.description}
                     </p>
                 </div>
@@ -222,7 +222,7 @@ export default function Category({
                         <button
                             onClick={() => setListingTab('box_pack')}
                             className={`inline-flex items-center gap-1.5 px-5 py-2.5 rounded-full text-xs font-bold transition-all ${
-                                listingTab === 'box_pack' ? 'bg-[#0066CC] text-white shadow-sm' : 'text-gray-500 hover:text-gray-800 dark:hover:text-white'
+                                listingTab === 'box_pack' ? 'bg-brand text-white shadow-sm' : 'text-muted hover:text-gray-800 dark:hover:text-white'
                             }`}
                         >
                             <Package className="w-3.5 h-3.5" /> Box Pack
@@ -230,13 +230,13 @@ export default function Category({
                         <button
                             onClick={() => setListingTab('gold_desire')}
                             className={`inline-flex items-center gap-1.5 px-5 py-2.5 rounded-full text-xs font-bold transition-all ${
-                                listingTab === 'gold_desire' ? 'bg-[#B8860B] text-white shadow-sm' : 'text-gray-500 hover:text-gray-800 dark:hover:text-white'
+                                listingTab === 'gold_desire' ? 'bg-gold text-white shadow-sm' : 'text-muted hover:text-gray-800 dark:hover:text-white'
                             }`}
                         >
                             <Sparkles className="w-3.5 h-3.5" /> Gold Desire
                         </button>
                     </div>
-                    <p className="text-xs text-gray-400 mt-2">
+                    <p className="text-xs text-subtle mt-2">
                         {listingTab === 'box_pack'
                             ? 'New, sealed-box retail units.'
                             : 'Certified pre-owned / refurbished units with condition grading.'}
@@ -257,7 +257,7 @@ export default function Category({
                                 <button
                                     type="button"
                                     onClick={chip.onRemove}
-                                    className="text-gray-400 hover:text-gray-600 dark:hover:text-gray-200"
+                                    className="text-subtle hover:text-body dark:hover:text-gray-200"
                                 >
                                     <X className="w-3 h-3" />
                                 </button>
@@ -277,7 +277,7 @@ export default function Category({
             {/* Main Shopping Layout */}
             <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-8 py-10 grid grid-cols-1 lg:grid-cols-4 gap-8">
                 {/* Desktop Sidebar Filters */}
-                <aside className="lg:col-span-1 bg-white dark:bg-[#1D1D1F] border border-gray-150 dark:border-gray-800 rounded-3xl p-6 h-fit font-sans">
+                <aside className="lg:col-span-1 bg-white dark:bg-surface-dark border border-gray-150 dark:border-gray-800 rounded-3xl p-6 h-fit font-sans">
                     <div className="flex items-center justify-between pb-4 border-b border-gray-200 dark:border-gray-800">
                         <div className="flex items-center space-x-2 text-xs font-bold uppercase tracking-wider text-gray-900 dark:text-white">
                             <SlidersHorizontal className="w-4 h-4" />
@@ -285,7 +285,7 @@ export default function Category({
                         </div>
                         <button
                             onClick={resetFilters}
-                            className="text-gray-400 hover:text-gray-900 dark:hover:text-white flex items-center space-x-1 text-[10px] font-bold uppercase"
+                            className="text-subtle hover:text-gray-900 dark:hover:text-white flex items-center space-x-1 text-[10px] font-bold uppercase"
                         >
                             <RotateCcw className="w-3 h-3" />
                             <span>Reset</span>
@@ -331,7 +331,7 @@ export default function Category({
                                             onClick={() => handleColorToggle(color.name)}
                                             className={`flex items-center space-x-1.5 px-3 py-1.5 rounded-full border text-[11px] font-medium transition-all ${
                                                 isSelected
-                                                    ? 'border-[#0066CC] bg-[#F0F7FF] text-[#0066CC] dark:bg-blue-950/40 dark:text-blue-300'
+                                                    ? 'border-brand bg-brand-tint text-brand dark:bg-blue-950/40 dark:text-blue-300'
                                                     : 'border-gray-200 dark:border-gray-800 hover:border-gray-450 dark:hover:border-gray-700 text-gray-700 dark:text-gray-300'
                                             }`}
                                         >
@@ -359,7 +359,7 @@ export default function Category({
                                             onClick={() => handleSizeToggle(size.name)}
                                             className={`text-center py-2 px-3 rounded-xl border text-[11px] font-semibold transition-all ${
                                                 isSelected
-                                                    ? 'border-[#0066CC] bg-[#F0F7FF] text-[#0066CC] dark:bg-blue-950/40 dark:text-blue-300'
+                                                    ? 'border-brand bg-brand-tint text-brand dark:bg-blue-950/40 dark:text-blue-300'
                                                     : 'border-gray-200 dark:border-gray-800 hover:border-gray-450 dark:hover:border-gray-700 text-gray-700 dark:text-gray-300'
                                             }`}
                                         >
@@ -380,7 +380,7 @@ export default function Category({
                                 value={priceMin}
                                 onChange={(e) => setPriceMin(e.target.value)}
                                 onBlur={applyFilters}
-                                className="w-full text-xs border border-gray-200 dark:border-gray-800 rounded-xl px-3 py-2 bg-gray-50 dark:bg-gray-850 text-[#1d1d1f] dark:text-white"
+                                className="w-full text-xs border border-gray-200 dark:border-gray-800 rounded-xl px-3 py-2 bg-gray-50 dark:bg-gray-850 text-heading dark:text-white"
                             />
                             <input
                                 type="number"
@@ -388,13 +388,13 @@ export default function Category({
                                 value={priceMax}
                                 onChange={(e) => setPriceMax(e.target.value)}
                                 onBlur={applyFilters}
-                                className="w-full text-xs border border-gray-200 dark:border-gray-800 rounded-xl px-3 py-2 bg-gray-50 dark:bg-gray-850 text-[#1d1d1f] dark:text-white"
+                                className="w-full text-xs border border-gray-200 dark:border-gray-800 rounded-xl px-3 py-2 bg-gray-50 dark:bg-gray-850 text-heading dark:text-white"
                             />
                         </div>
                         <button
                             type="button"
                             onClick={applyFilters}
-                            className="w-full mt-3 text-xs font-semibold text-white bg-[#0066CC] hover:bg-[#0077ED] rounded-full py-2 transition-colors"
+                            className="w-full mt-3 text-xs font-semibold text-white bg-brand hover:bg-brand-hover rounded-full py-2 transition-colors"
                         >
                             Apply Price
                         </button>
@@ -404,18 +404,18 @@ export default function Category({
                 {/* Products Grid and Sort Banner */}
                 <div className="lg:col-span-3 space-y-6">
                     {/* Toolbar */}
-                    <div className="flex flex-col sm:flex-row justify-between items-baseline sm:items-center space-y-3 sm:space-y-0 pb-4 border-b border-[#D2D2D7] dark:border-gray-800 text-xs">
-                        <span className="font-medium text-gray-500">
+                    <div className="flex flex-col sm:flex-row justify-between items-baseline sm:items-center space-y-3 sm:space-y-0 pb-4 border-b border-line dark:border-gray-800 text-xs">
+                        <span className="font-medium text-muted">
                             Showing {displayedProducts.length} products
                         </span>
 
                         {/* Sort Dropdown */}
-                        <div className="flex items-center space-x-2 bg-white dark:bg-[#1D1D1F] border border-gray-200 dark:border-gray-800 px-4 py-2 rounded-xl">
-                            <span className="text-gray-400 font-medium">Sort by:</span>
+                        <div className="flex items-center space-x-2 bg-white dark:bg-surface-dark border border-gray-200 dark:border-gray-800 px-4 py-2 rounded-xl">
+                            <span className="text-subtle font-medium">Sort by:</span>
                             <select
                                 value={sort}
                                 onChange={(e) => setSort(e.target.value)}
-                                className="border-none bg-transparent p-0 text-xs font-semibold focus:ring-0 focus:outline-none text-[#1d1d1f] dark:text-white"
+                                className="border-none bg-transparent p-0 text-xs font-semibold focus:ring-0 focus:outline-none text-heading dark:text-white"
                             >
                                 <option value="featured">Featured First</option>
                                 <option value="price_asc">Price: Low to High</option>
@@ -427,13 +427,13 @@ export default function Category({
 
                     {/* Products Grid */}
                     {displayedProducts.length === 0 ? (
-                        <div className="text-center py-24 bg-white dark:bg-[#1D1D1F] border border-gray-150 dark:border-gray-800 rounded-3xl">
+                        <div className="text-center py-24 bg-white dark:bg-surface-dark border border-gray-150 dark:border-gray-800 rounded-3xl">
                             <RotateCcw className="w-12 h-12 text-gray-300 stroke-[1.25] mx-auto mb-4" />
                             <h3 className="text-sm font-semibold text-gray-900 dark:text-white">No products match your filters</h3>
-                            <p className="text-xs text-gray-400 mt-1">Try resetting or modifying the filters on the sidebar.</p>
+                            <p className="text-xs text-subtle mt-1">Try resetting or modifying the filters on the sidebar.</p>
                             <button
                                 onClick={resetFilters}
-                                className="mt-6 px-5 py-2 text-xs font-semibold text-white bg-[#0066CC] hover:bg-[#0077ED] rounded-full"
+                                className="mt-6 px-5 py-2 text-xs font-semibold text-white bg-brand hover:bg-brand-hover rounded-full"
                             >
                                 Reset All Filters
                             </button>
@@ -457,14 +457,14 @@ export default function Category({
                                     <Link
                                         key={prod.id}
                                         href={`/products/${prod.slug}`}
-                                        className="bg-white dark:bg-[#1D1D1F] border border-gray-200 dark:border-gray-800 rounded-[4px] p-4 flex flex-col justify-between group transition-all duration-300 hover:shadow-md hover:scale-[1.01]"
+                                        className="bg-white dark:bg-surface-dark border border-gray-200 dark:border-gray-800 rounded-[4px] p-4 flex flex-col justify-between group transition-all duration-300 hover:shadow-md hover:scale-[1.01]"
                                     >
                                         <div className="relative">
                                             {/* Listing-type badge (visible in mixed views) */}
                                             <span className={`absolute top-1 left-1 z-10 inline-flex items-center gap-1 text-[9px] font-bold px-2 py-0.5 rounded-full ${
                                                 isGoldDesire
-                                                    ? 'bg-[#FBF3E0] text-[#B8860B] dark:bg-[#B8860B]/20 dark:text-[#E3B341]'
-                                                    : 'bg-[#EAF2FF] text-[#0066CC] dark:bg-blue-950/40 dark:text-blue-300'
+                                                    ? 'bg-gold-tint text-gold dark:bg-gold/20 dark:text-gold-light'
+                                                    : 'bg-brand-tint-alt text-brand dark:bg-blue-950/40 dark:text-blue-300'
                                             }`}>
                                                 {isGoldDesire ? <><Sparkles className="w-2.5 h-2.5" /> Gold Desire</> : <><Package className="w-2.5 h-2.5" /> Box Pack</>}
                                             </span>
@@ -474,7 +474,7 @@ export default function Category({
                                                 type="button"
                                                 onClick={(e) => addToCompare(e, prod.id)}
                                                 title="Add to Compare"
-                                                className="absolute top-1 right-1 z-10 p-1.5 rounded-full bg-white/90 dark:bg-black/50 border border-gray-150 dark:border-gray-700 text-gray-500 hover:text-[#0066CC] opacity-0 group-hover:opacity-100 transition-opacity"
+                                                className="absolute top-1 right-1 z-10 p-1.5 rounded-full bg-white/90 dark:bg-black/50 border border-gray-150 dark:border-gray-700 text-muted hover:text-brand opacity-0 group-hover:opacity-100 transition-opacity"
                                             >
                                                 <Scale className="w-3.5 h-3.5" />
                                             </button>
@@ -498,12 +498,12 @@ export default function Category({
                                             </h3>
 
                                             {/* Product Specifications Subtitle */}
-                                            <p className="text-[11px] text-gray-500 dark:text-gray-400 font-medium">
+                                            <p className="text-[11px] text-muted dark:text-subtle font-medium">
                                                 {isGoldDesire
                                                     ? `Grade ${prod.condition_grade || 'A'}${prod.battery_health ? ` · Battery ${prod.battery_health}%` : ''}`
                                                     : (prodColors.length > 0 ? `(${prodColors.join(', ')})` : '(Standard Variant)')}
                                             </p>
-                                            <p className="text-sm font-extrabold text-[#0066CC]">R {parseFloat(prod.base_price).toLocaleString()}</p>
+                                            <p className="text-sm font-extrabold text-brand">R {parseFloat(prod.base_price).toLocaleString()}</p>
                                         </div>
                                     </Link>
                                 );

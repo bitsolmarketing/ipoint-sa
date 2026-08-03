@@ -3,7 +3,7 @@ import { Link, usePage, useForm } from '@inertiajs/react';
 import {
     LayoutDashboard, Tag, Laptop, Palette, Layers, Ruler, Image,
     ShoppingBag, Globe, LogOut, Menu, X, ChevronRight, CheckCircle, AlertCircle,
-    Sparkles, MessageSquare, Wrench
+    Sparkles, MessageSquare, Wrench, Paintbrush, CreditCard, Settings2
 } from 'lucide-react';
 
 export default function AdminLayout({ children }) {
@@ -14,8 +14,10 @@ export default function AdminLayout({ children }) {
 
     const currentUrl = usePage().url;
 
+    // `exact` keeps a parent item from lighting up for a sibling's URL —
+    // /admin/repairs/catalogue must not also highlight "Repairs".
     const navItems = [
-        { name: 'Dashboard', url: '/admin', icon: LayoutDashboard },
+        { name: 'Dashboard', url: '/admin', icon: LayoutDashboard, exact: true },
         { name: 'Categories', url: '/admin/categories', icon: Tag },
         { name: 'Products', url: '/admin/products', icon: Laptop },
         { name: 'Colors', url: '/admin/colors', icon: Palette },
@@ -24,8 +26,11 @@ export default function AdminLayout({ children }) {
         { name: 'Banners', url: '/admin/banners', icon: Image },
         { name: 'Offers', url: '/admin/offers', icon: Sparkles },
         { name: 'Reviews', url: '/admin/reviews', icon: MessageSquare },
-        { name: 'Repairs', url: '/admin/repairs', icon: Wrench },
+        { name: 'Repairs', url: '/admin/repairs', icon: Wrench, exact: true },
+        { name: 'Repair Catalogue', url: '/admin/repairs/catalogue', icon: Settings2 },
         { name: 'Orders', url: '/admin/orders', icon: ShoppingBag },
+        { name: 'Payments', url: '/admin/payments', icon: CreditCard },
+        { name: 'Appearance', url: '/admin/appearance', icon: Paintbrush },
     ];
 
     useEffect(() => {
@@ -67,8 +72,10 @@ export default function AdminLayout({ children }) {
                     <div className="py-6 px-4 space-y-1">
                         {navItems.map((item) => {
                             const Icon = item.icon;
-                            // Check if currentUrl matches or starts with item.url
-                            const isActive = currentUrl === item.url || (item.url !== '/admin' && currentUrl.startsWith(item.url));
+                            const path = currentUrl.split('?')[0];
+                            const isActive = item.exact
+                                ? path === item.url
+                                : path === item.url || path.startsWith(item.url + '/');
 
                             return (
                                 <Link 

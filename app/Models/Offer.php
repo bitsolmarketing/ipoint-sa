@@ -9,8 +9,13 @@ class Offer extends Model
 {
     protected $fillable = [
         'title',
+        'subtitle',
+        'description',
+        'badge_text',
         'image_path',
         'link_url',
+        'cta_label',
+        'overlay_style',
         'sort_order',
         'is_active',
         'start_date',

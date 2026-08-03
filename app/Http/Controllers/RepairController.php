@@ -17,35 +17,15 @@ use Inertia\Inertia;
  */
 class RepairController extends Controller
 {
-    /**
-     * Repair category → supported iPhone model list. Content to be confirmed
-     * with the client's actual repair capability; managed here for now.
-     */
-    private const REPAIR_CATEGORIES = [
-        [
-            'key' => 'screen',
-            'title' => 'Screen repairs',
-            'description' => 'LCD and glass fracture repairs using genuine parts.',
-            'models' => ['iPhone 11', 'iPhone 12', 'iPhone 13', 'iPhone 14', 'iPhone 14 Pro', 'iPhone 15', 'iPhone 15 Pro', 'iPhone 15 Pro Max'],
-        ],
-        [
-            'key' => 'battery',
-            'title' => 'Battery replacements',
-            'description' => 'Restore your battery health with a genuine replacement battery.',
-            'models' => ['iPhone 11', 'iPhone 12', 'iPhone 13', 'iPhone 14', 'iPhone 15', 'iPhone 15 Plus'],
-        ],
-        [
-            'key' => 'rear_housing',
-            'title' => 'Rear housing replacement',
-            'description' => 'Rear glass and housing repairs. Limited stock on some models.',
-            'models' => ['iPhone 12', 'iPhone 13', 'iPhone 14', 'iPhone 15'],
-        ],
-    ];
-
     public function index(Request $request)
     {
         return Inertia::render('Storefront/Repair', [
-            'categories' => self::REPAIR_CATEGORIES,
+            // Categories, slots and service modes are all derived from the
+            // admin-managed catalogue (Admin → Repairs → Catalogue).
+            'categories' => RepairCatalogue::categories(),
+            'timeSlots' => RepairCatalogue::timeSlots(),
+            'serviceModes' => RepairCatalogue::serviceModes(),
+            'options' => RepairCatalogue::serviceOptions(),
             'locations' => RepairLocation::where('is_active', true)->orderBy('name')->get(['id', 'name', 'city', 'address']),
             // Populated when the customer arrives from the /services price
             // selector, so they don't re-pick what they already chose.
@@ -53,7 +33,7 @@ class RepairController extends Controller
                 'repair_type' => in_array($request->query('type'), RepairCatalogue::repairTypeKeys(), true)
                     ? $request->query('type')
                     : null,
-                'service_mode' => in_array($request->query('mode'), ['in_store', 'home_collection'], true)
+                'service_mode' => in_array($request->query('mode'), RepairCatalogue::serviceModeKeys(), true)
                     ? $request->query('mode')
                     : null,
                 'device_model' => in_array($request->query('model'), RepairCatalogue::modelNames(), true)
@@ -68,14 +48,20 @@ class RepairController extends Controller
 
     public function book(Request $request)
     {
+        // Honour the admin's "stop taking bookings" switch server-side too, not
+        // just by hiding the form.
+        if (! (RepairCatalogue::serviceOptions()['booking_enabled'] ?? true)) {
+            return redirect()->back()->with('error', 'Online repair bookings are closed at the moment. Please contact us directly.');
+        }
+
         $validated = $request->validate([
             'repair_type' => ['required', Rule::in(RepairCatalogue::repairTypeKeys())],
-            'service_mode' => ['required', Rule::in(['in_store', 'home_collection'])],
+            'service_mode' => ['required', Rule::in(RepairCatalogue::serviceModeKeys())],
             'device_model' => 'required|string|max:100',
             'device_variant' => 'nullable|string|max:60',
             'repair_location_id' => 'required|exists:repair_locations,id',
             'booking_date' => 'required|date|after_or_equal:today',
-            'time_slot' => 'required|string|max:20',
+            'time_slot' => ['required', 'string', 'max:40', Rule::in(RepairCatalogue::timeSlots())],
             'customer_name' => 'required|string|max:120',
             'email' => 'required|email|max:150',
             'phone' => 'nullable|string|max:30',

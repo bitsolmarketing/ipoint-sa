@@ -39,6 +39,14 @@
         @routes
         @viteReactRefresh
         @vite(['resources/js/app.jsx', "resources/js/Pages/{$page['component']}.jsx"])
+
+        {{--
+            Admin-configured colour palette (Admin → Appearance). Emitted after
+            @vite so the html background rule wins over the compiled stylesheet.
+            Defaults land on :root, overrides on .storefront-theme — see
+            App\Support\ThemePalette.
+        --}}
+        <style id="theme-palette">{!! \App\Support\ThemePalette::css() !!}</style>
         <!-- HERE Maps SDK -->
         <link rel="stylesheet" type="text/css" href="https://js.api.here.com/v3/3.1/mapsjs-ui.css" />
         <script type="text/javascript" src="https://js.api.here.com/v3/3.1/mapsjs-core.js"></script>

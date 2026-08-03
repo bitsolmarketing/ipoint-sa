@@ -50,6 +50,7 @@ export default function Home({
     heroBanners = [],
     featuredProducts = [],
     offers = [],
+    offersSection = null,
     categoryTabs = [],
     promoBannerPrimary = null,
     promoBannerSecondary = null,
@@ -168,21 +169,26 @@ export default function Home({
             {/* ============================================================
                 2. LATEST OFFERS — admin-managed carousel
                ============================================================ */}
-            {offers.length > 0 && (
+            {offers.length > 0 && offersSection?.is_enabled !== false && (
                 <ScrollReveal>
                     <section className="max-w-7xl mx-auto px-4 sm:px-6 md:px-8 py-16">
                         <div className="flex justify-between items-end mb-8">
                             <div>
-                                <span className="text-[10px] font-bold text-[#0066CC] uppercase tracking-wider">Deals & Promotions</span>
-                                <h2 className="text-2xl sm:text-3xl font-extrabold text-[#1D1D1F] dark:text-white tracking-tight mt-1">
-                                    Latest offers.
+                                {offersSection?.eyebrow && (
+                                    <span className="text-[10px] font-bold text-brand uppercase tracking-wider">{offersSection.eyebrow}</span>
+                                )}
+                                <h2 className="text-2xl sm:text-3xl font-extrabold text-heading dark:text-white tracking-tight mt-1">
+                                    {offersSection?.heading || 'Latest offers.'}
                                 </h2>
+                                {offersSection?.subheading && (
+                                    <p className="text-xs text-muted dark:text-subtle mt-1.5 max-w-lg">{offersSection.subheading}</p>
+                                )}
                             </div>
                             <div className="hidden sm:flex items-center space-x-2">
-                                <button onClick={() => scrollRow(offersRef, -1)} aria-label="Scroll offers left" className="p-2 rounded-full bg-white dark:bg-[#1D1D1F] border border-gray-200 dark:border-gray-800 text-gray-700 dark:text-gray-200 hover:bg-gray-50 transition-colors">
+                                <button onClick={() => scrollRow(offersRef, -1)} aria-label="Scroll offers left" className="p-2 rounded-full bg-white dark:bg-surface-dark border border-gray-200 dark:border-gray-800 text-gray-700 dark:text-gray-200 hover:bg-gray-50 transition-colors">
                                     <ChevronLeft className="w-4 h-4" />
                                 </button>
-                                <button onClick={() => scrollRow(offersRef, 1)} aria-label="Scroll offers right" className="p-2 rounded-full bg-white dark:bg-[#1D1D1F] border border-gray-200 dark:border-gray-800 text-gray-700 dark:text-gray-200 hover:bg-gray-50 transition-colors">
+                                <button onClick={() => scrollRow(offersRef, 1)} aria-label="Scroll offers right" className="p-2 rounded-full bg-white dark:bg-surface-dark border border-gray-200 dark:border-gray-800 text-gray-700 dark:text-gray-200 hover:bg-gray-50 transition-colors">
                                     <ChevronRight className="w-4 h-4" />
                                 </button>
                             </div>
@@ -201,13 +207,30 @@ export default function Home({
                                             alt={offer.title || 'Offer'}
                                             className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
                                         />
-                                        {offer.title && (
+
+                                        {offer.badge_text && (
+                                            <span className="absolute top-3 left-3 px-2.5 py-1 rounded-full bg-white/95 text-heading text-[10px] font-extrabold shadow-sm">
+                                                {offer.badge_text}
+                                            </span>
+                                        )}
+
+                                        {/* "none" means the promo text is already baked into the artwork */}
+                                        {offer.overlay_style !== 'none' && (offer.title || offer.subtitle) && (
                                             <>
-                                                <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent" />
+                                                {offer.overlay_style === 'solid' ? (
+                                                    <div className="absolute bottom-0 left-0 right-0 h-2/5 bg-black/70 backdrop-blur-sm" />
+                                                ) : (
+                                                    <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent" />
+                                                )}
                                                 <div className="absolute bottom-0 left-0 right-0 p-5">
-                                                    <h3 className="text-base font-extrabold text-white leading-tight">{offer.title}</h3>
-                                                    <span className="inline-flex items-center text-[11px] font-bold text-[#2997ff] mt-1">
-                                                        Shop offer <ArrowRight className="w-3 h-3 ml-0.5" />
+                                                    {offer.title && (
+                                                        <h3 className="text-base font-extrabold text-white leading-tight">{offer.title}</h3>
+                                                    )}
+                                                    {offer.subtitle && (
+                                                        <p className="text-[11px] text-white/80 mt-0.5 leading-snug">{offer.subtitle}</p>
+                                                    )}
+                                                    <span className="inline-flex items-center text-[11px] font-bold text-accent mt-1">
+                                                        {offer.cta_label || 'Shop offer'} <ArrowRight className="w-3 h-3 ml-0.5" />
                                                     </span>
                                                 </div>
                                             </>
@@ -224,9 +247,9 @@ export default function Home({
                 3. PRODUCT CATEGORIES — tabbed browser
                ============================================================ */}
             {categoryTabs.length > 0 && (
-                <section className="bg-white dark:bg-[#1D1D1F] py-16 border-t border-b border-[#D2D2D7] dark:border-gray-800">
+                <section className="bg-white dark:bg-surface-dark py-16 border-t border-b border-line dark:border-gray-800">
                     <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-8">
-                        <h2 className="text-3xl sm:text-4xl font-semibold text-center text-[#1D1D1F] dark:text-white tracking-tight mb-12">
+                        <h2 className="text-3xl sm:text-4xl font-semibold text-center text-heading dark:text-white tracking-tight mb-12">
                             Product Categories
                         </h2>
 
@@ -234,17 +257,17 @@ export default function Home({
 
                             {/* Left: brand statement */}
                             <div className="lg:col-span-1">
-                                <span className="block text-2xl font-extrabold tracking-tight text-[#1D1D1F] dark:text-white mb-6">
+                                <span className="block text-2xl font-extrabold tracking-tight text-heading dark:text-white mb-6">
                                     iPoint
                                 </span>
                                 <h3 className="text-3xl sm:text-4xl font-extrabold leading-[1.15] tracking-tight">
-                                    <span className="text-[#7CBA3F]">Effortless</span>
+                                    <span className="text-success">Effortless</span>
                                     <br />
-                                    <span className="text-[#1D1D1F] dark:text-white">Apple</span>
+                                    <span className="text-heading dark:text-white">Apple</span>
                                     <br />
-                                    <span className="text-[#1D1D1F] dark:text-white">Experience</span>
+                                    <span className="text-heading dark:text-white">Experience</span>
                                 </h3>
-                                <p className="text-sm text-gray-500 dark:text-gray-400 mt-5 max-w-xs leading-relaxed">
+                                <p className="text-sm text-muted dark:text-subtle mt-5 max-w-xs leading-relaxed">
                                     A Comprehensive Apple product lineup available at your fingertips!
                                 </p>
                             </div>
@@ -260,8 +283,8 @@ export default function Home({
                                                 onClick={() => setActiveTab(tab.slug)}
                                                 className={`px-6 py-2.5 rounded-full border text-sm font-medium transition-colors ${
                                                     isActive
-                                                        ? 'bg-[#7CBA3F] border-[#7CBA3F] text-white'
-                                                        : 'bg-transparent border-[#7CBA3F] text-[#7CBA3F] hover:bg-[#7CBA3F]/10'
+                                                        ? 'bg-success border-success text-white'
+                                                        : 'bg-transparent border-success text-success hover:bg-success/10'
                                                 }`}
                                             >
                                                 {tab.name}
@@ -275,7 +298,7 @@ export default function Home({
                                         <Link
                                             key={prod.id}
                                             href={`/products/${prod.slug}`}
-                                            className="bg-white dark:bg-[#1D1D1F] border border-gray-200 dark:border-gray-800 rounded-xl p-6 flex flex-col group transition-all duration-300 hover:shadow-[0_8px_30px_rgba(0,0,0,0.12)] hover:border-transparent"
+                                            className="bg-white dark:bg-surface-dark border border-gray-200 dark:border-gray-800 rounded-xl p-6 flex flex-col group transition-all duration-300 hover:shadow-[0_8px_30px_rgba(0,0,0,0.12)] hover:border-transparent"
                                         >
                                             <div className="relative h-52 w-full flex items-center justify-center overflow-hidden">
                                                 <img
@@ -285,17 +308,17 @@ export default function Home({
                                                 />
                                                 {/* "View Details" reveal on hover */}
                                                 <span className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none">
-                                                    <span className="bg-[#F0F0F0]/95 dark:bg-gray-800/95 text-[#1D1D1F] dark:text-white text-sm font-medium px-6 py-2.5 rounded-md shadow-md">
+                                                    <span className="bg-line-soft/95 dark:bg-gray-800/95 text-heading dark:text-white text-sm font-medium px-6 py-2.5 rounded-md shadow-md">
                                                         View Details
                                                     </span>
                                                 </span>
                                             </div>
                                             <div className="border-t border-gray-200 dark:border-gray-800 mt-5 pt-5">
-                                                <h4 className="text-base font-bold text-[#1D1D1F] dark:text-white leading-snug">
+                                                <h4 className="text-base font-bold text-heading dark:text-white leading-snug">
                                                     {prod.name}
                                                 </h4>
                                                 {variantLabel(prod) && (
-                                                    <p className="text-xs text-gray-500 dark:text-gray-400 mt-1.5">
+                                                    <p className="text-xs text-muted dark:text-subtle mt-1.5">
                                                         ({variantLabel(prod)})
                                                     </p>
                                                 )}
@@ -308,7 +331,7 @@ export default function Home({
                                 <div className="mt-10 flex justify-center lg:justify-start">
                                     <Link
                                         href="/products"
-                                        className="inline-flex items-center gap-2 px-7 py-3 rounded-full bg-[#7CBA3F] text-white text-sm font-semibold hover:bg-[#6ba834] transition-colors"
+                                        className="inline-flex items-center gap-2 px-7 py-3 rounded-full bg-success text-white text-sm font-semibold hover:bg-success-hover transition-colors"
                                     >
                                         View All Products
                                         <ArrowRight className="w-4 h-4" />
@@ -333,8 +356,8 @@ export default function Home({
                     <section className="max-w-7xl mx-auto px-4 sm:px-6 md:px-8 py-16">
                         <div className="flex justify-between items-end mb-8">
                             <div>
-                                <span className="text-[10px] font-bold text-[#0066CC] uppercase tracking-wider">Handpicked</span>
-                                <h2 className="text-2xl sm:text-3xl font-extrabold text-[#1D1D1F] dark:text-white tracking-tight mt-1">
+                                <span className="text-[10px] font-bold text-brand uppercase tracking-wider">Handpicked</span>
+                                <h2 className="text-2xl sm:text-3xl font-extrabold text-heading dark:text-white tracking-tight mt-1">
                                     Featured Apple products.
                                 </h2>
                             </div>
@@ -345,7 +368,7 @@ export default function Home({
                                 <Link
                                     key={prod.id}
                                     href={`/products/${prod.slug}`}
-                                    className="bg-white dark:bg-[#1D1D1F] border border-gray-200 dark:border-gray-800 rounded-xl p-6 flex flex-col group transition-all duration-300 hover:shadow-[0_8px_30px_rgba(0,0,0,0.12)] hover:border-transparent"
+                                    className="bg-white dark:bg-surface-dark border border-gray-200 dark:border-gray-800 rounded-xl p-6 flex flex-col group transition-all duration-300 hover:shadow-[0_8px_30px_rgba(0,0,0,0.12)] hover:border-transparent"
                                 >
                                     <div className="relative h-44 w-full flex items-center justify-center overflow-hidden">
                                         <img
@@ -354,18 +377,18 @@ export default function Home({
                                             className="max-h-full max-w-full object-contain"
                                         />
                                         <span className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none">
-                                            <span className="bg-[#F0F0F0]/95 dark:bg-gray-800/95 text-[#1D1D1F] dark:text-white text-sm font-medium px-6 py-2.5 rounded-md shadow-md">
+                                            <span className="bg-line-soft/95 dark:bg-gray-800/95 text-heading dark:text-white text-sm font-medium px-6 py-2.5 rounded-md shadow-md">
                                                 View Details
                                             </span>
                                         </span>
                                     </div>
                                     <div className="border-t border-gray-200 dark:border-gray-800 mt-5 pt-5">
-                                        <h3 className="text-base font-bold text-[#1D1D1F] dark:text-white leading-snug">{prod.name}</h3>
-                                        <p className="text-sm font-extrabold text-[#1D1D1F] dark:text-white mt-1">
+                                        <h3 className="text-base font-bold text-heading dark:text-white leading-snug">{prod.name}</h3>
+                                        <p className="text-sm font-extrabold text-heading dark:text-white mt-1">
                                             From R {parseFloat(prod.base_price).toLocaleString()}
                                         </p>
                                         {variantLabel(prod) && (
-                                            <p className="text-xs text-gray-500 dark:text-gray-400 mt-1.5">
+                                            <p className="text-xs text-muted dark:text-subtle mt-1.5">
                                                 ({variantLabel(prod)})
                                             </p>
                                         )}
@@ -390,16 +413,16 @@ export default function Home({
                     <section className="max-w-7xl mx-auto px-4 sm:px-6 md:px-8 py-16">
                         <div className="flex justify-between items-end mb-8">
                             <div>
-                                <span className="text-[10px] font-bold text-[#0066CC] uppercase tracking-wider">Genuine & certified</span>
-                                <h2 className="text-2xl sm:text-3xl font-extrabold text-[#1D1D1F] dark:text-white tracking-tight mt-1">
+                                <span className="text-[10px] font-bold text-brand uppercase tracking-wider">Genuine & certified</span>
+                                <h2 className="text-2xl sm:text-3xl font-extrabold text-heading dark:text-white tracking-tight mt-1">
                                     Apple authorized accessories.
                                 </h2>
                             </div>
                             <div className="hidden sm:flex items-center space-x-2">
-                                <button onClick={() => scrollRow(accessoriesRef, -1)} aria-label="Scroll accessories left" className="p-2 rounded-full bg-white dark:bg-[#1D1D1F] border border-gray-200 dark:border-gray-800 text-gray-700 dark:text-gray-200 hover:bg-gray-50 transition-colors">
+                                <button onClick={() => scrollRow(accessoriesRef, -1)} aria-label="Scroll accessories left" className="p-2 rounded-full bg-white dark:bg-surface-dark border border-gray-200 dark:border-gray-800 text-gray-700 dark:text-gray-200 hover:bg-gray-50 transition-colors">
                                     <ChevronLeft className="w-4 h-4" />
                                 </button>
-                                <button onClick={() => scrollRow(accessoriesRef, 1)} aria-label="Scroll accessories right" className="p-2 rounded-full bg-white dark:bg-[#1D1D1F] border border-gray-200 dark:border-gray-800 text-gray-700 dark:text-gray-200 hover:bg-gray-50 transition-colors">
+                                <button onClick={() => scrollRow(accessoriesRef, 1)} aria-label="Scroll accessories right" className="p-2 rounded-full bg-white dark:bg-surface-dark border border-gray-200 dark:border-gray-800 text-gray-700 dark:text-gray-200 hover:bg-gray-50 transition-colors">
                                     <ChevronRight className="w-4 h-4" />
                                 </button>
                             </div>
@@ -410,7 +433,7 @@ export default function Home({
                                 <Link
                                     key={prod.id}
                                     href={`/products/${prod.slug}`}
-                                    className="flex-shrink-0 w-[240px] sm:w-[270px] bg-white dark:bg-[#1D1D1F] border border-gray-200 dark:border-gray-800 rounded-xl p-6 group transition-all duration-300 hover:shadow-[0_8px_30px_rgba(0,0,0,0.12)] hover:border-transparent"
+                                    className="flex-shrink-0 w-[240px] sm:w-[270px] bg-white dark:bg-surface-dark border border-gray-200 dark:border-gray-800 rounded-xl p-6 group transition-all duration-300 hover:shadow-[0_8px_30px_rgba(0,0,0,0.12)] hover:border-transparent"
                                 >
                                     <div className="relative h-40 w-full flex items-center justify-center overflow-hidden">
                                         <img
@@ -419,17 +442,17 @@ export default function Home({
                                             className="max-h-full max-w-full object-contain"
                                         />
                                         <span className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none">
-                                            <span className="bg-[#F0F0F0]/95 dark:bg-gray-800/95 text-[#1D1D1F] dark:text-white text-sm font-medium px-5 py-2 rounded-md shadow-md">
+                                            <span className="bg-line-soft/95 dark:bg-gray-800/95 text-heading dark:text-white text-sm font-medium px-5 py-2 rounded-md shadow-md">
                                                 View Details
                                             </span>
                                         </span>
                                     </div>
                                     <div className="border-t border-gray-200 dark:border-gray-800 mt-5 pt-5">
                                         {prod.is_new && (
-                                            <span className="text-[9px] font-extrabold uppercase tracking-widest text-[#0066CC]">New</span>
+                                            <span className="text-[9px] font-extrabold uppercase tracking-widest text-brand">New</span>
                                         )}
                                         <h3 className="text-sm font-bold text-gray-900 dark:text-white leading-snug">{prod.name}</h3>
-                                        <p className="text-sm font-extrabold text-[#1D1D1F] dark:text-white mt-1">
+                                        <p className="text-sm font-extrabold text-heading dark:text-white mt-1">
                                             From R {parseFloat(prod.base_price).toLocaleString()}
                                         </p>
                                     </div>
@@ -440,7 +463,7 @@ export default function Home({
                         <div className="mt-8 flex justify-center sm:justify-start">
                             <Link
                                 href="/category/accessories"
-                                className="inline-flex items-center gap-2 text-sm font-bold text-[#0066CC] hover:text-[#0077ED] transition-colors"
+                                className="inline-flex items-center gap-2 text-sm font-bold text-brand hover:text-brand-hover transition-colors"
                             >
                                 Shop all accessories <ArrowRight className="w-4 h-4" />
                             </Link>
@@ -453,13 +476,13 @@ export default function Home({
                 8. DISCLAIMER / TRUST — "Buy with Confidence"
                ============================================================ */}
             <ScrollReveal>
-                <section className="bg-[#F5F5F7] dark:bg-black border-t border-[#D2D2D7] dark:border-gray-800">
+                <section className="bg-page dark:bg-black border-t border-line dark:border-gray-800">
                     <div className="max-w-5xl mx-auto px-4 sm:px-6 md:px-8 py-16 text-center">
-                        <span className="text-[10px] font-bold text-[#0066CC] uppercase tracking-wider">Shop with peace of mind</span>
-                        <h2 className="text-2xl sm:text-3xl font-extrabold text-[#1D1D1F] dark:text-white tracking-tight mt-1">
+                        <span className="text-[10px] font-bold text-brand uppercase tracking-wider">Shop with peace of mind</span>
+                        <h2 className="text-2xl sm:text-3xl font-extrabold text-heading dark:text-white tracking-tight mt-1">
                             Buy with Confidence
                         </h2>
-                        <p className="text-sm text-gray-500 dark:text-gray-400 mt-4 max-w-2xl mx-auto leading-relaxed">
+                        <p className="text-sm text-muted dark:text-subtle mt-4 max-w-2xl mx-auto leading-relaxed">
                             We offer genuine Apple products and premium accessories. Product availability, pricing, and
                             promotions are subject to change without prior notice. Images are for illustration purposes only.
                             Warranty coverage varies by product. Please review product details before placing your order.
@@ -469,10 +492,10 @@ export default function Home({
                             {TRUST_BADGES.map(({ icon: Icon, label }) => (
                                 <div
                                     key={label}
-                                    className="flex flex-col items-center justify-center gap-2 bg-white dark:bg-[#1D1D1F] border border-gray-200 dark:border-gray-800 rounded-2xl px-4 py-5"
+                                    className="flex flex-col items-center justify-center gap-2 bg-white dark:bg-surface-dark border border-gray-200 dark:border-gray-800 rounded-2xl px-4 py-5"
                                 >
-                                    <Icon className="w-6 h-6 text-[#7CBA3F]" />
-                                    <span className="text-xs font-semibold text-[#1D1D1F] dark:text-white text-center leading-snug">
+                                    <Icon className="w-6 h-6 text-success" />
+                                    <span className="text-xs font-semibold text-heading dark:text-white text-center leading-snug">
                                         {label}
                                     </span>
                                 </div>
@@ -486,13 +509,13 @@ export default function Home({
                 9. NEWSLETTER SUBSCRIPTION
                ============================================================ */}
             <ScrollReveal>
-                <section className="bg-white dark:bg-[#1D1D1F] border-t border-[#D2D2D7] dark:border-gray-800">
+                <section className="bg-white dark:bg-surface-dark border-t border-line dark:border-gray-800">
                     <div className="max-w-3xl mx-auto px-4 sm:px-6 md:px-8 py-16 text-center">
-                        <span className="text-[10px] font-bold text-[#0066CC] uppercase tracking-wider">Stay in the loop</span>
-                        <h2 className="text-2xl sm:text-3xl font-extrabold text-[#1D1D1F] dark:text-white tracking-tight mt-1">
+                        <span className="text-[10px] font-bold text-brand uppercase tracking-wider">Stay in the loop</span>
+                        <h2 className="text-2xl sm:text-3xl font-extrabold text-heading dark:text-white tracking-tight mt-1">
                             Sign up and subscribe.
                         </h2>
-                        <p className="text-xs sm:text-sm text-gray-500 dark:text-gray-400 mt-3 max-w-lg mx-auto">
+                        <p className="text-xs sm:text-sm text-muted dark:text-subtle mt-3 max-w-lg mx-auto">
                             Subscribe to get special offers, free giveaways, and once-in-a-lifetime deals.
                         </p>
 
@@ -511,11 +534,11 @@ export default function Home({
                                     value={email}
                                     onChange={(e) => setEmail(e.target.value)}
                                     placeholder="Enter your email address"
-                                    className="w-full flex-1 bg-[#F5F5F7] dark:bg-gray-800 border border-transparent focus:border-[#0066CC] rounded-full px-5 py-3 text-sm text-[#1D1D1F] dark:text-white placeholder-gray-400 focus:outline-none transition-colors"
+                                    className="w-full flex-1 bg-page dark:bg-gray-800 border border-transparent focus:border-brand rounded-full px-5 py-3 text-sm text-heading dark:text-white placeholder-gray-400 focus:outline-none transition-colors"
                                 />
                                 <button
                                     type="submit"
-                                    className="w-full sm:w-auto whitespace-nowrap bg-[#0066CC] hover:bg-[#0077ED] text-white text-sm font-bold px-7 py-3 rounded-full transition-colors"
+                                    className="w-full sm:w-auto whitespace-nowrap bg-brand hover:bg-brand-hover text-white text-sm font-bold px-7 py-3 rounded-full transition-colors"
                                 >
                                     Subscribe
                                 </button>

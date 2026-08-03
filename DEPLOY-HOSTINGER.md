@@ -79,7 +79,7 @@ Make these writable (File Manager → right-click → Permissions → `775`, or 
 - Home page shows the **Latest Offers** carousel + category shelves.
 - `/apple-product-repair` renders and the booking form submits.
 - `/compare` works; **Add to Compare** on a product bumps the header count.
-- `/admin` login `admin@istore.co.za` / `Password123!` — **change this password immediately**.
+- `/admin` login `admin@ipointapple.com` / `Password123!` — **change this password immediately**.
 - Confirm `APP_DEBUG=false` and that no Laravel error pages leak stack traces.
 
 ## Redeploying later

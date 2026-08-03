@@ -18,6 +18,9 @@ use App\Http\Controllers\Admin\AdminOrderController;
 use App\Http\Controllers\Admin\AdminOfferController;
 use App\Http\Controllers\Admin\AdminReviewController;
 use App\Http\Controllers\Admin\AdminRepairController;
+use App\Http\Controllers\Admin\AdminRepairCatalogueController;
+use App\Http\Controllers\Admin\AdminAppearanceController;
+use App\Http\Controllers\Admin\AdminPaymentController;
 use App\Http\Middleware\AdminMiddleware;
 use Illuminate\Support\Facades\Route;
 
@@ -103,8 +106,25 @@ Route::middleware(['auth', AdminMiddleware::class])->prefix('admin')->name('admi
     Route::resource('banners', AdminBannerController::class);
     Route::resource('attributes', AdminAttributeController::class);
 
+    // Site colour palette (Appearance)
+    Route::get('/appearance', [AdminAppearanceController::class, 'index'])->name('appearance.index');
+    Route::post('/appearance', [AdminAppearanceController::class, 'update'])->name('appearance.update');
+    Route::post('/appearance/reset', [AdminAppearanceController::class, 'reset'])->name('appearance.reset');
+
+    // Payment gateways, merchant onboarding & bank credentials
+    Route::get('/payments', [AdminPaymentController::class, 'index'])->name('payments.index');
+    Route::post('/payments/checkout', [AdminPaymentController::class, 'updateCheckout'])->name('payments.checkout.update');
+    Route::post('/payments/gateways/{provider}', [AdminPaymentController::class, 'updateGateway'])->name('payments.gateways.update');
+    Route::post('/payments/gateways/{provider}/disconnect', [AdminPaymentController::class, 'disconnectGateway'])->name('payments.gateways.disconnect');
+    Route::post('/payments/bank-accounts', [AdminPaymentController::class, 'storeBankAccount'])->name('payments.bank-accounts.store');
+    Route::put('/payments/bank-accounts/{id}', [AdminPaymentController::class, 'updateBankAccount'])->name('payments.bank-accounts.update');
+    Route::delete('/payments/bank-accounts/{id}', [AdminPaymentController::class, 'destroyBankAccount'])->name('payments.bank-accounts.destroy');
+
     // Latest Offers module (§4.4)
+    Route::post('/offers/section', [AdminOfferController::class, 'updateSection'])->name('offers.section.update');
     Route::post('/offers/{id}/toggle', [AdminOfferController::class, 'toggle'])->name('offers.toggle');
+    Route::post('/offers/{id}/reorder', [AdminOfferController::class, 'reorder'])->name('offers.reorder');
+    Route::post('/offers/{id}/duplicate', [AdminOfferController::class, 'duplicate'])->name('offers.duplicate');
     Route::resource('offers', AdminOfferController::class)->except(['create', 'show', 'edit']);
 
     // Reviews moderation (§7.3)
@@ -112,6 +132,24 @@ Route::middleware(['auth', AdminMiddleware::class])->prefix('admin')->name('admi
     Route::post('/reviews/{id}/approve', [AdminReviewController::class, 'approve'])->name('reviews.approve');
     Route::post('/reviews/{id}/reject', [AdminReviewController::class, 'reject'])->name('reviews.reject');
     Route::delete('/reviews/{id}', [AdminReviewController::class, 'destroy'])->name('reviews.destroy');
+
+    // Repair catalogue — device categories, models, repair types, prices, options.
+    // Declared before /repairs/{...} routes so "catalogue" is never read as an id.
+    Route::get('/repairs/catalogue', [AdminRepairCatalogueController::class, 'index'])->name('repairs.catalogue');
+    Route::post('/repairs/catalogue/seed', [AdminRepairCatalogueController::class, 'seedDefaults'])->name('repairs.seed');
+    Route::post('/repairs/catalogue/options', [AdminRepairCatalogueController::class, 'updateOptions'])->name('repairs.options.update');
+
+    Route::post('/repairs/types', [AdminRepairCatalogueController::class, 'storeType'])->name('repairs.types.store');
+    Route::put('/repairs/types/{id}', [AdminRepairCatalogueController::class, 'updateType'])->name('repairs.types.update');
+    Route::delete('/repairs/types/{id}', [AdminRepairCatalogueController::class, 'destroyType'])->name('repairs.types.destroy');
+
+    Route::post('/repairs/devices', [AdminRepairCatalogueController::class, 'storeDevice'])->name('repairs.devices.store');
+    Route::put('/repairs/devices/{id}', [AdminRepairCatalogueController::class, 'updateDevice'])->name('repairs.devices.update');
+    Route::delete('/repairs/devices/{id}', [AdminRepairCatalogueController::class, 'destroyDevice'])->name('repairs.devices.destroy');
+
+    Route::post('/repairs/models', [AdminRepairCatalogueController::class, 'storeModel'])->name('repairs.models.store');
+    Route::put('/repairs/models/{id}', [AdminRepairCatalogueController::class, 'updateModel'])->name('repairs.models.update');
+    Route::delete('/repairs/models/{id}', [AdminRepairCatalogueController::class, 'destroyModel'])->name('repairs.models.destroy');
 
     // Repair bookings & service locations (§8.5)
     Route::get('/repairs', [AdminRepairController::class, 'index'])->name('repairs.index');

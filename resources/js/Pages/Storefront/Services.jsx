@@ -77,16 +77,16 @@ export default function Services({ products = [], ineligibleLevy = 750, location
             <Head title="Repairs & Services — iPoint" />
 
             {/* ── Hero ─────────────────────────────────────────────── */}
-            <section className="bg-white dark:bg-[#1D1D1F] px-4 sm:px-6 md:px-8 pt-16 pb-20">
+            <section className="bg-white dark:bg-surface-dark px-4 sm:px-6 md:px-8 pt-16 pb-20">
                 <div className="max-w-4xl mx-auto text-center">
                     {/* Breadcrumb */}
-                    <nav className="flex items-center justify-center space-x-1.5 text-[11px] text-gray-400 mb-4" aria-label="Breadcrumb">
-                        <Link href="/" className="hover:text-[#0066CC] transition-colors font-medium">Home</Link>
+                    <nav className="flex items-center justify-center space-x-1.5 text-[11px] text-subtle mb-4" aria-label="Breadcrumb">
+                        <Link href="/" className="hover:text-brand transition-colors font-medium">Home</Link>
                         <span className="text-gray-300">›</span>
-                        <span className="text-[#1D1D1F] dark:text-white font-semibold">Repairs &amp; Services</span>
+                        <span className="text-heading dark:text-white font-semibold">Repairs &amp; Services</span>
                     </nav>
-                    <span className="text-[10px] font-bold text-[#0066CC] uppercase tracking-widest">iPoint Service Centre</span>
-                    <h1 className="text-3xl sm:text-5xl font-extrabold text-[#1D1D1F] dark:text-white tracking-tight mt-3 leading-tight">
+                    <span className="text-[10px] font-bold text-brand uppercase tracking-widest">iPoint Service Centre</span>
+                    <h1 className="text-3xl sm:text-5xl font-extrabold text-heading dark:text-white tracking-tight mt-3 leading-tight">
                         Professional repairs and technical support for Apple products
                     </h1>
 
@@ -103,8 +103,8 @@ export default function Services({ products = [], ineligibleLevy = 750, location
                         ))}
                     </div>
 
-                    <p className="text-sm text-gray-600 dark:text-gray-400 leading-relaxed max-w-3xl mx-auto">
-                        <span className="font-bold text-[#1D1D1F] dark:text-white">iPoint</span> offers professional repairs on a
+                    <p className="text-sm text-body dark:text-subtle leading-relaxed max-w-3xl mx-auto">
+                        <span className="font-bold text-heading dark:text-white">iPoint</span> offers professional repairs on a
                         selected range of Apple products. These repairs are carried out at our Service Centres, which handle small
                         to large scale repairs as well as unit replacements. All repairs use genuine parts so your product&rsquo;s
                         warranty and trade-in value are retained, and so it works exactly the way it&rsquo;s supposed to. Simply
@@ -114,13 +114,13 @@ export default function Services({ products = [], ineligibleLevy = 750, location
                     <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mt-10">
                         <a
                             href={bookingHref('in_store')}
-                            className="w-full sm:w-auto inline-flex items-center justify-center gap-2 border-2 border-[#0066CC] text-[#0066CC] hover:bg-[#0066CC] hover:text-white text-sm font-bold px-8 py-3.5 rounded-full transition-colors"
+                            className="w-full sm:w-auto inline-flex items-center justify-center gap-2 border-2 border-brand text-brand hover:bg-brand hover:text-white text-sm font-bold px-8 py-3.5 rounded-full transition-colors"
                         >
                             <Store className="w-4 h-4" /> Book in-store appointment
                         </a>
                         <a
                             href={bookingHref('home_collection')}
-                            className="w-full sm:w-auto inline-flex items-center justify-center gap-2 border-2 border-[#0066CC] text-[#0066CC] hover:bg-[#0066CC] hover:text-white text-sm font-bold px-8 py-3.5 rounded-full transition-colors"
+                            className="w-full sm:w-auto inline-flex items-center justify-center gap-2 border-2 border-brand text-brand hover:bg-brand hover:text-white text-sm font-bold px-8 py-3.5 rounded-full transition-colors"
                         >
                             <Truck className="w-4 h-4" /> Book home collection
                         </a>
@@ -129,22 +129,22 @@ export default function Services({ products = [], ineligibleLevy = 750, location
             </section>
 
             {/* ── Eligible vs ineligible ───────────────────────────── */}
-            <section className="bg-[#F5F5F7] dark:bg-[#151516] px-4 sm:px-6 md:px-8 py-20">
+            <section className="bg-page dark:bg-page-dark px-4 sm:px-6 md:px-8 py-20">
                 <div className="max-w-5xl mx-auto text-center">
-                    <h2 className="text-2xl sm:text-4xl font-extrabold text-[#1D1D1F] dark:text-white tracking-tight">
+                    <h2 className="text-2xl sm:text-4xl font-extrabold text-heading dark:text-white tracking-tight">
                         Screen, battery and other repairs.
                     </h2>
-                    <p className="text-base text-gray-500 dark:text-gray-400 mt-2">
+                    <p className="text-base text-muted dark:text-subtle mt-2">
                         A full range of repairs available at iPoint.
                     </p>
 
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-12 text-left">
-                        <div className="bg-white dark:bg-[#1D1D1F] rounded-3xl p-8 shadow-sm">
+                        <div className="bg-white dark:bg-surface-dark rounded-3xl p-8 shadow-sm">
                             <div className="flex items-center gap-2 text-green-600 dark:text-green-400">
                                 <ShieldCheck className="w-5 h-5" />
                                 <h3 className="text-xs font-bold uppercase tracking-wider">Eligible repairs</h3>
                             </div>
-                            <p className="text-sm text-gray-600 dark:text-gray-300 mt-4 leading-relaxed">
+                            <p className="text-sm text-body dark:text-gray-300 mt-4 leading-relaxed">
                                 Eligible repairs can be carried out on devices damaged by forms of accidental damage, which are
                                 limited to LCD fractures and glass fractures, or damage caused by defects in materials and/or
                                 workmanship.
@@ -158,29 +158,29 @@ export default function Services({ products = [], ineligibleLevy = 750, location
                             </ul>
                         </div>
 
-                        <div className="bg-white dark:bg-[#1D1D1F] rounded-3xl p-8 shadow-sm">
-                            <div className="flex items-center gap-2 text-[#E30000]">
+                        <div className="bg-white dark:bg-surface-dark rounded-3xl p-8 shadow-sm">
+                            <div className="flex items-center gap-2 text-sale">
                                 <XCircle className="w-5 h-5" />
                                 <h3 className="text-xs font-bold uppercase tracking-wider">Ineligible repairs</h3>
                             </div>
-                            <p className="text-sm text-gray-600 dark:text-gray-300 mt-4 leading-relaxed">
+                            <p className="text-sm text-body dark:text-gray-300 mt-4 leading-relaxed">
                                 Ineligible repairs apply to devices that have any 3rd party, missing or disassembled components,
                                 intentional tampering or catastrophic damage. A{' '}
-                                <span className="font-bold text-[#E30000]">{rand(ineligibleLevy)}</span> additional levy is applied
+                                <span className="font-bold text-sale">{rand(ineligibleLevy)}</span> additional levy is applied
                                 to restore your device back to a serviceable condition.
                             </p>
                             <ul className="mt-5 space-y-2.5 text-sm text-gray-700 dark:text-gray-300">
                                 {['3rd party, missing or disassembled components', 'Intentional tampering', 'Catastrophic damage'].map((item) => (
                                     <li key={item} className="flex gap-2">
-                                        <XCircle className="w-4 h-4 text-[#E30000] flex-shrink-0 mt-0.5" /> {item}
+                                        <XCircle className="w-4 h-4 text-sale flex-shrink-0 mt-0.5" /> {item}
                                     </li>
                                 ))}
                             </ul>
                         </div>
                     </div>
 
-                    <p className="text-[10px] font-bold text-gray-400 uppercase tracking-wider mt-10">T&amp;Cs apply.</p>
-                    <p className="text-sm text-gray-600 dark:text-gray-400 mt-3 max-w-2xl mx-auto leading-relaxed">
+                    <p className="text-[10px] font-bold text-subtle uppercase tracking-wider mt-10">T&amp;Cs apply.</p>
+                    <p className="text-sm text-body dark:text-subtle mt-3 max-w-2xl mx-auto leading-relaxed">
                         Eligible devices purchased from outside of South Africa cannot be serviced in store and will need to be sent
                         away to the central service centre. This is applicable to all hardware repairs and includes screens and
                         batteries.
@@ -189,28 +189,28 @@ export default function Services({ products = [], ineligibleLevy = 750, location
             </section>
 
             {/* ── Repair selector ──────────────────────────────────── */}
-            <section id="repair-selector" className="bg-white dark:bg-[#1D1D1F] px-4 sm:px-6 md:px-8 py-20">
+            <section id="repair-selector" className="bg-white dark:bg-surface-dark px-4 sm:px-6 md:px-8 py-20">
                 <div className="max-w-6xl mx-auto">
                     <div className="text-center">
-                        <h2 className="text-2xl sm:text-4xl font-extrabold text-[#1D1D1F] dark:text-white tracking-tight">
+                        <h2 className="text-2xl sm:text-4xl font-extrabold text-heading dark:text-white tracking-tight">
                             Professional repairs and technical support
                             {product ? ` for ${product.label}` : ''}
                         </h2>
-                        <p className="text-sm text-gray-500 dark:text-gray-400 mt-3">
+                        <p className="text-sm text-muted dark:text-subtle mt-3">
                             We offer same-day battery and display repairs at selected iPoint stores. Please book your repair.
                         </p>
                     </div>
 
                     <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mt-12">
                         {/* Selector */}
-                        <div className="bg-[#F5F5F7] dark:bg-[#151516] rounded-3xl p-8">
-                            <h3 className="text-xl font-extrabold text-[#1D1D1F] dark:text-white text-center">
+                        <div className="bg-page dark:bg-page-dark rounded-3xl p-8">
+                            <h3 className="text-xl font-extrabold text-heading dark:text-white text-center">
                                 Need {product ? product.label : 'device'} support
                             </h3>
-                            <p className="text-sm text-gray-500 dark:text-gray-400 text-center mt-1">
+                            <p className="text-sm text-muted dark:text-subtle text-center mt-1">
                                 Here&rsquo;s a list of our {product ? product.label : 'repair'} services
                             </p>
-                            <p className="text-sm text-gray-500 dark:text-gray-400 text-center mt-3">
+                            <p className="text-sm text-muted dark:text-subtle text-center mt-3">
                                 Select your device and service required below.
                             </p>
 
@@ -219,7 +219,7 @@ export default function Services({ products = [], ineligibleLevy = 750, location
                                     value={productKey}
                                     onChange={(e) => chooseProduct(e.target.value)}
                                     aria-label="Choose product"
-                                    className="w-full text-sm font-semibold text-center border border-gray-300 dark:border-gray-700 rounded-full px-4 py-3 bg-white dark:bg-[#1D1D1F] text-gray-900 dark:text-white focus:ring-[#0066CC] focus:border-[#0066CC]"
+                                    className="w-full text-sm font-semibold text-center border border-gray-300 dark:border-gray-700 rounded-full px-4 py-3 bg-white dark:bg-surface-dark text-gray-900 dark:text-white focus:ring-brand focus:border-brand"
                                 >
                                     <option value="">-- Choose Product --</option>
                                     {products.map((p) => (
@@ -232,7 +232,7 @@ export default function Services({ products = [], ineligibleLevy = 750, location
                                     onChange={(e) => chooseModel(e.target.value)}
                                     disabled={!product}
                                     aria-label="Choose model"
-                                    className="w-full text-sm font-semibold text-center border border-gray-300 dark:border-gray-700 rounded-full px-4 py-3 bg-white dark:bg-[#1D1D1F] text-gray-900 dark:text-white disabled:bg-gray-100 dark:disabled:bg-gray-900 disabled:text-gray-400 disabled:cursor-not-allowed focus:ring-[#0066CC] focus:border-[#0066CC]"
+                                    className="w-full text-sm font-semibold text-center border border-gray-300 dark:border-gray-700 rounded-full px-4 py-3 bg-white dark:bg-surface-dark text-gray-900 dark:text-white disabled:bg-gray-100 dark:disabled:bg-gray-900 disabled:text-subtle disabled:cursor-not-allowed focus:ring-brand focus:border-brand"
                                 >
                                     <option value="">-- Choose Model --</option>
                                     {product?.models.map((m) => (
@@ -245,7 +245,7 @@ export default function Services({ products = [], ineligibleLevy = 750, location
                                     onChange={(e) => setVariant(e.target.value)}
                                     disabled={!model}
                                     aria-label={`Choose ${product ? product.variant_label.toLowerCase() : 'storage'}`}
-                                    className="w-full text-sm font-semibold text-center border border-gray-300 dark:border-gray-700 rounded-full px-4 py-3 bg-white dark:bg-[#1D1D1F] text-gray-900 dark:text-white disabled:bg-gray-100 dark:disabled:bg-gray-900 disabled:text-gray-400 disabled:cursor-not-allowed focus:ring-[#0066CC] focus:border-[#0066CC]"
+                                    className="w-full text-sm font-semibold text-center border border-gray-300 dark:border-gray-700 rounded-full px-4 py-3 bg-white dark:bg-surface-dark text-gray-900 dark:text-white disabled:bg-gray-100 dark:disabled:bg-gray-900 disabled:text-subtle disabled:cursor-not-allowed focus:ring-brand focus:border-brand"
                                 >
                                     <option value="">-- Choose {product ? product.variant_label : 'Storage'} --</option>
                                     {model?.variants.map((v) => (
@@ -258,7 +258,7 @@ export default function Services({ products = [], ineligibleLevy = 750, location
                                     onChange={(e) => setRepairKey(e.target.value)}
                                     disabled={!model}
                                     aria-label="Choose repair type"
-                                    className="w-full text-sm font-semibold text-center border border-gray-300 dark:border-gray-700 rounded-full px-4 py-3 bg-white dark:bg-[#1D1D1F] text-gray-900 dark:text-white disabled:bg-gray-100 dark:disabled:bg-gray-900 disabled:text-gray-400 disabled:cursor-not-allowed focus:ring-[#0066CC] focus:border-[#0066CC]"
+                                    className="w-full text-sm font-semibold text-center border border-gray-300 dark:border-gray-700 rounded-full px-4 py-3 bg-white dark:bg-surface-dark text-gray-900 dark:text-white disabled:bg-gray-100 dark:disabled:bg-gray-900 disabled:text-subtle disabled:cursor-not-allowed focus:ring-brand focus:border-brand"
                                 >
                                     <option value="">-- Choose Repair Type --</option>
                                     {model?.repairs.map((r) => (
@@ -285,16 +285,16 @@ export default function Services({ products = [], ineligibleLevy = 750, location
                         </div>
 
                         {/* Price + booking */}
-                        <div className="bg-[#F5F5F7] dark:bg-[#151516] rounded-3xl p-8 flex flex-col justify-center text-center">
+                        <div className="bg-page dark:bg-page-dark rounded-3xl p-8 flex flex-col justify-center text-center">
                             {repair ? (
                                 <>
-                                    <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">
+                                    <p className="text-[10px] font-bold text-subtle uppercase tracking-widest">
                                         {repair.label}
                                     </p>
-                                    <p className="text-4xl font-extrabold text-[#1D1D1F] dark:text-white tracking-tight mt-2">
+                                    <p className="text-4xl font-extrabold text-heading dark:text-white tracking-tight mt-2">
                                         {rand(repair.price)}
                                     </p>
-                                    <p className="text-xs text-gray-500 dark:text-gray-400 mt-2">
+                                    <p className="text-xs text-muted dark:text-subtle mt-2">
                                         {model.name}{variant ? ` · ${variant}` : ''}
                                     </p>
                                     {repair.same_day && (
@@ -304,7 +304,7 @@ export default function Services({ products = [], ineligibleLevy = 750, location
                                     )}
                                 </>
                             ) : (
-                                <p className="text-sm text-gray-400 dark:text-gray-500 leading-relaxed">
+                                <p className="text-sm text-subtle dark:text-muted leading-relaxed">
                                     Select your device and repair type to see an indicative price.
                                 </p>
                             )}
@@ -315,8 +315,8 @@ export default function Services({ products = [], ineligibleLevy = 750, location
                                     aria-disabled={!readyToBook}
                                     className={`flex-1 text-center text-xs font-bold px-5 py-3 rounded-full transition-colors ${
                                         readyToBook
-                                            ? 'bg-[#0066CC] hover:bg-[#0077ED] text-white'
-                                            : 'bg-gray-200 dark:bg-gray-800 text-gray-400 cursor-not-allowed pointer-events-none'
+                                            ? 'bg-brand hover:bg-brand-hover text-white'
+                                            : 'bg-gray-200 dark:bg-gray-800 text-subtle cursor-not-allowed pointer-events-none'
                                     }`}
                                 >
                                     Book appointment
@@ -326,22 +326,22 @@ export default function Services({ products = [], ineligibleLevy = 750, location
                                     aria-disabled={!readyToBook}
                                     className={`flex-1 text-center text-xs font-bold px-5 py-3 rounded-full transition-colors ${
                                         readyToBook
-                                            ? 'bg-[#0066CC] hover:bg-[#0077ED] text-white'
-                                            : 'bg-gray-200 dark:bg-gray-800 text-gray-400 cursor-not-allowed pointer-events-none'
+                                            ? 'bg-brand hover:bg-brand-hover text-white'
+                                            : 'bg-gray-200 dark:bg-gray-800 text-subtle cursor-not-allowed pointer-events-none'
                                     }`}
                                 >
                                     Book collection
                                 </a>
                             </div>
 
-                            <p className="text-[10px] text-[#E30000] leading-relaxed mt-5">
+                            <p className="text-[10px] text-sale leading-relaxed mt-5">
                                 *Subject to part availability on assessment.<br />
                                 *Price displayed is indicative only, subject to assessment, part retention, and change without notice.
                             </p>
                         </div>
                     </div>
 
-                    <p className="text-[11px] font-semibold text-gray-500 dark:text-gray-400 text-center mt-10">
+                    <p className="text-[11px] font-semibold text-muted dark:text-subtle text-center mt-10">
                         Same day battery and screen replacements available at select stores
                         {locationCount > 0 ? ` — ${locationCount} service ${locationCount === 1 ? 'location' : 'locations'} nationwide.` : '.'}
                     </p>
@@ -349,12 +349,12 @@ export default function Services({ products = [], ineligibleLevy = 750, location
             </section>
 
             {/* ── Prep steps ───────────────────────────────────────── */}
-            <section className="bg-white dark:bg-[#1D1D1F] px-4 sm:px-6 md:px-8 pb-20">
+            <section className="bg-white dark:bg-surface-dark px-4 sm:px-6 md:px-8 pb-20">
                 <div className="max-w-6xl mx-auto text-center">
-                    <h2 className="text-2xl sm:text-4xl font-extrabold text-[#1D1D1F] dark:text-white tracking-tight">
+                    <h2 className="text-2xl sm:text-4xl font-extrabold text-heading dark:text-white tracking-tight">
                         Here&rsquo;s how to get your Apple device ready for its big day.
                     </h2>
-                    <p className="text-base text-gray-500 dark:text-gray-400 mt-2">
+                    <p className="text-base text-muted dark:text-subtle mt-2">
                         Steps to follow before handing in your device.
                     </p>
 
@@ -363,13 +363,13 @@ export default function Services({ products = [], ineligibleLevy = 750, location
                             const Icon = step.icon;
                             return (
                                 <div key={step.title}>
-                                    <span className="w-12 h-12 rounded-full bg-[#1D1D1F] dark:bg-white text-white dark:text-[#1D1D1F] text-lg font-extrabold flex items-center justify-center mx-auto">
+                                    <span className="w-12 h-12 rounded-full bg-surface-dark dark:bg-white text-white dark:text-heading text-lg font-extrabold flex items-center justify-center mx-auto">
                                         {i + 1}
                                     </span>
-                                    <h3 className="text-lg font-bold text-[#1D1D1F] dark:text-white mt-6 flex items-center justify-center gap-2">
-                                        <Icon className="w-4 h-4 text-gray-400" /> {step.title}
+                                    <h3 className="text-lg font-bold text-heading dark:text-white mt-6 flex items-center justify-center gap-2">
+                                        <Icon className="w-4 h-4 text-subtle" /> {step.title}
                                     </h3>
-                                    <p className="text-sm text-gray-600 dark:text-gray-400 mt-3 leading-relaxed">
+                                    <p className="text-sm text-body dark:text-subtle mt-3 leading-relaxed">
                                         {step.body}
                                     </p>
                                 </div>
@@ -380,10 +380,10 @@ export default function Services({ products = [], ineligibleLevy = 750, location
             </section>
 
             {/* ── Terms & conditions ───────────────────────────────── */}
-            <section className="bg-[#F5F5F7] dark:bg-[#151516] px-4 sm:px-6 md:px-8 py-14">
+            <section className="bg-page dark:bg-page-dark px-4 sm:px-6 md:px-8 py-14">
                 <div className="max-w-5xl mx-auto space-y-4">
-                    <h2 className="text-xs font-bold text-gray-600 dark:text-gray-300">Terms and Conditions</h2>
-                    <p className="text-[11px] text-gray-500 dark:text-gray-500 leading-relaxed">
+                    <h2 className="text-xs font-bold text-body dark:text-gray-300">Terms and Conditions</h2>
+                    <p className="text-[11px] text-muted dark:text-muted leading-relaxed">
                         Devices with the following damage will not qualify for a screen replacement: the housing cannot be damaged
                         severely (light dents and scratches are okay), the device cannot be bent, the device cannot have multiple
                         issues (i.e. not only is the screen damaged but the device no longer switches on or has water damage too),
@@ -394,7 +394,7 @@ export default function Services({ products = [], ineligibleLevy = 750, location
                         with any of the following conditions is ineligible for out-of-warranty service: third party display, missing
                         display, intentional tampering, missing or disassembled parts of the display and catastrophic damage.
                     </p>
-                    <p className="text-[11px] text-gray-500 dark:text-gray-500 leading-relaxed">
+                    <p className="text-[11px] text-muted dark:text-muted leading-relaxed">
                         Customers booking in their device for a screen replacement must back up their device, turn Find My off and
                         ensure the device has been charged or is able to switch on at time of booking it in, in order to run
                         diagnostics. It is imperative that your device is backed up prior to requesting a screen replacement service,
@@ -402,16 +402,16 @@ export default function Services({ products = [], ineligibleLevy = 750, location
                         procedure. The screen repair includes a 90 day warranty or the remainder of your warranty period, whichever
                         is longer.
                     </p>
-                    <p className="text-[11px] text-gray-500 dark:text-gray-500 leading-relaxed">
+                    <p className="text-[11px] text-muted dark:text-muted leading-relaxed">
                         iPoint levies a charge on returns of unsealed products to cover the costs of repackaging the product for
                         sale. You will only be eligible for a refund if the product is returned to iPoint together with all its
                         accessories, the original product packaging and original tax invoice, and subject to an internal inspection
                         of the product at our Service Centre. This excludes any bulk deals over five units — iPoint will not
                         facilitate any bulk deal returns. All faulty products are covered by the relevant product warranty.
                     </p>
-                    <p className="text-[11px] text-gray-400 dark:text-gray-600 pt-2">
+                    <p className="text-[11px] text-subtle dark:text-body pt-2">
                         Questions about a repair already booked?{' '}
-                        <Link href="/contact" className="text-[#0066CC] font-semibold inline-flex items-center gap-0.5">
+                        <Link href="/contact" className="text-brand font-semibold inline-flex items-center gap-0.5">
                             Contact us <ChevronRight className="w-3 h-3" />
                         </Link>
                     </p>

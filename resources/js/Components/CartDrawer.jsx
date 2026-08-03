@@ -40,21 +40,21 @@ export default function CartDrawer({ isOpen, onClose }) {
             />
 
             <div className="absolute inset-y-0 right-0 max-w-full flex pl-10">
-                <div className="w-screen max-w-md transform transition-all duration-300 ease-in-out bg-white dark:bg-[#1D1D1F] shadow-2xl flex flex-col">
+                <div className="w-screen max-w-md transform transition-all duration-300 ease-in-out bg-white dark:bg-surface-dark shadow-2xl flex flex-col">
                     {/* Header */}
                     <div className="px-6 py-5 border-b border-gray-100 dark:border-gray-800 flex items-center justify-between">
                         <div className="flex items-center space-x-2.5">
-                            <ShoppingBag className="w-5 h-5 text-[#1D1D1F] dark:text-[#FFFFFF]" />
-                            <h2 className="text-base font-semibold text-[#1D1D1F] dark:text-[#FFFFFF]">Shopping Bag</h2>
+                            <ShoppingBag className="w-5 h-5 text-heading dark:text-white" />
+                            <h2 className="text-base font-semibold text-heading dark:text-white">Shopping Bag</h2>
                             {cartItems.length > 0 && (
-                                <span className="bg-[#0066CC] text-white text-[11px] font-bold px-2 py-0.5 rounded-full">
+                                <span className="bg-brand text-white text-[11px] font-bold px-2 py-0.5 rounded-full">
                                     {cartItems.reduce((sum, item) => sum + item.quantity, 0)}
                                 </span>
                             )}
                         </div>
                         <button 
                             onClick={onClose}
-                            className="p-1 rounded-full text-gray-400 hover:text-gray-600 dark:hover:text-white transition-colors"
+                            className="p-1 rounded-full text-subtle hover:text-body dark:hover:text-white transition-colors"
                         >
                             <X className="w-5 h-5" />
                         </button>
@@ -63,13 +63,13 @@ export default function CartDrawer({ isOpen, onClose }) {
                     {/* Cart Items */}
                     <div className="flex-1 overflow-y-auto py-4 px-6 divide-y divide-gray-100 dark:divide-gray-800">
                         {cartItems.length === 0 ? (
-                            <div className="h-full flex flex-col items-center justify-center text-center py-20 text-gray-500">
+                            <div className="h-full flex flex-col items-center justify-center text-center py-20 text-muted">
                                 <ShoppingBag className="w-12 h-12 stroke-[1.25] text-gray-300 mb-4" />
                                 <p className="text-sm font-medium">Your shopping bag is empty</p>
-                                <p className="text-xs text-gray-400 mt-1">Explore our products to add items.</p>
+                                <p className="text-xs text-subtle mt-1">Explore our products to add items.</p>
                                 <button 
                                     onClick={onClose}
-                                    className="mt-6 px-5 py-2 text-xs font-semibold text-white bg-[#0066CC] hover:bg-[#0077ED] rounded-full transition-colors"
+                                    className="mt-6 px-5 py-2 text-xs font-semibold text-white bg-brand hover:bg-brand-hover rounded-full transition-colors"
                                 >
                                     Continue Shopping
                                 </button>
@@ -90,7 +90,7 @@ export default function CartDrawer({ isOpen, onClose }) {
                                             <h4 className="text-xs font-semibold text-gray-900 dark:text-white line-clamp-2 leading-tight">
                                                 {item.name}
                                             </h4>
-                                            <p className="text-[10px] text-gray-500 dark:text-gray-400 mt-1 uppercase font-medium tracking-wider">
+                                            <p className="text-[10px] text-muted dark:text-subtle mt-1 uppercase font-medium tracking-wider">
                                                 SKU: {item.sku}
                                             </p>
                                         </div>
@@ -100,7 +100,7 @@ export default function CartDrawer({ isOpen, onClose }) {
                                             <div className="flex items-center border border-gray-200 dark:border-gray-800 rounded-full py-0.5 px-2 bg-gray-50 dark:bg-gray-800">
                                                 <button 
                                                     onClick={() => updateQuantity(item.id, item.quantity - 1)}
-                                                    className="p-1 text-gray-400 hover:text-gray-600 dark:hover:text-white"
+                                                    className="p-1 text-subtle hover:text-body dark:hover:text-white"
                                                     disabled={item.quantity <= 1}
                                                 >
                                                     <Minus className="w-3 h-3" />
@@ -110,7 +110,7 @@ export default function CartDrawer({ isOpen, onClose }) {
                                                 </span>
                                                 <button 
                                                     onClick={() => updateQuantity(item.id, item.quantity + 1)}
-                                                    className="p-1 text-gray-400 hover:text-gray-600 dark:hover:text-white"
+                                                    className="p-1 text-subtle hover:text-body dark:hover:text-white"
                                                     disabled={item.quantity >= item.stock}
                                                 >
                                                     <Plus className="w-3 h-3" />
@@ -123,7 +123,7 @@ export default function CartDrawer({ isOpen, onClose }) {
                                                 </span>
                                                 <button 
                                                     onClick={() => removeItem(item.id)}
-                                                    className="text-gray-400 hover:text-[#E30000] p-1"
+                                                    className="text-subtle hover:text-sale p-1"
                                                 >
                                                     <Trash2 className="w-3.5 h-3.5" />
                                                 </button>
@@ -142,7 +142,7 @@ export default function CartDrawer({ isOpen, onClose }) {
                                 <span>Subtotal</span>
                                 <span>R {subtotal.toLocaleString()}</span>
                             </div>
-                            <p className="text-[10px] text-gray-400 mb-6">Free shipping and delivery nationwide included.</p>
+                            <p className="text-[10px] text-subtle mb-6">Free shipping and delivery nationwide included.</p>
                             
                             <div className="grid grid-cols-2 gap-3">
                                 <Link 
@@ -155,7 +155,7 @@ export default function CartDrawer({ isOpen, onClose }) {
                                 <Link 
                                     href="/checkout" 
                                     onClick={onClose}
-                                    className="w-full text-center py-3 text-xs font-semibold rounded-full bg-[#0066CC] hover:bg-[#0077ED] text-white transition-colors"
+                                    className="w-full text-center py-3 text-xs font-semibold rounded-full bg-brand hover:bg-brand-hover text-white transition-colors"
                                 >
                                     Check Out
                                 </Link>

@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { Link, usePage, useForm } from '@inertiajs/react';
 import { Search, ShoppingBag, User, X, Menu, Settings, LogOut, Store, Truck, MapPin, ShieldCheck, Clock, XCircle, Wrench, Scale } from 'lucide-react';
 import CartDrawer from './CartDrawer';
+import { themeColor } from '@/theme';
 
 // Apple glyph as an inline SVG — the  private-use character does not render off Apple devices.
 const AppleIcon = (props) => (
@@ -14,7 +15,7 @@ const AppleIcon = (props) => (
 const IPointLogo = ({ className = '' }) => (
     <span className={`inline-flex items-baseline font-extrabold tracking-tight leading-none ${className}`}>
         <span className="text-white">i</span>
-        <span className="text-[#0066CC]">Point</span>
+        <span className="text-brand">Point</span>
     </span>
 );
 
@@ -103,7 +104,9 @@ function TrackingMap({ hereApiKey, city }) {
             lineString.pushPoint(destCoords);
 
             const routeLine = new window.H.map.Polyline(lineString, {
-                style: { strokeColor: '#0066CC', lineWidth: 4 }
+                // HERE takes a colour string, not a class, so pull the configured
+                // primary out of the palette rather than hard-coding the blue.
+                style: { strokeColor: themeColor('brand', '#0066CC'), lineWidth: 4 }
             });
             map.addObject(routeLine);
 
@@ -118,19 +121,19 @@ function TrackingMap({ hereApiKey, city }) {
     if (mapError || !hereApiKey || !window.H) {
         return (
             <div className="bg-gray-50 dark:bg-gray-850 rounded-2xl p-4 text-center space-y-3 border border-gray-100 dark:border-gray-800">
-                <div className="flex justify-between items-center text-[9px] font-bold text-gray-400 uppercase tracking-widest">
+                <div className="flex justify-between items-center text-[9px] font-bold text-subtle uppercase tracking-widest">
                     <span>Dispatch: Johannesburg</span>
-                    <span className="text-[#0066CC]">In Transit</span>
+                    <span className="text-brand">In Transit</span>
                     <span>Destination: {city || 'Your Address'}</span>
                 </div>
-                <div className="relative h-10 w-full bg-white dark:bg-[#1D1D1F] border border-gray-150 dark:border-gray-800 rounded-xl flex items-center px-4 overflow-hidden">
+                <div className="relative h-10 w-full bg-white dark:bg-surface-dark border border-gray-150 dark:border-gray-800 rounded-xl flex items-center px-4 overflow-hidden">
                     <div className="w-2 h-2 rounded-full bg-gray-300 dark:bg-gray-700" />
-                    <div className="flex-grow border-t border-dashed border-[#0066CC]/30 mx-2 relative">
-                        <div className="absolute top-1/2 -translate-y-1/2 left-[45%] text-[#0066CC] animate-bounce">
+                    <div className="flex-grow border-t border-dashed border-brand/30 mx-2 relative">
+                        <div className="absolute top-1/2 -translate-y-1/2 left-[45%] text-brand animate-bounce">
                             <Truck className="w-4 h-4" />
                         </div>
                     </div>
-                    <div className="w-2 h-2 rounded-full bg-[#0066CC]" />
+                    <div className="w-2 h-2 rounded-full bg-brand" />
                 </div>
             </div>
         );
@@ -138,12 +141,12 @@ function TrackingMap({ hereApiKey, city }) {
 
     return (
         <div className="space-y-2">
-            <div className="flex justify-between items-baseline text-[8px] font-bold text-gray-400 uppercase tracking-wider">
+            <div className="flex justify-between items-baseline text-[8px] font-bold text-subtle uppercase tracking-wider">
                 <span>Dispatch: Johannesburg</span>
-                <span className="text-[#0066CC] animate-pulse">Live Shipment Tracking</span>
+                <span className="text-brand animate-pulse">Live Shipment Tracking</span>
                 <span>Destination: {city || 'Your Address'}</span>
             </div>
-            <div ref={mapRef} className="h-44 w-full rounded-xl overflow-hidden border border-gray-150 dark:border-gray-800 bg-[#F5F5F7]" />
+            <div ref={mapRef} className="h-44 w-full rounded-xl overflow-hidden border border-gray-150 dark:border-gray-800 bg-page" />
         </div>
     );
 }
@@ -307,7 +310,7 @@ export default function Navigation() {
                             href="https://www.postnet.co.za/tracker"
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="hidden lg:inline-flex items-center gap-2 bg-[#7CBA3F] hover:bg-[#6BA831] text-white text-[13px] font-bold px-5 py-2.5 rounded-lg transition-colors whitespace-nowrap focus:outline-none"
+                            className="hidden lg:inline-flex items-center gap-2 bg-success hover:bg-success-hover text-white text-[13px] font-bold px-5 py-2.5 rounded-lg transition-colors whitespace-nowrap focus:outline-none"
                         >
                             <Truck className="w-4 h-4" />
                             <span>Track Order</span>
@@ -333,11 +336,11 @@ export default function Navigation() {
                             </button>
 
                             {isProfileOpen && (
-                                <div className="absolute right-0 mt-2.5 w-56 bg-white dark:bg-[#1D1D1F] border border-gray-150 dark:border-gray-800 rounded-2xl shadow-xl z-55 py-2 text-[#1D1D1F] dark:text-white">
+                                <div className="absolute right-0 mt-2.5 w-56 bg-white dark:bg-surface-dark border border-gray-150 dark:border-gray-800 rounded-2xl shadow-xl z-55 py-2 text-heading dark:text-white">
                                     {auth.user ? (
                                         <>
                                             <div className="px-4 py-2 border-b border-gray-100 dark:border-gray-850">
-                                                <p className="text-[10px] text-gray-400 font-bold uppercase">Signed in as</p>
+                                                <p className="text-[10px] text-subtle font-bold uppercase">Signed in as</p>
                                                 <p className="text-xs font-bold text-gray-800 dark:text-white truncate mt-0.5">{auth.user.name}</p>
                                             </div>
 
@@ -346,7 +349,7 @@ export default function Navigation() {
                                                     href={route('admin.dashboard')}
                                                     className="px-4 py-2 text-xs hover:bg-gray-50 dark:hover:bg-gray-855 flex items-center space-x-2.5 text-gray-700 dark:text-gray-200 font-semibold"
                                                 >
-                                                    <Settings className="w-4 h-4 text-gray-400" />
+                                                    <Settings className="w-4 h-4 text-subtle" />
                                                     <span>Admin Dashboard</span>
                                                 </Link>
                                             )}
@@ -355,7 +358,7 @@ export default function Navigation() {
                                                 href={route('profile.edit')}
                                                 className="px-4 py-2 text-xs hover:bg-gray-50 dark:hover:bg-gray-855 flex items-center space-x-2.5 text-gray-700 dark:text-gray-200 font-semibold"
                                             >
-                                                <User className="w-4 h-4 text-gray-400" />
+                                                <User className="w-4 h-4 text-subtle" />
                                                 <span>My Account / Portal</span>
                                             </Link>
                                         </>
@@ -382,7 +385,7 @@ export default function Navigation() {
                                             onClick={() => { setIsProfileOpen(false); setIsStoreModalOpen(true); }}
                                             className="w-full text-left px-4 py-2 text-xs hover:bg-gray-50 dark:hover:bg-gray-855 flex items-center space-x-2.5 text-gray-700 dark:text-gray-200 font-semibold"
                                         >
-                                            <Store className="w-4 h-4 text-gray-400" />
+                                            <Store className="w-4 h-4 text-subtle" />
                                             <span>Pickup: {selectedStore || 'Select Store'}</span>
                                         </button>
                                         <a
@@ -392,14 +395,14 @@ export default function Navigation() {
                                             onClick={() => setIsProfileOpen(false)}
                                             className="w-full text-left px-4 py-2 text-xs hover:bg-gray-50 dark:hover:bg-gray-855 flex items-center space-x-2.5 text-gray-700 dark:text-gray-200 font-semibold"
                                         >
-                                            <Truck className="w-4 h-4 text-gray-400" />
+                                            <Truck className="w-4 h-4 text-subtle" />
                                             <span>Track Order</span>
                                         </a>
                                         <Link
                                             href="/apple-product-repair"
                                             className="px-4 py-2 text-xs hover:bg-gray-50 dark:hover:bg-gray-855 flex items-center space-x-2.5 text-gray-700 dark:text-gray-200 font-semibold"
                                         >
-                                            <Wrench className="w-4 h-4 text-gray-400" />
+                                            <Wrench className="w-4 h-4 text-subtle" />
                                             <span>Book a Repair</span>
                                         </Link>
                                     </div>
@@ -407,7 +410,7 @@ export default function Navigation() {
                                     {auth.user && (
                                         <button
                                             onClick={handleLogout}
-                                            className="w-full text-left px-4 py-2 text-xs hover:bg-gray-50 dark:hover:bg-gray-855 flex items-center space-x-2.5 text-[#E30000] border-t border-gray-100 dark:border-gray-855 mt-1 font-bold"
+                                            className="w-full text-left px-4 py-2 text-xs hover:bg-gray-50 dark:hover:bg-gray-855 flex items-center space-x-2.5 text-sale border-t border-gray-100 dark:border-gray-855 mt-1 font-bold"
                                         >
                                             <LogOut className="w-4 h-4" />
                                             <span>Log Out</span>
@@ -425,7 +428,7 @@ export default function Navigation() {
                         >
                             <ShoppingBag className="w-5 h-5" />
                             {cartCount > 0 && (
-                                <span className="absolute -top-0.5 -right-0.5 bg-[#7CBA3F] text-white text-[9px] font-bold w-4 h-4 rounded-full flex items-center justify-center border border-black">
+                                <span className="absolute -top-0.5 -right-0.5 bg-success text-white text-[9px] font-bold w-4 h-4 rounded-full flex items-center justify-center border border-black">
                                     {cartCount}
                                 </span>
                             )}
@@ -467,9 +470,9 @@ export default function Navigation() {
                             </div>
 
                             {isDropdownOpen && (
-                                <div className="absolute left-4 right-4 sm:left-6 sm:right-6 top-full bg-white dark:bg-[#1D1D1F] border border-gray-150 dark:border-gray-800 rounded-2xl shadow-xl z-55 max-h-80 overflow-y-auto p-4 space-y-3">
+                                <div className="absolute left-4 right-4 sm:left-6 sm:right-6 top-full bg-white dark:bg-surface-dark border border-gray-150 dark:border-gray-800 rounded-2xl shadow-xl z-55 max-h-80 overflow-y-auto p-4 space-y-3">
                                     {isSearching ? (
-                                        <p className="text-[10px] text-gray-400 animate-pulse font-semibold">Searching catalog...</p>
+                                        <p className="text-[10px] text-subtle animate-pulse font-semibold">Searching catalog...</p>
                                     ) : searchResults.length > 0 ? (
                                         searchResults.map((prod) => (
                                             <Link
@@ -481,12 +484,12 @@ export default function Navigation() {
                                                 <img src={prod.image_path} alt={prod.name} className="w-8 h-8 object-contain bg-white p-0.5 border border-gray-100 rounded-lg flex-shrink-0" />
                                                 <div className="flex-1 min-w-0">
                                                     <p className="text-xs font-bold text-gray-800 dark:text-white truncate">{prod.name}</p>
-                                                    <p className="text-[9px] text-[#0066CC] font-semibold">R {parseFloat(prod.base_price).toLocaleString()}</p>
+                                                    <p className="text-[9px] text-brand font-semibold">R {parseFloat(prod.base_price).toLocaleString()}</p>
                                                 </div>
                                             </Link>
                                         ))
                                     ) : (
-                                        <p className="text-[10px] text-gray-400 py-2">No matching products found.</p>
+                                        <p className="text-[10px] text-subtle py-2">No matching products found.</p>
                                     )}
                                 </div>
                             )}
@@ -501,7 +504,7 @@ export default function Navigation() {
                 <div className="fixed inset-0 top-[72px] z-35 bg-black/95 text-white lg:hidden py-8 px-6 font-sans flex flex-col justify-between overflow-y-auto">
                     <div className="space-y-6">
                         <div className="flex items-center bg-gray-900 rounded-xl px-3.5 py-2">
-                            <Search className="w-4 h-4 text-gray-400 mr-2" />
+                            <Search className="w-4 h-4 text-subtle mr-2" />
                             <input 
                                 type="text"
                                 value={searchQuery}
@@ -544,13 +547,13 @@ export default function Navigation() {
                         </a>
 
                         {auth.user ? (
-                            <button onClick={handleLogout} className="text-[#E30000] flex items-center space-x-2 border-t border-white/10 pt-4 w-full font-bold">
+                            <button onClick={handleLogout} className="text-sale flex items-center space-x-2 border-t border-white/10 pt-4 w-full font-bold">
                                 <LogOut className="w-4 h-4" />
                                 <span>Logout</span>
                             </button>
                         ) : (
                             <div className="flex space-x-4 border-t border-white/10 pt-4">
-                                <Link href={route('login')} onClick={() => setIsMobileMenuOpen(false)} className="text-[#0066CC]">Sign In</Link>
+                                <Link href={route('login')} onClick={() => setIsMobileMenuOpen(false)} className="text-brand">Sign In</Link>
                                 <Link href={route('register')} onClick={() => setIsMobileMenuOpen(false)}>Register</Link>
                             </div>
                         )}
@@ -562,13 +565,13 @@ export default function Navigation() {
             {isStoreModalOpen && (
                 <div className="fixed inset-0 z-55 flex items-center justify-center p-4">
                     <div className="absolute inset-0 bg-black/40 backdrop-blur-xs" onClick={() => setIsStoreModalOpen(false)} />
-                    <div className="w-full max-w-md bg-white dark:bg-[#1D1D1F] border border-gray-150 dark:border-gray-800 rounded-3xl p-6 relative z-10 shadow-2xl font-sans">
+                    <div className="w-full max-w-md bg-white dark:bg-surface-dark border border-gray-150 dark:border-gray-800 rounded-3xl p-6 relative z-10 shadow-2xl font-sans">
                         <div className="flex justify-between items-center pb-4 border-b border-gray-100 dark:border-gray-800">
                             <h3 className="text-sm font-bold text-gray-900 dark:text-white uppercase tracking-wider flex items-center space-x-2">
-                                <Store className="w-4 h-4 text-[#0066CC]" />
+                                <Store className="w-4 h-4 text-brand" />
                                 <span>Select a Pickup Store</span>
                             </h3>
-                            <button onClick={() => setIsStoreModalOpen(false)} className="p-1 text-gray-400 hover:text-gray-600 dark:hover:text-white">
+                            <button onClick={() => setIsStoreModalOpen(false)} className="p-1 text-subtle hover:text-body dark:hover:text-white">
                                 <X className="w-5 h-5" />
                             </button>
                         </div>
@@ -579,7 +582,7 @@ export default function Navigation() {
                                     onClick={() => handleSelectStore(store.name)}
                                     className={`w-full text-left p-3.5 rounded-2xl border text-xs flex justify-between items-center transition-all ${
                                         selectedStore === store.name
-                                            ? 'border-[#0066CC] bg-[#F0F7FF] dark:bg-blue-950/20 text-[#0066CC] font-bold'
+                                            ? 'border-brand bg-brand-tint dark:bg-blue-950/20 text-brand font-bold'
                                             : 'border-gray-150 dark:border-gray-800 hover:bg-gray-50 dark:hover:bg-gray-850 text-gray-850 dark:text-gray-300'
                                     }`}
                                 >
@@ -599,13 +602,13 @@ export default function Navigation() {
             {isTrackingModalOpen && (
                 <div className="fixed inset-0 z-55 flex items-center justify-center p-4">
                     <div className="absolute inset-0 bg-black/40 backdrop-blur-xs" onClick={() => setIsTrackingModalOpen(false)} />
-                    <div className="w-full max-w-lg bg-white dark:bg-[#1D1D1F] border border-gray-155 dark:border-gray-800 rounded-3xl p-6 relative z-10 shadow-2xl font-sans max-h-[90vh] overflow-y-auto">
+                    <div className="w-full max-w-lg bg-white dark:bg-surface-dark border border-gray-155 dark:border-gray-800 rounded-3xl p-6 relative z-10 shadow-2xl font-sans max-h-[90vh] overflow-y-auto">
                         <div className="flex justify-between items-center pb-4 border-b border-gray-100 dark:border-gray-800">
                             <h3 className="text-sm font-bold text-gray-900 dark:text-white uppercase tracking-wider flex items-center space-x-2">
-                                <Truck className="w-4 h-4 text-[#0066CC]" />
+                                <Truck className="w-4 h-4 text-brand" />
                                 <span>Order Tracking System</span>
                             </h3>
-                            <button onClick={() => setIsTrackingModalOpen(false)} className="p-1 text-gray-400 hover:text-gray-600 dark:hover:text-white">
+                            <button onClick={() => setIsTrackingModalOpen(false)} className="p-1 text-subtle hover:text-body dark:hover:text-white">
                                 <X className="w-5 h-5" />
                             </button>
                         </div>
@@ -620,13 +623,13 @@ export default function Navigation() {
                                         value={trackOrderId}
                                         onChange={(e) => setTrackOrderId(e.target.value)}
                                         placeholder="e.g. 100001 or #IPT-100001"
-                                        className="flex-1 border border-gray-200 dark:border-gray-800 rounded-xl px-3.5 py-2.5 bg-gray-50 dark:bg-gray-850 text-xs text-[#1D1D1F] dark:text-white focus:outline-none focus:ring-1 focus:ring-[#0066CC]"
+                                        className="flex-1 border border-gray-200 dark:border-gray-800 rounded-xl px-3.5 py-2.5 bg-gray-50 dark:bg-gray-850 text-xs text-heading dark:text-white focus:outline-none focus:ring-1 focus:ring-brand"
                                         required
                                     />
                                     <button 
                                         type="submit"
                                         disabled={isFetchingTrack}
-                                        className="px-6 py-2.5 bg-[#0066CC] hover:bg-[#0077ED] disabled:bg-gray-300 text-white text-xs font-bold rounded-xl transition-colors"
+                                        className="px-6 py-2.5 bg-brand hover:bg-brand-hover disabled:bg-gray-300 text-white text-xs font-bold rounded-xl transition-colors"
                                     >
                                         {isFetchingTrack ? 'Searching...' : 'Track'}
                                     </button>
@@ -647,11 +650,11 @@ export default function Navigation() {
                                 {/* Order info header details */}
                                 <div className="flex justify-between items-start text-xs bg-gray-50 dark:bg-gray-850 p-4 rounded-2xl">
                                     <div>
-                                        <p className="text-[9px] text-gray-400 font-bold uppercase">Order Reference</p>
+                                        <p className="text-[9px] text-subtle font-bold uppercase">Order Reference</p>
                                         <p className="font-bold text-gray-800 dark:text-white mt-0.5">#IPT-{(100000 + trackOrderResult.id)}</p>
                                     </div>
                                     <div className="text-right">
-                                        <p className="text-[9px] text-gray-400 font-bold uppercase">Total Price</p>
+                                        <p className="text-[9px] text-subtle font-bold uppercase">Total Price</p>
                                         <p className="font-extrabold text-gray-900 dark:text-white mt-0.5">R {parseFloat(trackOrderResult.total_amount).toLocaleString()}</p>
                                     </div>
                                     <div>
@@ -671,7 +674,7 @@ export default function Navigation() {
                                                 <img src={item.variant.product.image_path} alt={item.variant.product.name} className="w-8 h-8 object-contain bg-white p-0.5 border border-gray-100 rounded-lg flex-shrink-0" />
                                                 <div>
                                                     <p className="font-bold text-gray-900 dark:text-white truncate max-w-[200px]">{item.variant.product.name}</p>
-                                                    <p className="text-[9px] text-gray-400 mt-0.5">Qty: {item.quantity}</p>
+                                                    <p className="text-[9px] text-subtle mt-0.5">Qty: {item.quantity}</p>
                                                 </div>
                                             </div>
                                             <span className="font-extrabold text-gray-900 dark:text-white">R {(item.price * item.quantity).toLocaleString()}</span>

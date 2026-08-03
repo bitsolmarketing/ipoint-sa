@@ -21,7 +21,10 @@ export default function StorefrontLayout({ children }) {
     }, [flash]);
 
     return (
-        <div className="min-h-screen bg-[#F5F5F7] dark:bg-[#151516] flex flex-col font-sans antialiased text-[#1D1D1F] dark:text-[#F5F5F7]">
+        // `storefront-theme` scopes the admin-configured palette to the shop.
+        // The admin panel sits outside it and always renders the stock colours,
+        // so an unreadable palette can never lock anyone out of the CMS.
+        <div className="storefront-theme min-h-screen bg-page dark:bg-page-dark flex flex-col font-sans antialiased text-heading dark:text-page">
             {/* Top Navigation */}
             <Navigation />
 

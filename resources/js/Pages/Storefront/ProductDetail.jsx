@@ -108,18 +108,18 @@ export default function ProductDetail({ product, relatedProducts }) {
 
             {/* Breadcrumb */}
             <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-8 pt-6 pb-0">
-                <nav className="flex items-center space-x-1.5 text-[11px] text-gray-400" aria-label="Breadcrumb">
-                    <Link href="/" className="hover:text-[#0066CC] transition-colors font-medium">Home</Link>
+                <nav className="flex items-center space-x-1.5 text-[11px] text-subtle" aria-label="Breadcrumb">
+                    <Link href="/" className="hover:text-brand transition-colors font-medium">Home</Link>
                     <span className="text-gray-300">›</span>
                     {product.category && (
                         <>
-                            <Link href={`/category/${product.category.slug}`} className="hover:text-[#0066CC] transition-colors font-medium">
+                            <Link href={`/category/${product.category.slug}`} className="hover:text-brand transition-colors font-medium">
                                 {product.category.name}
                             </Link>
                             <span className="text-gray-300">›</span>
                         </>
                     )}
-                    <span className="text-[#1D1D1F] dark:text-white font-semibold line-clamp-1">{product.name}</span>
+                    <span className="text-heading dark:text-white font-semibold line-clamp-1">{product.name}</span>
                 </nav>
             </div>
 
@@ -129,7 +129,7 @@ export default function ProductDetail({ product, relatedProducts }) {
                 <div className="space-y-8">
                     {/* Main Image Frame - Premium Sleek Design with swipe left/right navigation */}
                     <div 
-                        className="bg-gradient-to-br from-[#F5F5F7] to-[#E8E8ED] dark:from-[#1D1D1F] dark:to-[#161617] rounded-3xl p-12 h-96 sm:h-[520px] flex items-center justify-center overflow-hidden shadow-[0_4px_30px_rgba(0,0,0,0.02)] dark:shadow-[0_4px_30px_rgba(0,0,0,0.25)] border-0 ring-1 ring-black/[0.03] dark:ring-white/[0.05] relative select-none cursor-grab active:cursor-grabbing group"
+                        className="bg-gradient-to-br from-page to-line-light dark:from-surface-dark dark:to-page-dark rounded-3xl p-12 h-96 sm:h-[520px] flex items-center justify-center overflow-hidden shadow-[0_4px_30px_rgba(0,0,0,0.02)] dark:shadow-[0_4px_30px_rgba(0,0,0,0.25)] border-0 ring-1 ring-black/[0.03] dark:ring-white/[0.05] relative select-none cursor-grab active:cursor-grabbing group"
                         onTouchStart={(e) => {
                             const touch = e.touches[0];
                             window.swipeStartX = touch.clientX;
@@ -211,9 +211,9 @@ export default function ProductDetail({ product, relatedProducts }) {
                                 <button
                                     key={index}
                                     onClick={() => setActiveImage(img)}
-                                    className={`w-20 h-20 bg-white dark:bg-[#1D1D1F] border rounded-2xl flex items-center justify-center p-2.5 overflow-hidden transition-all ${
+                                    className={`w-20 h-20 bg-white dark:bg-surface-dark border rounded-2xl flex items-center justify-center p-2.5 overflow-hidden transition-all ${
                                         activeImage === img 
-                                            ? 'border-[#0066CC] ring-2 ring-[#0066CC]/20' 
+                                            ? 'border-brand ring-2 ring-brand/20' 
                                             : 'border-gray-205 dark:border-gray-800 hover:border-gray-400'
                                     }`}
                                 >
@@ -225,14 +225,14 @@ export default function ProductDetail({ product, relatedProducts }) {
 
                     {/* Apple Style Creative Info-Graphics */}
                     <div className="grid grid-cols-2 gap-4 mt-8">
-                        <div className="bg-[#F5F5F7] dark:bg-[#1D1D1F] p-6 rounded-2xl">
+                        <div className="bg-page dark:bg-surface-dark p-6 rounded-2xl">
                             <h4 className="text-xs font-bold text-gray-900 dark:text-white uppercase mb-1">Apple Pencil Pro</h4>
-                            <p className="text-[10px] text-gray-400">Fits perfectly and handles with pixel-perfect precision.</p>
+                            <p className="text-[10px] text-subtle">Fits perfectly and handles with pixel-perfect precision.</p>
                             <img src="/uploads/categories/ipad.png" className="w-16 h-16 object-contain mt-3 mx-auto" />
                         </div>
-                        <div className="bg-[#F5F5F7] dark:bg-[#1D1D1F] p-6 rounded-2xl">
+                        <div className="bg-page dark:bg-surface-dark p-6 rounded-2xl">
                             <h4 className="text-xs font-bold text-gray-900 dark:text-white uppercase mb-1">Magic Keyboard</h4>
-                            <p className="text-[10px] text-gray-400">Super thin design with back-lit keys & comfortable typing.</p>
+                            <p className="text-[10px] text-subtle">Super thin design with back-lit keys & comfortable typing.</p>
                             <img src="/uploads/categories/mac.png" className="w-16 h-16 object-contain mt-3 mx-auto" />
                         </div>
                     </div>
@@ -242,11 +242,11 @@ export default function ProductDetail({ product, relatedProducts }) {
                 <div className="space-y-8">
                     <div>
                         {isGoldDesire ? (
-                            <span className="inline-flex items-center gap-1 text-[10px] font-extrabold uppercase text-[#B8860B] tracking-widest">
+                            <span className="inline-flex items-center gap-1 text-[10px] font-extrabold uppercase text-gold tracking-widest">
                                 <Sparkles className="w-3 h-3" /> Gold Desire · Certified Pre-Owned
                             </span>
                         ) : (
-                            <span className="inline-flex items-center gap-1 text-[10px] font-extrabold uppercase text-[#0066CC] tracking-widest">
+                            <span className="inline-flex items-center gap-1 text-[10px] font-extrabold uppercase text-brand tracking-widest">
                                 Box Pack · {product.is_new ? 'New' : 'Sealed'}
                             </span>
                         )}
@@ -258,7 +258,7 @@ export default function ProductDetail({ product, relatedProducts }) {
                                     <Star key={i} className="w-3.5 h-3.5 fill-current" />
                                 ))}
                             </div>
-                            <span className="text-[11px] text-[#0066CC] hover:underline cursor-pointer font-medium">({product.reviews ? product.reviews.length : 0} client reviews)</span>
+                            <span className="text-[11px] text-brand hover:underline cursor-pointer font-medium">({product.reviews ? product.reviews.length : 0} client reviews)</span>
                         </div>
                     </div>
 
@@ -269,33 +269,33 @@ export default function ProductDetail({ product, relatedProducts }) {
                                 R {finalPrice.toLocaleString()}
                             </span>
                             {product.original_price && !selectedVariant?.price_modifier && (
-                                <span className="text-lg line-through text-gray-400">
+                                <span className="text-lg line-through text-subtle">
                                     R {parseFloat(product.original_price).toLocaleString()}
                                 </span>
                             )}
                         </div>
-                        <p className="text-[10px] text-[#0066CC] font-semibold mt-1 cursor-pointer hover:underline">Explore financing options ›</p>
+                        <p className="text-[10px] text-brand font-semibold mt-1 cursor-pointer hover:underline">Explore financing options ›</p>
                     </div>
 
                     {/* Gold Desire condition panel (§6) */}
                     {isGoldDesire && (
-                        <div className="border border-[#E7D9AE] dark:border-[#B8860B]/30 bg-[#FCF7EA] dark:bg-[#B8860B]/10 rounded-3xl p-5 space-y-3">
-                            <div className="flex items-center gap-2 text-[#B8860B] dark:text-[#E3B341]">
+                        <div className="border border-gold/25 dark:border-gold/30 bg-gold/10 dark:bg-gold/10 rounded-3xl p-5 space-y-3">
+                            <div className="flex items-center gap-2 text-gold dark:text-gold-light">
                                 <Sparkles className="w-4 h-4" />
                                 <h4 className="text-xs font-bold uppercase tracking-wider">Certified Pre-Owned Condition</h4>
                             </div>
                             <div className="grid grid-cols-2 gap-3 text-xs">
                                 <div className="bg-white/70 dark:bg-black/20 rounded-2xl p-3">
-                                    <p className="text-[9px] font-bold text-gray-400 uppercase">Condition grade</p>
+                                    <p className="text-[9px] font-bold text-subtle uppercase">Condition grade</p>
                                     <p className="font-extrabold text-gray-900 dark:text-white mt-0.5">{product.condition_grade ? `Grade ${product.condition_grade}` : '—'}</p>
                                 </div>
                                 <div className="bg-white/70 dark:bg-black/20 rounded-2xl p-3">
-                                    <p className="text-[9px] font-bold text-gray-400 uppercase flex items-center gap-1"><BatteryCharging className="w-3 h-3" /> Battery health</p>
+                                    <p className="text-[9px] font-bold text-subtle uppercase flex items-center gap-1"><BatteryCharging className="w-3 h-3" /> Battery health</p>
                                     <p className="font-extrabold text-gray-900 dark:text-white mt-0.5">{product.battery_health ? `${product.battery_health}%` : '—'}</p>
                                 </div>
                             </div>
                             {product.cosmetic_notes && (
-                                <p className="text-[11px] text-gray-600 dark:text-gray-300 leading-relaxed">{product.cosmetic_notes}</p>
+                                <p className="text-[11px] text-body dark:text-gray-300 leading-relaxed">{product.cosmetic_notes}</p>
                             )}
                         </div>
                     )}
@@ -303,7 +303,7 @@ export default function ProductDetail({ product, relatedProducts }) {
                     {/* Color Picker */}
                     {colorsList.length > 0 && (
                         <div>
-                            <h3 className="text-xs font-bold text-gray-400 uppercase tracking-widest mb-3">Color: <span className="text-gray-900 dark:text-white">{selectedColor?.name}</span></h3>
+                            <h3 className="text-xs font-bold text-subtle uppercase tracking-widest mb-3">Color: <span className="text-gray-900 dark:text-white">{selectedColor?.name}</span></h3>
                             <div className="flex space-x-3.5">
                                 {colorsList.map((color) => {
                                     const isSelected = selectedColor?.id === color.id;
@@ -341,7 +341,7 @@ export default function ProductDetail({ product, relatedProducts }) {
                         <div>
                             <div className="flex justify-between items-center mb-3">
                                 <h3 className="text-xs font-bold text-gray-405 uppercase tracking-widest">Capacity</h3>
-                                <span className="text-[10px] text-[#0066CC] hover:underline cursor-pointer">Which size is right?</span>
+                                <span className="text-[10px] text-brand hover:underline cursor-pointer">Which size is right?</span>
                             </div>
                             <div className="grid grid-cols-1 gap-3">
                                 {sizesList.map((size) => {
@@ -363,7 +363,7 @@ export default function ProductDetail({ product, relatedProducts }) {
                                                 !varForSize 
                                                     ? 'opacity-40 cursor-not-allowed border-gray-100 bg-gray-50' 
                                                     : isSelected 
-                                                        ? 'border-[#0066CC] bg-[#F0F7FF]/30 text-[#0066CC] dark:bg-blue-950/20 dark:text-blue-300 ring-2 ring-[#0066CC]/20' 
+                                                        ? 'border-brand bg-brand-tint/30 text-brand dark:bg-blue-950/20 dark:text-blue-300 ring-2 ring-brand/20' 
                                                         : 'border-gray-200 hover:border-gray-450 bg-white dark:bg-transparent text-gray-900 dark:text-white'
                                             }`}
                                         >
@@ -384,7 +384,7 @@ export default function ProductDetail({ product, relatedProducts }) {
                     <div>
                         <div className="flex justify-between items-center mb-3">
                             <h3 className="text-xs font-bold text-gray-405 uppercase tracking-widest">Connectivity</h3>
-                            <span className="text-[10px] text-[#0066CC] hover:underline cursor-pointer font-medium">Which model?</span>
+                            <span className="text-[10px] text-brand hover:underline cursor-pointer font-medium">Which model?</span>
                         </div>
                         <div className="grid grid-cols-1 gap-3">
                             {['Wi-Fi', 'Wi-Fi + Cellular'].map((conn) => (
@@ -394,7 +394,7 @@ export default function ProductDetail({ product, relatedProducts }) {
                                     onClick={() => setConnectivity(conn)}
                                     className={`border rounded-2xl p-4 flex justify-between items-center text-left text-xs font-bold transition-all ${
                                         connectivity === conn
-                                            ? 'border-[#0066CC] bg-[#F0F7FF]/30 text-[#0066CC] dark:bg-blue-950/20 dark:text-blue-300 ring-2 ring-[#0066CC]/20'
+                                            ? 'border-brand bg-brand-tint/30 text-brand dark:bg-blue-950/20 dark:text-blue-300 ring-2 ring-brand/20'
                                             : 'border-gray-202 hover:border-gray-450 bg-white dark:bg-transparent text-gray-900 dark:text-white'
                                     }`}
                                 >
@@ -411,7 +411,7 @@ export default function ProductDetail({ product, relatedProducts }) {
                                 <img src="/uploads/categories/airtag.png" className="w-8 h-8 object-contain" />
                                 <div>
                                     <h4 className="text-xs font-bold text-gray-900 dark:text-white">AppleCare+ for {product.name}</h4>
-                                    <p className="text-[10px] text-gray-400 mt-0.5">Protect against drops, spills & hardware failures.</p>
+                                    <p className="text-[10px] text-subtle mt-0.5">Protect against drops, spills & hardware failures.</p>
                                 </div>
                             </div>
                             <button
@@ -419,7 +419,7 @@ export default function ProductDetail({ product, relatedProducts }) {
                                 onClick={() => setAppleCareSelected(!appleCareSelected)}
                                 className={`text-[10px] font-bold px-3 py-1.5 rounded-full border transition-all ${
                                     appleCareSelected
-                                        ? 'bg-[#0066CC] text-white border-transparent'
+                                        ? 'bg-brand text-white border-transparent'
                                         : 'border-gray-300 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800'
                                 }`}
                             >
@@ -427,24 +427,24 @@ export default function ProductDetail({ product, relatedProducts }) {
                             </button>
                         </div>
                         <div className="flex justify-between items-center mt-3 pt-3 border-t border-gray-100 dark:border-gray-850">
-                            <span className="text-[10px] text-gray-400">Total AppleCare+ cover</span>
+                            <span className="text-[10px] text-subtle">Total AppleCare+ cover</span>
                             <span className="text-xs font-extrabold text-gray-950 dark:text-white">R 2 999</span>
                         </div>
                     </div>
 
                     {/* Get it fast section */}
-                    <div className="bg-[#F5F5F7] dark:bg-[#1D1D1F] border border-gray-150 dark:border-gray-800 rounded-3xl p-5 md:p-6 space-y-4 font-sans text-xs">
-                        <h4 className="font-bold text-[#1D1D1F] dark:text-white text-sm">Get it fast</h4>
+                    <div className="bg-page dark:bg-surface-dark border border-gray-150 dark:border-gray-800 rounded-3xl p-5 md:p-6 space-y-4 font-sans text-xs">
+                        <h4 className="font-bold text-heading dark:text-white text-sm">Get it fast</h4>
                         
                         {/* Pickup option */}
                         <div className="space-y-1">
                             <p className="font-bold text-gray-700 dark:text-gray-300 flex items-center space-x-1.5">
-                                <Store className="w-4 h-4 text-gray-400" />
+                                <Store className="w-4 h-4 text-subtle" />
                                 <span>Pickup</span>
                             </p>
                             <button 
                                 onClick={() => setIsStoreModalOpen(true)}
-                                className="text-xs font-semibold text-[#0066CC] hover:underline flex items-center"
+                                className="text-xs font-semibold text-brand hover:underline flex items-center"
                             >
                                 {selectedStore ? `${selectedStore} ` : 'Select a Store '} &gt;
                             </button>
@@ -453,7 +453,7 @@ export default function ProductDetail({ product, relatedProducts }) {
                         {/* Shipping option */}
                         <div className="space-y-1 pt-1.5 border-t border-gray-200/50 dark:border-gray-800/80">
                             <p className="font-bold text-gray-700 dark:text-gray-300 flex items-center space-x-1.5">
-                                <Truck className="w-4 h-4 text-gray-400" />
+                                <Truck className="w-4 h-4 text-subtle" />
                                 <span>Shipping</span>
                             </p>
                             {isPostalInputOpen ? (
@@ -463,7 +463,7 @@ export default function ProductDetail({ product, relatedProducts }) {
                                         value={postalCode} 
                                         onChange={(e) => setPostalCode(e.target.value)} 
                                         placeholder="e.g. 2000" 
-                                        className="border border-gray-200 dark:border-gray-800 rounded-lg px-2 py-1 text-[11px] bg-white dark:bg-gray-850 w-24 text-[#1D1D1F] dark:text-white focus:outline-none" 
+                                        className="border border-gray-200 dark:border-gray-800 rounded-lg px-2 py-1 text-[11px] bg-white dark:bg-gray-850 w-24 text-heading dark:text-white focus:outline-none" 
                                     />
                                     <button 
                                         onClick={() => {
@@ -472,7 +472,7 @@ export default function ProductDetail({ product, relatedProducts }) {
                                                 setIsPostalInputOpen(false);
                                             }
                                         }}
-                                        className="bg-[#0066CC] text-white px-3 py-1 rounded-lg text-[10px] font-bold"
+                                        className="bg-brand text-white px-3 py-1 rounded-lg text-[10px] font-bold"
                                     >
                                         Save
                                     </button>
@@ -480,7 +480,7 @@ export default function ProductDetail({ product, relatedProducts }) {
                             ) : (
                                 <button 
                                     onClick={() => setIsPostalInputOpen(true)}
-                                    className="text-xs font-semibold text-[#0066CC] hover:underline flex items-center"
+                                    className="text-xs font-semibold text-brand hover:underline flex items-center"
                                 >
                                     {postalCodeSaved ? `Postal Code: ${postalCodeSaved} ` : 'Enter your postal code '} &gt;
                                 </button>
@@ -492,13 +492,13 @@ export default function ProductDetail({ product, relatedProducts }) {
                     {isStoreModalOpen && (
                         <div className="fixed inset-0 z-55 flex items-center justify-center p-4">
                             <div className="absolute inset-0 bg-black/40 backdrop-blur-xs" onClick={() => setIsStoreModalOpen(false)} />
-                            <div className="w-full max-w-md bg-white dark:bg-[#1D1D1F] border border-gray-155 dark:border-gray-800 rounded-3xl p-6 relative z-10 shadow-2xl font-sans text-xs">
+                            <div className="w-full max-w-md bg-white dark:bg-surface-dark border border-gray-155 dark:border-gray-800 rounded-3xl p-6 relative z-10 shadow-2xl font-sans text-xs">
                                 <div className="flex justify-between items-center pb-4 border-b border-gray-100 dark:border-gray-800">
                                     <h3 className="text-sm font-bold text-gray-900 dark:text-white uppercase tracking-wider flex items-center space-x-2">
-                                        <Store className="w-4 h-4 text-[#0066CC]" />
+                                        <Store className="w-4 h-4 text-brand" />
                                         <span>Select a Pickup Store</span>
                                     </h3>
-                                    <button onClick={() => setIsStoreModalOpen(false)} className="p-1 text-gray-400 hover:text-gray-600 dark:hover:text-white">
+                                    <button onClick={() => setIsStoreModalOpen(false)} className="p-1 text-subtle hover:text-body dark:hover:text-white">
                                         <X className="w-5 h-5" />
                                     </button>
                                 </div>
@@ -509,7 +509,7 @@ export default function ProductDetail({ product, relatedProducts }) {
                                             onClick={() => handleSelectStore(store.name)}
                                             className={`w-full text-left p-3.5 rounded-2xl border text-xs flex justify-between items-center transition-all ${
                                                 selectedStore === store.name
-                                                    ? 'border-[#0066CC] bg-[#F0F7FF] dark:bg-blue-950/20 text-[#0066CC] font-bold'
+                                                    ? 'border-brand bg-brand-tint dark:bg-blue-950/20 text-brand font-bold'
                                                     : 'border-gray-150 dark:border-gray-800 hover:bg-gray-50 dark:hover:bg-gray-850 text-gray-850 dark:text-gray-300'
                                             }`}
                                         >
@@ -533,8 +533,8 @@ export default function ProductDetail({ product, relatedProducts }) {
                                 disabled={processing || !selectedVariant || selectedVariant.stock <= 0}
                                 className={`w-full py-4 text-xs font-semibold text-center rounded-full transition-all duration-300 ${
                                     !selectedVariant || selectedVariant.stock <= 0
-                                        ? 'bg-gray-150 text-gray-450 dark:bg-gray-800 dark:text-gray-600 cursor-not-allowed'
-                                        : 'bg-[#0066CC] hover:bg-[#0077ED] text-white hover:scale-[1.01] hover:shadow-lg'
+                                        ? 'bg-gray-150 text-gray-450 dark:bg-gray-800 dark:text-body cursor-not-allowed'
+                                        : 'bg-brand hover:bg-brand-hover text-white hover:scale-[1.01] hover:shadow-lg'
                                     }`}
                             >
                                 {processing 
@@ -557,7 +557,7 @@ export default function ProductDetail({ product, relatedProducts }) {
                         <button
                             type="button"
                             onClick={addToCompare}
-                            className="w-full flex items-center justify-center gap-2 py-3 text-xs font-bold rounded-full border border-gray-300 dark:border-gray-700 text-gray-700 dark:text-gray-300 hover:border-[#0066CC] hover:text-[#0066CC] transition-colors"
+                            className="w-full flex items-center justify-center gap-2 py-3 text-xs font-bold rounded-full border border-gray-300 dark:border-gray-700 text-gray-700 dark:text-gray-300 hover:border-brand hover:text-brand transition-colors"
                         >
                             <Scale className="w-4 h-4" /> Add to Compare
                         </button>
@@ -566,9 +566,9 @@ export default function ProductDetail({ product, relatedProducts }) {
             </div>
 
             {/* Cross-Sell: Frequently bought together section */}
-            <section className="bg-white dark:bg-[#1D1D1F] border-t border-gray-100 dark:border-gray-800 py-16 px-4 sm:px-6 md:px-8">
+            <section className="bg-white dark:bg-surface-dark border-t border-gray-100 dark:border-gray-800 py-16 px-4 sm:px-6 md:px-8">
                 <div className="max-w-7xl mx-auto text-center">
-                    <h3 className="text-xl sm:text-2xl font-extrabold text-[#1d1d1f] dark:text-white tracking-tight mb-8">
+                    <h3 className="text-xl sm:text-2xl font-extrabold text-heading dark:text-white tracking-tight mb-8">
                         Frequently bought together.
                     </h3>
                     <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mb-8 text-left">
@@ -578,11 +578,11 @@ export default function ProductDetail({ product, relatedProducts }) {
                             { name: 'Glass Screen Guard', price: 'R399', img: '/uploads/categories/airtag.png' },
                             { name: 'Apple Pencil Pro', price: 'R2 499', img: '/uploads/categories/ipad.png' }
                         ].map((item, idx) => (
-                            <div key={idx} className="bg-[#F5F5F7] dark:bg-[#252528] p-6 rounded-3xl flex flex-col justify-between items-center text-center">
+                            <div key={idx} className="bg-page dark:bg-surface-dark-alt p-6 rounded-3xl flex flex-col justify-between items-center text-center">
                                 <img src={item.img} className="w-16 h-16 object-contain mb-4" />
                                 <h4 className="text-xs font-bold text-gray-900 dark:text-white mb-1 line-clamp-1">{item.name}</h4>
-                                <span className="text-[11px] text-gray-500 font-extrabold">{item.price}</span>
-                                <button className="mt-4 px-4 py-1.5 border border-gray-200 hover:bg-[#0066CC] hover:text-white text-[10px] font-bold rounded-full transition-colors">Add to setup</button>
+                                <span className="text-[11px] text-muted font-extrabold">{item.price}</span>
+                                <button className="mt-4 px-4 py-1.5 border border-gray-200 hover:bg-brand hover:text-white text-[10px] font-bold rounded-full transition-colors">Add to setup</button>
                             </div>
                         ))}
                     </div>
@@ -590,7 +590,7 @@ export default function ProductDetail({ product, relatedProducts }) {
             </section>
 
             {/* Accordions Details: description, warranty, delivery specs */}
-            <section className="bg-white dark:bg-[#1D1D1F] border-t border-gray-100 dark:border-gray-800 py-12 px-4 sm:px-6 md:px-8">
+            <section className="bg-white dark:bg-surface-dark border-t border-gray-100 dark:border-gray-800 py-12 px-4 sm:px-6 md:px-8">
                 <div className="max-w-3xl mx-auto space-y-4">
                     {/* Description Accordion */}
                     <div className="border-b border-gray-200 dark:border-gray-850 pb-4">
@@ -602,7 +602,7 @@ export default function ProductDetail({ product, relatedProducts }) {
                             {expandedAccordion === 'description' ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
                         </button>
                         {expandedAccordion === 'description' && (
-                            <div className="pt-2 text-xs text-gray-500 leading-relaxed dark:text-gray-400">
+                            <div className="pt-2 text-xs text-muted leading-relaxed dark:text-subtle">
                                 {product.description}
                             </div>
                         )}
@@ -618,7 +618,7 @@ export default function ProductDetail({ product, relatedProducts }) {
                             {expandedAccordion === 'specs' ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
                         </button>
                         {expandedAccordion === 'specs' && (
-                            <div className="pt-2 text-xs text-gray-500 leading-relaxed dark:text-gray-400">
+                            <div className="pt-2 text-xs text-muted leading-relaxed dark:text-subtle">
                                 <ul className="space-y-1.5 list-disc pl-5">
                                     <li>M-Series supercharged custom silicon architecture</li>
                                     <li>Tandem OLED Ultra Retina display support</li>
@@ -639,7 +639,7 @@ export default function ProductDetail({ product, relatedProducts }) {
                             {expandedAccordion === 'shipping' ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
                         </button>
                         {expandedAccordion === 'shipping' && (
-                            <div className="pt-2 text-xs text-gray-500 leading-relaxed dark:text-gray-400">
+                            <div className="pt-2 text-xs text-muted leading-relaxed dark:text-subtle">
                                 Standard shipping takes 1-3 business days. Free returns are supported within 7 days of package delivery.
                             </div>
                         )}
@@ -648,7 +648,7 @@ export default function ProductDetail({ product, relatedProducts }) {
             </section>
 
             {/* Specifications Tab (Summary vs Technical Specs) */}
-            <section className="bg-white dark:bg-[#1D1D1F] py-16 px-4 sm:px-6 md:px-8 border-b border-gray-100 dark:border-gray-800">
+            <section className="bg-white dark:bg-surface-dark py-16 px-4 sm:px-6 md:px-8 border-b border-gray-100 dark:border-gray-800">
                 <div className="max-w-4xl mx-auto space-y-8 font-sans">
                     {/* Tab Switcher Pills */}
                     <div className="flex justify-center">
@@ -658,8 +658,8 @@ export default function ProductDetail({ product, relatedProducts }) {
                                 onClick={() => setActiveSpecsTab('summary')}
                                 className={`px-6 py-2.5 rounded-full text-xs font-bold transition-all duration-300 ${
                                     activeSpecsTab === 'summary'
-                                        ? 'bg-[#80B52B] text-white shadow-sm'
-                                        : 'text-gray-500 hover:text-gray-700 dark:hover:text-white'
+                                        ? 'bg-success-hover text-white shadow-sm'
+                                        : 'text-muted hover:text-gray-700 dark:hover:text-white'
                                 }`}
                             >
                                 Summary
@@ -669,8 +669,8 @@ export default function ProductDetail({ product, relatedProducts }) {
                                 onClick={() => setActiveSpecsTab('technical')}
                                 className={`px-6 py-2.5 rounded-full text-xs font-bold transition-all duration-300 ${
                                     activeSpecsTab === 'technical'
-                                        ? 'bg-[#80B52B] text-white shadow-sm'
-                                        : 'text-gray-500 hover:text-gray-700 dark:hover:text-white'
+                                        ? 'bg-success-hover text-white shadow-sm'
+                                        : 'text-muted hover:text-gray-700 dark:hover:text-white'
                                 }`}
                             >
                                 Technical Specifications
@@ -689,9 +689,9 @@ export default function ProductDetail({ product, relatedProducts }) {
                             ]).map((item, index) => (
                                 <div key={index} className="flex flex-col items-center text-center p-4 border border-gray-100 dark:border-gray-800 rounded-2xl bg-gray-50/50 dark:bg-gray-900/10">
                                     <div className="w-10 h-10 rounded-full bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 flex items-center justify-center mb-3">
-                                        {item.icon === 'battery' ? <ShieldCheck className="w-5 h-5 text-gray-400" /> : <Smartphone className="w-5 h-5 text-gray-400" />}
+                                        {item.icon === 'battery' ? <ShieldCheck className="w-5 h-5 text-subtle" /> : <Smartphone className="w-5 h-5 text-subtle" />}
                                     </div>
-                                    <span className="text-[10px] font-bold text-gray-400 uppercase tracking-wide">{item.label}</span>
+                                    <span className="text-[10px] font-bold text-subtle uppercase tracking-wide">{item.label}</span>
                                     <span className="text-xs font-bold text-gray-900 dark:text-white mt-1">{item.value || 'Not Configured'}</span>
                                 </div>
                             ))}
@@ -707,7 +707,7 @@ export default function ProductDetail({ product, relatedProducts }) {
                                         { spec_key: 'USB', spec_val: 'USB-C connector with support for USB 3' }
                                     ]).map((item, index) => (
                                         <tr key={index} className="border-b border-gray-100 dark:border-gray-850 hover:bg-gray-50/50 dark:hover:bg-gray-800/10 transition-colors">
-                                            <td className="py-4 px-6 font-bold text-gray-500 uppercase tracking-wider w-1/3 border-r border-gray-100 dark:border-gray-850 bg-gray-50/40 dark:bg-gray-900/40">
+                                            <td className="py-4 px-6 font-bold text-muted uppercase tracking-wider w-1/3 border-r border-gray-100 dark:border-gray-850 bg-gray-50/40 dark:bg-gray-900/40">
                                                 {item.spec_key}
                                             </td>
                                             <td className="py-4 px-6 text-gray-900 dark:text-white font-normal leading-relaxed">
@@ -723,12 +723,12 @@ export default function ProductDetail({ product, relatedProducts }) {
             </section>
 
             {/* Reviews Section */}
-            <section className="bg-white dark:bg-[#1D1D1F] border-t border-gray-100 dark:border-gray-800 py-16 px-4 sm:px-6 md:px-8">
+            <section className="bg-white dark:bg-surface-dark border-t border-gray-100 dark:border-gray-800 py-16 px-4 sm:px-6 md:px-8">
                 <div className="max-w-3xl mx-auto space-y-12">
                     <div className="border-b border-gray-150 dark:border-gray-800 pb-6 flex justify-between items-center">
                         <div>
                             <h3 className="text-xl sm:text-2xl font-extrabold text-gray-900 dark:text-white tracking-tight">Customer Reviews</h3>
-                            <p className="text-xs text-gray-400 mt-1">Real feedback left by verified buyers.</p>
+                            <p className="text-xs text-subtle mt-1">Real feedback left by verified buyers.</p>
                         </div>
                         <div className="text-right">
                             <div className="flex items-center space-x-1 justify-end">
@@ -740,14 +740,14 @@ export default function ProductDetail({ product, relatedProducts }) {
                                 </span>
                                 <Star className="w-4 h-4 fill-amber-400 text-amber-400" />
                             </div>
-                            <span className="text-[10px] text-gray-400 mt-0.5 block">{product.reviews ? product.reviews.length : 0} reviews</span>
+                            <span className="text-[10px] text-subtle mt-0.5 block">{product.reviews ? product.reviews.length : 0} reviews</span>
                         </div>
                     </div>
 
                     {/* Review Submission Form */}
                     <div className="bg-gray-50/50 dark:bg-gray-900/10 border border-gray-100 dark:border-gray-850 p-6 rounded-3xl">
                         <h4 className="text-xs font-bold text-gray-900 dark:text-white uppercase mb-1 tracking-wider">Leave a Review</h4>
-                        <p className="text-[10px] text-gray-400 mb-4">Reviews are checked by our team before they’re published.</p>
+                        <p className="text-[10px] text-subtle mb-4">Reviews are checked by our team before they’re published.</p>
                         <ReviewForm productId={product.id} />
                     </div>
 
@@ -759,7 +759,7 @@ export default function ProductDetail({ product, relatedProducts }) {
                                     <div className="flex justify-between items-start">
                                         <div>
                                             <p className="text-xs font-bold text-gray-900 dark:text-white">{rev.reviewer_name}</p>
-                                            <p className="text-[10px] text-gray-400 mt-0.5">
+                                            <p className="text-[10px] text-subtle mt-0.5">
                                                 {new Date(rev.created_at).toLocaleDateString(undefined, { year: 'numeric', month: 'long', day: 'numeric' })}
                                             </p>
                                         </div>
@@ -769,13 +769,13 @@ export default function ProductDetail({ product, relatedProducts }) {
                                             ))}
                                         </div>
                                     </div>
-                                    <p className="text-xs text-gray-600 dark:text-gray-400 mt-3 leading-relaxed font-normal">
+                                    <p className="text-xs text-body dark:text-subtle mt-3 leading-relaxed font-normal">
                                         {rev.comment}
                                     </p>
                                 </div>
                             ))
                         ) : (
-                            <p className="text-xs text-gray-400 text-center py-6">No reviews have been left for this product yet. Be the first to share your experience!</p>
+                            <p className="text-xs text-subtle text-center py-6">No reviews have been left for this product yet. Be the first to share your experience!</p>
                         )}
                     </div>
                 </div>
@@ -783,7 +783,7 @@ export default function ProductDetail({ product, relatedProducts }) {
 
             {/* Recently Viewed Products Deck */}
             {relatedProducts.length > 0 && (
-                <section className="bg-[#F5F5F7] dark:bg-[#1D1D1F] border-t border-gray-100 dark:border-gray-800 py-16 px-4 sm:px-6 md:px-8">
+                <section className="bg-page dark:bg-surface-dark border-t border-gray-100 dark:border-gray-800 py-16 px-4 sm:px-6 md:px-8">
                     <div className="max-w-7xl mx-auto">
                         <h2 className="text-xl sm:text-2xl font-extrabold text-gray-900 dark:text-white tracking-tight mb-8">
                             Recently viewed products.
@@ -793,7 +793,7 @@ export default function ProductDetail({ product, relatedProducts }) {
                                 <Link 
                                     key={prod.id} 
                                     href={`/products/${prod.slug}`}
-                                    className="bg-white dark:bg-[#1D1D1F] border border-gray-200 dark:border-gray-800 rounded-[4px] p-4 flex flex-col justify-between group transition-all duration-300 hover:shadow-md hover:scale-[1.01]"
+                                    className="bg-white dark:bg-surface-dark border border-gray-200 dark:border-gray-800 rounded-[4px] p-4 flex flex-col justify-between group transition-all duration-300 hover:shadow-md hover:scale-[1.01]"
                                 >
                                     <div className="relative">
                                         {/* Product Image */}
@@ -814,7 +814,7 @@ export default function ProductDetail({ product, relatedProducts }) {
                                             {prod.name}
                                         </h3>
                                         {/* Specifications Subtitle */}
-                                        <p className="text-[11px] text-gray-500 dark:text-gray-400 font-medium">
+                                        <p className="text-[11px] text-muted dark:text-subtle font-medium">
                                             (Standard Variant, 256GB)
                                         </p>
                                     </div>
@@ -847,7 +847,7 @@ function ReviewForm({ productId }) {
         <form onSubmit={submit} className="space-y-4 font-sans text-xs">
             <div className="grid grid-cols-2 gap-4">
                 <div>
-                    <label className="block text-[10px] font-bold text-gray-400 uppercase mb-1.5">Your Name</label>
+                    <label className="block text-[10px] font-bold text-subtle uppercase mb-1.5">Your Name</label>
                     <input 
                         type="text" 
                         value={data.reviewer_name}
@@ -856,10 +856,10 @@ function ReviewForm({ productId }) {
                         placeholder="e.g. John Doe"
                         required
                     />
-                    {errors.reviewer_name && <p className="text-[#E30000] text-[10px] mt-1">{errors.reviewer_name}</p>}
+                    {errors.reviewer_name && <p className="text-sale text-[10px] mt-1">{errors.reviewer_name}</p>}
                 </div>
                 <div>
-                    <label className="block text-[10px] font-bold text-gray-400 uppercase mb-1.5">Rating stars</label>
+                    <label className="block text-[10px] font-bold text-subtle uppercase mb-1.5">Rating stars</label>
                     <select 
                         value={data.rating}
                         onChange={(e) => setData('rating', parseInt(e.target.value))}
@@ -872,12 +872,12 @@ function ReviewForm({ productId }) {
                         <option value="2">⭐⭐ 2 Stars</option>
                         <option value="1">⭐ 1 Star</option>
                     </select>
-                    {errors.rating && <p className="text-[#E30000] text-[10px] mt-1">{errors.rating}</p>}
+                    {errors.rating && <p className="text-sale text-[10px] mt-1">{errors.rating}</p>}
                 </div>
             </div>
 
             <div>
-                <label className="block text-[10px] font-bold text-gray-400 uppercase mb-1.5">Comments</label>
+                <label className="block text-[10px] font-bold text-subtle uppercase mb-1.5">Comments</label>
                 <textarea 
                     value={data.comment}
                     onChange={(e) => setData('comment', e.target.value)}
@@ -886,14 +886,14 @@ function ReviewForm({ productId }) {
                     placeholder="Tell us what you like or dislike about this product."
                     required
                 ></textarea>
-                {errors.comment && <p className="text-[#E30000] text-[10px] mt-1">{errors.comment}</p>}
+                {errors.comment && <p className="text-sale text-[10px] mt-1">{errors.comment}</p>}
             </div>
 
             <div className="flex justify-end">
                 <button
                     type="submit"
                     disabled={processing}
-                    className="px-6 py-2 bg-[#0066CC] hover:bg-[#0077ED] text-white font-semibold rounded-full disabled:opacity-50"
+                    className="px-6 py-2 bg-brand hover:bg-brand-hover text-white font-semibold rounded-full disabled:opacity-50"
                 >
                     {processing ? 'Submitting...' : 'Post Review'}
                 </button>

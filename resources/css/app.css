@@ -3,14 +3,9 @@
 @tailwind utilities;
 
 @layer base {
-    /* Canvas colour so overscroll / short pages never flash white in dark mode */
-    html {
-        background-color: #F5F5F7;
-    }
-
-    html.dark {
-        background-color: #151516;
-    }
+    /* The canvas colour (so overscroll / short pages never flash the wrong
+       shade) is emitted per-request from App\Support\ThemePalette into the page
+       head, because it follows the admin-configured palette. */
 
     body, .font-sans {
         font-family: 'Montserrat', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif !important;
@@ -65,9 +60,10 @@
 .glass-card:hover {
     transform: translateY(-8px) scale(1.01) !important;
     background: rgba(255, 255, 255, 0.55) !important;
-    box-shadow: 
-        0 20px 40px -10px rgba(0, 102, 204, 0.12),
-        0 0 1px 1px rgba(0, 102, 204, 0.1) !important;
+    /* Lift glow follows the configured primary colour */
+    box-shadow:
+        0 20px 40px -10px rgb(var(--c-brand) / 0.12),
+        0 0 1px 1px rgb(var(--c-brand) / 0.1) !important;
 }
 
 .dark .glass-card:hover {

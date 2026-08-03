@@ -27,14 +27,14 @@ class DatabaseSeeder extends Seeder
         // 1. Create Test Users
         User::create([
             'name' => 'iPoint Admin',
-            'email' => 'admin@istore.co.za',
+            'email' => 'admin@ipointapple.com',
             'password' => Hash::make('Password123!'),
             'is_admin' => true,
         ]);
 
         User::create([
             'name' => 'iPoint Client',
-            'email' => 'client@istore.co.za',
+            'email' => 'client@ipointapple.com',
             'password' => Hash::make('Password123!'),
             'is_admin' => false,
         ]);
@@ -255,6 +255,11 @@ class DatabaseSeeder extends Seeder
         foreach ($repairLocationsData as $loc) {
             RepairLocation::create($loc);
         }
+
+        // 5b. Import the repair catalogue (devices, models, types, prices) into
+        // the admin-editable tables. Idempotent, so it is also safe to run on
+        // its own: php artisan db:seed --class=RepairCatalogueSeeder
+        $this->call(RepairCatalogueSeeder::class);
 
         // 6. Create Products & Variants
         $productsData = [

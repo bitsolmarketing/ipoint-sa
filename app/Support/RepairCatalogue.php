@@ -2,28 +2,38 @@
 
 namespace App\Support;
 
+use App\Models\RepairDevice;
+use App\Models\RepairType;
+
 /**
  * Repair catalogue backing the /services repair selector (Product → Model →
- * Storage → Repair type → indicative price).
+ * Storage → Repair type → indicative price) and the /apple-product-repair
+ * booking page.
+ *
+ * The catalogue is admin-managed (Admin → Repairs → Catalogue): device
+ * families, models, repair types, prices and service options all live in the
+ * database. The constants below are the seed data and the fallback used while
+ * those tables are empty or have not been migrated yet, so the storefront never
+ * renders an empty selector on a fresh install.
  *
  * Structured after istore.co.za/apple-product-repair. Deliberately avoids
  * "Apple Certified" / "Apple Authorised" wording — see the compliance note on
  * RepairController. Keep it that way unless iPoint is registered as an Apple
  * Authorised Service Provider.
  *
- * PRICES ARE INDICATIVE PLACEHOLDERS in ZAR and must be confirmed against the
- * client's real repair price list before go-live. The page renders them with a
- * "subject to assessment" disclaimer.
+ * PRICES IN THE FALLBACK ARE INDICATIVE PLACEHOLDERS in ZAR. The page renders
+ * them with a "subject to assessment" disclaimer.
  */
 class RepairCatalogue
 {
     /**
-     * Levy applied to devices that fail the eligibility inspection, in ZAR.
+     * Default levy applied to devices that fail the eligibility inspection, in
+     * ZAR. Overridden by the `repairs.ineligible_levy` setting.
      */
     public const INELIGIBLE_LEVY = 750;
 
     /**
-     * Repair type key => customer-facing label. Keys are persisted on
+     * Fallback repair type key => customer-facing label. Keys are persisted on
      * repair_bookings.repair_type, so never rename an existing key.
      */
     public const REPAIR_TYPES = [
@@ -36,11 +46,29 @@ class RepairCatalogue
     ];
 
     /**
-     * Repair types eligible for same-day turnaround at participating stores.
+     * Fallback set of repair types eligible for same-day turnaround.
      */
     public const SAME_DAY_TYPES = ['screen', 'battery'];
 
-    private const PRODUCTS = [
+    /**
+     * Defaults for the admin-editable service options (`repairs` setting group).
+     */
+    public const SERVICE_DEFAULTS = [
+        'ineligible_levy' => self::INELIGIBLE_LEVY,
+        'time_slots' => ['09:00 – 11:00', '11:00 – 13:00', '13:00 – 15:00', '15:00 – 17:00'],
+        'offer_in_store' => true,
+        'offer_home_collection' => true,
+        'home_collection_fee' => 0,
+        'turnaround_note' => 'Most screen and battery repairs are completed the same day at participating stores.',
+        'disclaimer' => 'Prices are indicative and subject to an in-store assessment of your device.',
+        'booking_enabled' => true,
+    ];
+
+    /**
+     * Seed/fallback catalogue. Imported into the database by
+     * RepairCatalogueSeeder, after which the tables are authoritative.
+     */
+    public const FALLBACK_PRODUCTS = [
         [
             'key' => 'iphone',
             'label' => 'iPhone',
@@ -160,44 +188,118 @@ class RepairCatalogue
         ],
     ];
 
+    /** Memoised per request — the selector and request validation both read it. */
+    private static ?array $memoProducts = null;
+
     /**
      * Full catalogue, shaped for the front-end selector. Each repair option is
      * expanded to { key, label, price, same_day } so the page needs no lookups.
+     *
+     * Reads the admin-managed tables, falling back to the constants above while
+     * they are empty or unmigrated.
      *
      * @return array<int, array<string, mixed>>
      */
     public static function products(): array
     {
-        return array_map(static function (array $product) {
-            $product['models'] = array_map(static function (array $model) {
-                $repairs = [];
+        if (self::$memoProducts !== null) {
+            return self::$memoProducts;
+        }
 
-                foreach ($model['repairs'] as $key => $price) {
-                    $repairs[] = [
-                        'key' => $key,
-                        'label' => self::REPAIR_TYPES[$key] ?? $key,
-                        'price' => $price,
-                        'same_day' => in_array($key, self::SAME_DAY_TYPES, true),
-                    ];
-                }
+        $fromDatabase = rescue(fn () => self::productsFromDatabase(), null, false);
 
-                $model['repairs'] = $repairs;
-
-                return $model;
-            }, $product['models']);
-
-            return $product;
-        }, self::PRODUCTS);
+        return self::$memoProducts = $fromDatabase ?: self::expandFallback();
     }
 
     /**
-     * Every repair type key the catalogue can produce, for request validation.
+     * Admin-editable service options, merged over the defaults.
+     *
+     * @return array<string, mixed>
+     */
+    public static function serviceOptions(): array
+    {
+        return Settings::group('repairs', self::SERVICE_DEFAULTS);
+    }
+
+    /**
+     * The configured failed-inspection levy.
+     */
+    public static function ineligibleLevy(): float
+    {
+        return (float) (self::serviceOptions()['ineligible_levy'] ?? self::INELIGIBLE_LEVY);
+    }
+
+    /**
+     * Service modes currently on offer, as { key, label } pairs.
+     *
+     * @return array<int, array<string, string>>
+     */
+    public static function serviceModes(): array
+    {
+        $options = self::serviceOptions();
+        $modes = [];
+
+        if ($options['offer_in_store'] ?? true) {
+            $modes[] = ['key' => 'in_store', 'label' => 'Book an in-store appointment'];
+        }
+
+        if ($options['offer_home_collection'] ?? true) {
+            $modes[] = ['key' => 'home_collection', 'label' => 'Arrange a home collection'];
+        }
+
+        // Never leave the booking form with nothing to choose.
+        return $modes ?: [['key' => 'in_store', 'label' => 'Book an in-store appointment']];
+    }
+
+    /**
+     * Service mode keys accepted by the booking request.
+     *
+     * @return array<int, string>
+     */
+    public static function serviceModeKeys(): array
+    {
+        return array_column(self::serviceModes(), 'key');
+    }
+
+    /**
+     * Bookable time slots.
+     *
+     * @return array<int, string>
+     */
+    public static function timeSlots(): array
+    {
+        $slots = self::serviceOptions()['time_slots'] ?? [];
+
+        return is_array($slots) && $slots !== [] ? array_values($slots) : self::SERVICE_DEFAULTS['time_slots'];
+    }
+
+    /**
+     * Repair type key => label.
+     *
+     * Includes retired types so an old booking's repair_type still resolves to
+     * a readable name after the type is deactivated.
+     *
+     * @return array<string, string>
+     */
+    public static function repairTypeLabels(): array
+    {
+        $labels = rescue(
+            fn () => RepairType::orderBy('sort_order')->orderBy('id')->pluck('label', 'key')->all(),
+            [],
+            false
+        );
+
+        return $labels ? array_merge(self::REPAIR_TYPES, $labels) : self::REPAIR_TYPES;
+    }
+
+    /**
+     * Every repair type key a booking may reference, for request validation.
      *
      * @return array<int, string>
      */
     public static function repairTypeKeys(): array
     {
-        return array_keys(self::REPAIR_TYPES);
+        return array_keys(self::repairTypeLabels());
     }
 
     /**
@@ -209,12 +311,155 @@ class RepairCatalogue
     {
         $names = [];
 
-        foreach (self::PRODUCTS as $product) {
+        foreach (self::products() as $product) {
             foreach ($product['models'] as $model) {
                 $names[] = $model['name'];
             }
         }
 
         return $names;
+    }
+
+    /**
+     * Repair categories for the /apple-product-repair landing page: one entry
+     * per repair type, listing the models it is offered on.
+     *
+     * @return array<int, array<string, mixed>>
+     */
+    public static function categories(): array
+    {
+        $categories = [];
+
+        foreach (self::products() as $product) {
+            foreach ($product['models'] as $model) {
+                foreach ($model['repairs'] as $repair) {
+                    $key = $repair['key'];
+
+                    if (! isset($categories[$key])) {
+                        $categories[$key] = [
+                            'key' => $key,
+                            'title' => $repair['label'],
+                            'description' => $repair['description'] ?: '',
+                            'models' => [],
+                        ];
+                    }
+
+                    $categories[$key]['models'][] = $model['name'];
+                }
+            }
+        }
+
+        // A model appears once per repair type, so de-duplicate the lists.
+        return array_values(array_map(static function (array $category) {
+            $category['models'] = array_values(array_unique($category['models']));
+
+            return $category;
+        }, $categories));
+    }
+
+    /**
+     * Drop the per-request memo, so an admin edit is reflected on the redirect.
+     */
+    public static function flush(): void
+    {
+        self::$memoProducts = null;
+    }
+
+    /**
+     * @return array<int, array<string, mixed>>|null  null when nothing is configured yet
+     */
+    private static function productsFromDatabase(): ?array
+    {
+        $devices = RepairDevice::where('is_active', true)
+            ->with(['models' => fn ($query) => $query->where('is_active', true)->with('prices')])
+            ->orderBy('sort_order')
+            ->orderBy('id')
+            ->get();
+
+        if ($devices->isEmpty()) {
+            return null;
+        }
+
+        $types = RepairType::where('is_active', true)
+            ->orderBy('sort_order')
+            ->orderBy('id')
+            ->get()
+            ->keyBy('id');
+
+        $products = $devices->map(function (RepairDevice $device) use ($types) {
+            $models = $device->models
+                ->map(function ($model) use ($types) {
+                    $repairs = $model->prices
+                        ->filter(fn ($price) => $price->is_available && $types->has($price->repair_type_id))
+                        ->map(function ($price) use ($types) {
+                            $type = $types[$price->repair_type_id];
+
+                            return [
+                                'key' => $type->key,
+                                'label' => $type->label,
+                                'description' => (string) $type->description,
+                                'price' => (float) $price->price,
+                                'same_day' => (bool) $type->is_same_day,
+                                'sort_order' => (int) $type->sort_order,
+                            ];
+                        })
+                        ->sortBy('sort_order')
+                        ->values()
+                        ->all();
+
+                    return [
+                        'name' => $model->name,
+                        'variants' => $model->variants ?: [],
+                        'repairs' => $repairs,
+                    ];
+                })
+                // A model with no priced repairs is a dead end in the selector.
+                ->filter(fn (array $model) => $model['repairs'] !== [])
+                ->values()
+                ->all();
+
+            return [
+                'key' => $device->key,
+                'label' => $device->label,
+                'variant_label' => $device->variant_label,
+                'image' => $device->image_path,
+                'models' => $models,
+            ];
+        })
+        ->filter(fn (array $product) => $product['models'] !== [])
+        ->values()
+        ->all();
+
+        return $products ?: null;
+    }
+
+    /**
+     * Expand the hard-coded fallback into the shape the selector expects.
+     *
+     * @return array<int, array<string, mixed>>
+     */
+    private static function expandFallback(): array
+    {
+        return array_map(static function (array $product) {
+            $product['models'] = array_map(static function (array $model) {
+                $repairs = [];
+
+                foreach ($model['repairs'] as $key => $price) {
+                    $repairs[] = [
+                        'key' => $key,
+                        'label' => self::REPAIR_TYPES[$key] ?? $key,
+                        'description' => '',
+                        'price' => (float) $price,
+                        'same_day' => in_array($key, self::SAME_DAY_TYPES, true),
+                    ];
+                }
+
+                $model['repairs'] = $repairs;
+
+                return $model;
+            }, $product['models']);
+
+            return $product;
+        }, self::FALLBACK_PRODUCTS);
     }
 }

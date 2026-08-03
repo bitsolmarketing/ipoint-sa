@@ -277,7 +277,7 @@ class AdminProductController extends Controller
         // Which subfolder to file this image under. Allowlisted rather than taken
         // verbatim — the value becomes a path segment and a public URL.
         $folder = $request->input('folder', 'products');
-        if (! in_array($folder, ['products', 'banners', 'categories'], true)) {
+        if (! in_array($folder, ['products', 'banners', 'categories', 'offers', 'repairs'], true)) {
             $folder = 'products';
         }
 

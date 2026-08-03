@@ -5,8 +5,10 @@ namespace App\Http\Controllers;
 use App\Models\Order;
 use App\Models\OrderItem;
 use App\Models\ProductVariant;
+use App\Support\CheckoutPayments;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Validation\Rule;
 use Inertia\Inertia;
 
 class OrderController extends Controller
@@ -22,7 +24,12 @@ class OrderController extends Controller
             return redirect()->route('cart.index')->with('error', 'Your cart is empty.');
         }
 
-        return Inertia::render('Storefront/Checkout');
+        return Inertia::render('Storefront/Checkout', [
+            // Which methods to offer, and their copy, come from Admin → Payments.
+            'paymentMethods' => CheckoutPayments::methods(),
+            'bankAccount' => CheckoutPayments::primaryBankAccount(),
+            'paymentSettings' => CheckoutPayments::checkoutSettings(),
+        ]);
     }
 
     /**
@@ -36,7 +43,12 @@ class OrderController extends Controller
             return redirect()->route('cart.index')->with('error', 'Your cart is empty.');
         }
 
-        // Validate customer info & mock payment info
+        // Only a method the admin currently offers may be submitted — a stale
+        // form or a hand-crafted request cannot book an order against a gateway
+        // that has been switched off.
+        $method = $request->input('payment_method');
+        $flow = CheckoutPayments::flowForProvider((string) $method);
+
         $rules = [
             'customer_name' => 'required|string|max:100',
             'customer_email' => 'required|email|max:100',
@@ -44,16 +56,19 @@ class OrderController extends Controller
             'shipping_address' => 'required|string',
             'city' => 'required|string|max:50',
             'postal_code' => 'required|string|max:10',
-            'payment_method' => 'nullable|in:cod,card',
+            'payment_method' => ['required', Rule::in(CheckoutPayments::allowedProviders())],
         ];
 
-        if ($request->input('payment_method') === 'card') {
+        // Card details are only collected for the built-in inline card flow;
+        // hosted gateways take them on their own page.
+        if ($flow === 'inline_card') {
             $rules['card_number'] = 'required|string|min:16|max:19';
             $rules['card_expiry'] = 'required|string|regex:/^(0[1-9]|1[0-2])\/?([0-9]{2})$/';
             $rules['card_cvv'] = 'required|string|digits_between:3,4';
         }
 
         $request->validate($rules, [
+            'payment_method.in' => 'That payment method is no longer available. Please pick another.',
             'card_number.min' => 'Please enter a valid 16-digit card number.',
             'card_expiry.regex' => 'Please enter expiry date in MM/YY format.',
             'card_cvv.digits_between' => 'CVV must be 3 or 4 digits.',
@@ -78,7 +93,17 @@ class OrderController extends Controller
                 'city' => $request->input('city'),
                 'postal_code' => $request->input('postal_code'),
                 'total_amount' => $totalAmount,
-                'status' => 'paid', // Paid automatically upon successful mock payment
+                // Offline methods (EFT, cash on delivery) are only settled once
+                // the money actually arrives, so they start unpaid and are
+                // marked off by an admin in Admin → Orders.
+                'status' => $flow === 'offline' ? 'pending' : 'paid',
+                'payment_method' => $method,
+            ]);
+
+            // Reference the customer quotes on their EFT deposit.
+            $bank = CheckoutPayments::primaryBankAccount();
+            $order->update([
+                'payment_reference' => ($bank['reference_prefix'] ?? '') . $order->id,
             ]);
 
             // Save items and update stock
@@ -125,8 +150,17 @@ class OrderController extends Controller
     {
         $order = Order::with(['items.variant.product', 'items.variant.color', 'items.variant.size'])->findOrFail($id);
 
+        $settings = CheckoutPayments::checkoutSettings();
+
+        // An unpaid EFT order needs the bank details and its reference in front
+        // of the customer straight away — that is the whole point of the method.
+        $showBank = $order->payment_method === 'eft'
+            || ($settings['show_bank_details_on_success'] ?? true) && $order->status === 'pending';
+
         return Inertia::render('Storefront/CheckoutSuccess', [
-            'order' => $order
+            'order' => $order,
+            'bankAccount' => $showBank ? CheckoutPayments::primaryBankAccount() : null,
+            'paymentInstructions' => $settings['instructions'] ?? '',
         ]);
     }
 }

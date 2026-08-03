@@ -11,7 +11,9 @@ use App\Models\Offer;
 use App\Models\Color;
 use App\Models\Size;
 use App\Models\RepairLocation;
+use App\Http\Controllers\Admin\AdminOfferController;
 use App\Support\RepairCatalogue;
+use App\Support\Settings;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
@@ -44,6 +46,9 @@ class StorefrontController extends Controller
 
         // Admin-managed "Latest Offers" carousel (Redesign Guide §4.4)
         $offers = Offer::live()->orderBy('sort_order')->orderBy('id')->get();
+
+        // Heading copy + on/off switch for that carousel (Admin → Offers).
+        $offersSection = Settings::group('offers', AdminOfferController::SECTION_DEFAULTS);
 
         // Promotional banner strips between homepage sections (admin-managed).
         // Each slot renders the first active banner for its position and hides when empty.
@@ -86,6 +91,7 @@ class StorefrontController extends Controller
             'promoProducts' => $promoProducts,
             'newProducts' => $newProducts,
             'offers' => $offers,
+            'offersSection' => $offersSection,
             'categoryTabs' => $categoryTabs,
             'promoBannerPrimary' => $promoBannerPrimary,
             'promoBannerSecondary' => $promoBannerSecondary,
@@ -300,7 +306,8 @@ class StorefrontController extends Controller
     {
         return Inertia::render('Storefront/Services', [
             'products' => RepairCatalogue::products(),
-            'ineligibleLevy' => RepairCatalogue::INELIGIBLE_LEVY,
+            'ineligibleLevy' => RepairCatalogue::ineligibleLevy(),
+            'repairOptions' => RepairCatalogue::serviceOptions(),
             'locationCount' => RepairLocation::where('is_active', true)->count(),
         ]);
     }

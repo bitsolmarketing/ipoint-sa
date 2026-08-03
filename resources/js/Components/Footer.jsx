@@ -104,7 +104,7 @@ export default function Footer() {
                             <ul className="space-y-3.5 text-sm">
                                 {col.links.map((link) => (
                                     <li key={link.label}>
-                                        <Link href={link.href} className="text-gray-400 hover:text-white transition-colors">
+                                        <Link href={link.href} className="text-subtle hover:text-white transition-colors">
                                             {link.label}
                                         </Link>
                                     </li>
@@ -116,7 +116,7 @@ export default function Footer() {
                     {/* Sign Up And Subscribe */}
                     <div className="col-span-2 md:col-span-3 lg:col-span-4">
                         <h3 className="text-lg font-semibold text-white mb-5">Sign Up And Subscribe</h3>
-                        <p className="text-sm text-gray-400 mb-5 max-w-xs">
+                        <p className="text-sm text-subtle mb-5 max-w-xs">
                             Subscribe to get special offers, free giveaways, and once-in-a-lifetime deals.
                         </p>
                         <form onSubmit={handleSubscribe} className="flex items-stretch gap-3 max-w-sm">
@@ -163,14 +163,14 @@ export default function Footer() {
                     <div className="flex items-center gap-4">
                         <Link href="/" aria-label="iPoint home" className="inline-flex items-baseline font-extrabold tracking-tight leading-none text-2xl">
                             <span className="text-white">i</span>
-                            <span className="text-[#0066CC]">Point</span>
+                            <span className="text-brand">Point</span>
                         </Link>
                         <div className="inline-flex items-center gap-2 rounded-lg border border-white/25 px-2.5 py-1 text-white/90">
                             <AppleIcon className="w-4 h-4 flex-shrink-0" />
                             <span className="text-[9px] leading-[1.15] font-semibold uppercase tracking-wide">Authorised<br />Reseller</span>
                         </div>
                     </div>
-                    <p className="text-sm text-gray-400 text-center">
+                    <p className="text-sm text-subtle text-center">
                         Copyright © {year} iPoint. All Rights Reserved.
                     </p>
                 </div>

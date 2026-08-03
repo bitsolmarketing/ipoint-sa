@@ -15,7 +15,9 @@ class Order extends Model
         'city',
         'postal_code',
         'total_amount',
-        'status'
+        'status',
+        'payment_method',
+        'payment_reference',
     ];
 
     protected function casts(): array
