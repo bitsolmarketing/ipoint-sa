@@ -6,6 +6,7 @@ import {
     ShieldCheck, AlertTriangle, Landmark, Star, KeyRound, Save, Unplug,
 } from 'lucide-react';
 import InputError from '@/Components/InputError';
+import PendingMigrationNotice from '@/Components/Admin/PendingMigrationNotice';
 
 const STATUS_STYLES = {
     pending: 'bg-gray-100 dark:bg-gray-800 text-gray-500',
@@ -281,7 +282,8 @@ function GatewayCard({ gateway, isOpen, onToggle }) {
     );
 }
 
-export default function Index({ gateways, bankAccounts, checkout }) {
+export default function Index({ gateways, bankAccounts, checkout, pendingMigration = [] }) {
+    const needsMigration = pendingMigration.length > 0;
     const [openProvider, setOpenProvider] = useState(null);
     const [bankModalOpen, setBankModalOpen] = useState(false);
     const [editingAccount, setEditingAccount] = useState(null);
@@ -382,7 +384,9 @@ export default function Index({ gateways, bankAccounts, checkout }) {
                 </div>
 
                 {/* Gateways */}
-                <div className="space-y-3">
+                <PendingMigrationNotice tables={pendingMigration} />
+
+                <div className={`space-y-3 ${needsMigration ? 'opacity-50 pointer-events-none' : ''}`}>
                     <h2 className="text-[11px] font-bold text-gray-400 uppercase tracking-wider px-1">Payment methods</h2>
                     {gateways.map((gateway) => (
                         <GatewayCard

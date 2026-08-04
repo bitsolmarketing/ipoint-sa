@@ -7,6 +7,7 @@ import {
 } from 'lucide-react';
 import InputError from '@/Components/InputError';
 import ImageUploader from '@/Components/Admin/ImageUploader';
+import PendingMigrationNotice from '@/Components/Admin/PendingMigrationNotice';
 
 const inputClass =
     'w-full text-xs border border-gray-200 dark:border-gray-800 rounded-xl px-3 py-2 bg-gray-50 dark:bg-gray-850 text-[#1d1d1f] dark:text-white';
@@ -71,7 +72,8 @@ function StringListEditor({ values, onChange, placeholder, addLabel }) {
     );
 }
 
-export default function Catalogue({ types, devices, options, isSeeded }) {
+export default function Catalogue({ types, devices, options, isSeeded, pendingMigration = [] }) {
+    const needsMigration = pendingMigration.length > 0;
     const [openDevice, setOpenDevice] = useState(devices[0]?.id ?? null);
     const [typeModal, setTypeModal] = useState(null);     // null | {} | type
     const [deviceModal, setDeviceModal] = useState(null);
@@ -240,7 +242,9 @@ export default function Catalogue({ types, devices, options, isSeeded }) {
                     </Link>
                 </div>
 
-                {!isSeeded && (
+                <PendingMigrationNotice tables={pendingMigration} />
+
+                {!isSeeded && !needsMigration && (
                     <div className="bg-[#0066CC]/5 border border-[#0066CC]/20 rounded-3xl p-5 flex flex-wrap items-center justify-between gap-4">
                         <div>
                             <p className="text-xs font-bold text-gray-900 dark:text-white">Your catalogue is empty</p>
@@ -263,7 +267,7 @@ export default function Catalogue({ types, devices, options, isSeeded }) {
                             <h2 className="text-sm font-bold text-gray-900 dark:text-white">Repair types</h2>
                             <p className="text-[11px] text-gray-400 mt-0.5">What you fix. Each one can be priced per model below.</p>
                         </div>
-                        <button onClick={() => openTypeModal()} className={btnPrimary}>
+                        <button onClick={() => openTypeModal()} disabled={needsMigration} className={`${btnPrimary} disabled:opacity-40 disabled:cursor-not-allowed`}>
                             <Plus className="w-4 h-4" /> Add type
                         </button>
                     </div>
@@ -309,7 +313,7 @@ export default function Catalogue({ types, devices, options, isSeeded }) {
                 <div className="space-y-3">
                     <div className="flex items-center justify-between px-1">
                         <h2 className="text-[11px] font-bold text-gray-400 uppercase tracking-wider">Device categories &amp; models</h2>
-                        <button onClick={() => openDeviceModal()} className={btnPrimary}>
+                        <button onClick={() => openDeviceModal()} disabled={needsMigration} className={`${btnPrimary} disabled:opacity-40 disabled:cursor-not-allowed`}>
                             <Plus className="w-4 h-4" /> Add device category
                         </button>
                     </div>
@@ -514,7 +518,7 @@ export default function Catalogue({ types, devices, options, isSeeded }) {
                     </div>
 
                     <div className="flex justify-end">
-                        <button type="submit" disabled={optionsForm.processing} className={btnPrimary}>
+                        <button type="submit" disabled={optionsForm.processing || needsMigration} className={`${btnPrimary} disabled:opacity-40 disabled:cursor-not-allowed`}>
                             <Save className="w-3.5 h-3.5" />
                             {optionsForm.processing ? 'Saving…' : 'Save options'}
                         </button>

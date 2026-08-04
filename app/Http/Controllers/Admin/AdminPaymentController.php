@@ -8,6 +8,7 @@ use App\Models\PaymentGateway;
 use App\Support\PaymentProviders;
 use App\Support\Settings;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Schema;
 use Illuminate\Validation\Rule;
 use Inertia\Inertia;
 
@@ -22,8 +23,43 @@ use Inertia\Inertia;
  */
 class AdminPaymentController extends Controller
 {
+    /**
+     * Tables this screen cannot function without.
+     */
+    private const REQUIRED_TABLES = ['payment_gateways', 'bank_accounts'];
+
     public function index()
     {
+        // Deploys land before migrations run (Git pull, then the /__setup
+        // route), so show an explanatory banner rather than a 500 in the gap.
+        $missing = array_values(array_filter(
+            self::REQUIRED_TABLES,
+            fn (string $table) => ! rescue(fn () => Schema::hasTable($table), false, false)
+        ));
+
+        if ($missing) {
+            return Inertia::render('Admin/Payments/Index', [
+                'gateways' => collect(PaymentProviders::PROVIDERS)->map(fn (array $meta, string $provider) => [
+                    'provider' => $provider,
+                    'label' => $meta['label'],
+                    'description' => $meta['blurb'],
+                    'is_enabled' => false,
+                    'is_test_mode' => true,
+                    'merchant_status' => 'pending',
+                    'merchant_notes' => '',
+                    'sort_order' => 0,
+                    'is_configured' => false,
+                    'meta' => $meta,
+                    'credentials' => [],
+                    'test_credentials' => [],
+                    'secrets_set' => ['live' => [], 'test' => []],
+                ])->values(),
+                'bankAccounts' => [],
+                'checkout' => ['instructions' => '', 'show_bank_details_on_success' => true],
+                'pendingMigration' => $missing,
+            ]);
+        }
+
         $stored = PaymentGateway::orderBy('sort_order')->orderBy('id')->get()->keyBy('provider');
 
         // Present every provider in the registry, whether or not it has a row

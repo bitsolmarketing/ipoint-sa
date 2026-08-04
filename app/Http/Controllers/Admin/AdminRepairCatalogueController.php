@@ -10,6 +10,7 @@ use App\Models\RepairType;
 use App\Support\RepairCatalogue;
 use App\Support\Settings;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
 use Inertia\Inertia;
@@ -24,8 +25,27 @@ use Inertia\Inertia;
  */
 class AdminRepairCatalogueController extends Controller
 {
+    /**
+     * Tables this screen cannot function without.
+     */
+    private const REQUIRED_TABLES = ['repair_types', 'repair_devices', 'repair_models', 'repair_prices'];
+
     public function index()
     {
+        // Code deploys and migrations are separate steps here (Git pull via
+        // hPanel, then the /__setup route), so there is always a window where
+        // the controller exists but its tables do not. Degrade to an
+        // explanatory banner instead of a 500 with a stack trace.
+        if ($missing = $this->missingTables()) {
+            return Inertia::render('Admin/Repairs/Catalogue', [
+                'types' => [],
+                'devices' => [],
+                'options' => RepairCatalogue::SERVICE_DEFAULTS,
+                'isSeeded' => false,
+                'pendingMigration' => $missing,
+            ]);
+        }
+
         return Inertia::render('Admin/Repairs/Catalogue', [
             'types' => RepairType::orderBy('sort_order')->orderBy('id')->get(),
             'devices' => RepairDevice::with(['models' => fn ($query) => $query->with('prices')])
@@ -34,7 +54,19 @@ class AdminRepairCatalogueController extends Controller
                 ->get(),
             'options' => RepairCatalogue::serviceOptions(),
             'isSeeded' => RepairDevice::exists(),
+            'pendingMigration' => [],
         ]);
+    }
+
+    /**
+     * @return array<int, string>  the required tables that do not exist yet
+     */
+    private function missingTables(): array
+    {
+        return array_values(array_filter(
+            self::REQUIRED_TABLES,
+            fn (string $table) => ! rescue(fn () => Schema::hasTable($table), false, false)
+        ));
     }
 
     // ---------------------------------------------------------------- types
