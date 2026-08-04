@@ -22,16 +22,6 @@ class AdminMigrationTest extends TestCase
 
     private const REPAIR_MIGRATION = '2026_08_04_100005_create_repair_catalogue_tables';
 
-    protected function setUp(): void
-    {
-        parent::setUp();
-
-        // These assertions are about props, not assets. index.php repoints the
-        // public path at the repo root, but the test kernel does not, so @vite
-        // would otherwise resolve a manifest this app never actually serves.
-        $this->withoutVite();
-    }
-
     private function admin(): User
     {
         return User::create([
