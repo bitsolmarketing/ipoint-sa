@@ -61,7 +61,7 @@ export default function AdminLayout({ children }) {
                     <div className="h-16 border-b border-gray-50 dark:border-gray-800 flex items-center justify-between px-6 bg-white dark:bg-[#1D1D1F]">
                         <Link href="/admin" className="flex items-center space-x-2">
                             <span className="text-xl"></span>
-                            <span className="font-bold text-sm tracking-wider text-gray-900 dark:text-white">Admin Control</span>
+                            <span className="font-bold text-sm tracking-wider text-gray-900 dark:text-white">iPoint Apple</span>
                         </Link>
                         <button className="md:hidden p-1 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800" onClick={() => setIsSidebarOpen(false)}>
                             <X className="w-5 h-5 text-gray-400" />
@@ -140,7 +140,7 @@ export default function AdminLayout({ children }) {
                         >
                             <Menu className="w-5 h-5 text-gray-400" />
                         </button>
-                        <h2 className="text-sm font-bold text-gray-900 dark:text-white">iPoint Admin Control Panel</h2>
+                        <h2 className="text-sm font-bold text-gray-900 dark:text-white">iPoint Apple Admin Control Panel</h2>
                     </div>
 
                     <div className="flex items-center space-x-3 text-xs">

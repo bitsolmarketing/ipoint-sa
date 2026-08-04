@@ -91,7 +91,7 @@ export default function Dashboard({ stats, recentOrders, monthlySales }) {
                                         {recentOrders.map((order) => (
                                             <tr key={order.id} className="hover:bg-gray-50/50 dark:hover:bg-gray-800/10">
                                                 <td className="py-3.5 font-semibold text-[#0066CC]">
-                                                    <Link href={`/admin/orders/${order.id}`}>#IST-{(100000 + order.id)}</Link>
+                                                    <Link href={`/admin/orders/${order.id}`}>#IPT-{(100000 + order.id)}</Link>
                                                 </td>
                                                 <td className="py-3.5">
                                                     <p className="font-bold text-gray-900 dark:text-white">{order.customer_name}</p>

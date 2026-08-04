@@ -23,7 +23,7 @@ export default function Show({ order }) {
 
     return (
         <AdminLayout>
-            <Head title={`Order Details #IST-${(100000 + order.id)}`} />
+            <Head title={`Order Details #IPT-${(100000 + order.id)}`} />
 
             <div className="space-y-6 font-sans">
                 {/* Back Link */}
@@ -39,7 +39,7 @@ export default function Show({ order }) {
                 <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center border-b border-gray-100 dark:border-gray-800 pb-4 gap-4">
                     <div>
                         <h1 className="text-xl font-extrabold text-gray-900 dark:text-white tracking-tight">
-                            Order #IST-{(100000 + order.id)}
+                            Order #IPT-{(100000 + order.id)}
                         </h1>
                         <p className="text-xs text-gray-400 mt-1 flex items-center">
                             <FileText className="w-3.5 h-3.5 mr-1" />

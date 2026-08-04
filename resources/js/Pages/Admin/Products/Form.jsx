@@ -123,7 +123,7 @@ export default function Form({ categories, colors, sizes, product, isEdit, attri
             
             // Generate a code: PRD-NAME-COLOR-SIZE-RAND
             const suffix = Math.floor(10 + Math.random() * 90); // 2 digit random
-            const sku = `IST-${nameSlug}-${colorCode}-${sizeCode}-${suffix}`;
+            const sku = `IPT-${nameSlug}-${colorCode}-${sizeCode}-${suffix}`;
             
             return { ...v, sku: sku };
         });

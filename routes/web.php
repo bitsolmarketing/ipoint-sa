@@ -21,6 +21,7 @@ use App\Http\Controllers\Admin\AdminRepairController;
 use App\Http\Controllers\Admin\AdminRepairCatalogueController;
 use App\Http\Controllers\Admin\AdminAppearanceController;
 use App\Http\Controllers\Admin\AdminPaymentController;
+use App\Http\Controllers\Admin\AdminMigrationController;
 use App\Http\Middleware\AdminMiddleware;
 use Illuminate\Support\Facades\Route;
 
@@ -96,7 +97,11 @@ Route::middleware('auth')->group(function () {
 // --- Admin Dashboard Routes ---
 Route::middleware(['auth', AdminMiddleware::class])->prefix('admin')->name('admin.')->group(function () {
     Route::get('/', [AdminDashboardController::class, 'index'])->name('dashboard');
-    
+
+    // Applies pending migrations after a deploy (no SSH on this host). Additive
+    // only — never seeds, never drops. Surfaced by PendingMigrationNotice.
+    Route::post('/system/migrate', [AdminMigrationController::class, 'run'])->name('system.migrate');
+
     // Resource Controllers for Admin CMS
     Route::resource('categories', AdminCategoryController::class);
     Route::post('/products/upload', [AdminProductController::class, 'uploadImage'])->name('products.upload');
