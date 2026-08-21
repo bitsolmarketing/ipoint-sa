@@ -75,6 +75,14 @@ Flags: `?seed=1` migrates **and** seeds demo data · `?fresh=1` wipes and reseed
 Make these writable (File Manager → right-click → Permissions → `775`, or `chmod -R 775`):
 `ipointapple/storage`, `ipointapple/bootstrap/cache`, `ipointapple/public/uploads`.
 
+**Also create and chmod the persistent media folder**, one level *above* `ipointapple/` (i.e. a
+sibling of it, inside `~/domains/<your-domain>/`): create a folder named **`media`** there and set
+it to `775` too. Product/Banner/Offer image uploads try this folder **first** (it survives future
+redeploys, unlike `public/uploads` which gets replaced when you re-upload the bundle) and only fall
+back to `public/uploads` if it isn't writable. If uploads fail in the admin panel after deployment,
+this is the first thing to check — the upload error message now states which exact path it tried
+and couldn't write to.
+
 ## Step 7 — Verify
 - Home page shows the **Latest Offers** carousel + category shelves.
 - `/apple-product-repair` renders and the booking form submits.

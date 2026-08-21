@@ -3,6 +3,7 @@ import { Head, Link, useForm } from '@inertiajs/react';
 import AdminLayout from '@/Layouts/AdminLayout';
 import { ArrowLeft, Save, Plus, Trash2, HelpCircle, Layers } from 'lucide-react';
 import InputError from '@/Components/InputError';
+import ImageUploader from '@/Components/Admin/ImageUploader';
 
 export default function Form({ categories, colors, sizes, product, isEdit, attributeGroups = [], selectedAttributeValues = [] }) {
     const { data, setData, post, put, processing, errors, reset } = useForm({
@@ -36,7 +37,7 @@ export default function Form({ categories, colors, sizes, product, isEdit, attri
             { spec_key: 'Weight', spec_val: '' }
         ],
         variants: product?.variants || [
-            { color_id: '', size_id: '', sku: '', price_modifier: 0, stock: 10 }
+            { color_id: '', size_id: '', image_path: '', sku: '', price_modifier: 0, stock: 10 }
         ],
         attribute_value_ids: selectedAttributeValues || []
     });
@@ -75,7 +76,7 @@ export default function Form({ categories, colors, sizes, product, isEdit, attri
     const addVariantRow = () => {
         setData('variants', [
             ...data.variants,
-            { color_id: '', size_id: '', sku: '', price_modifier: 0, stock: 10 }
+            { color_id: '', size_id: '', image_path: '', sku: '', price_modifier: 0, stock: 10 }
         ]);
     };
 
@@ -518,14 +519,33 @@ export default function Form({ categories, colors, sizes, product, isEdit, attri
                                                 />
                                                 <InputError message={errors[`variants.${index}.stock`]} className="mt-0.5" />
                                             </div>
-                                            <button 
-                                                type="button" 
+                                            <button
+                                                type="button"
                                                 onClick={() => removeVariantRow(index)}
                                                 className="p-1 rounded-full text-gray-400 hover:text-[#E30000] mt-4"
                                                 title="Remove variant"
                                             >
                                                 <Trash2 className="w-4 h-4" />
                                             </button>
+                                        </div>
+
+                                        {/* Per-variant image — shown on the storefront when a shopper picks this color */}
+                                        <div className="sm:col-span-6 pt-3 mt-1 border-t border-gray-200 dark:border-gray-750 flex items-start gap-3">
+                                            <div className="w-28 flex-shrink-0">
+                                                <ImageUploader
+                                                    value={v.image_path}
+                                                    onChange={(url) => handleVariantChange(index, 'image_path', url)}
+                                                    folder="products"
+                                                    aspect="aspect-square"
+                                                    hint=""
+                                                    error={errors[`variants.${index}.image_path`]}
+                                                />
+                                            </div>
+                                            <p className="flex-1 pt-1 text-[10px] text-gray-400 leading-relaxed">
+                                                <span className="font-bold text-gray-500 dark:text-gray-300 uppercase text-[9px] block mb-1">Image for this color</span>
+                                                Shown on the product page when a shopper selects this color/size combination.
+                                                Leave empty to keep showing the main product image.
+                                            </p>
                                         </div>
                                     </div>
                                 ))}

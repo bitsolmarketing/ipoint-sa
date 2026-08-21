@@ -9,9 +9,10 @@
         <meta name="color-scheme" content="light dark">
 
         {{--
-            Mirror the browser/OS colour scheme onto <html class="dark">.
-            Runs before paint so there is no flash of the wrong theme, and keeps
-            listening so the site flips live when the OS setting changes.
+            Apply the colour scheme onto <html class="dark"> before paint, so there's
+            no flash of the wrong theme. A saved choice from the ThemeToggle wins;
+            otherwise this mirrors the browser/OS setting and keeps listening so the
+            site flips live when the OS setting changes.
         --}}
         <script>
             (function () {
@@ -19,11 +20,20 @@
                 var apply = function (isDark) {
                     document.documentElement.classList.toggle('dark', isDark);
                 };
-                apply(mq.matches);
+                var saved = null;
+                try { saved = localStorage.getItem('theme'); } catch (e) {}
+
+                apply(saved ? saved === 'dark' : mq.matches);
+
+                var onSystemChange = function (e) {
+                    var current = null;
+                    try { current = localStorage.getItem('theme'); } catch (err) {}
+                    if (!current) apply(e.matches);
+                };
                 if (mq.addEventListener) {
-                    mq.addEventListener('change', function (e) { apply(e.matches); });
+                    mq.addEventListener('change', onSystemChange);
                 } else if (mq.addListener) {
-                    mq.addListener(function (e) { apply(e.matches); });
+                    mq.addListener(onSystemChange);
                 }
             })();
         </script>

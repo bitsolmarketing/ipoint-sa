@@ -73,6 +73,21 @@ export default function ProductDetail({ product, relatedProducts }) {
         }
     }, [selectedColor, selectedSize, variants]);
 
+    // Swap the displayed image to match the selected color, if that color has
+    // a dedicated image. Falls back to whatever image is already showing
+    // (the main product image or a gallery pick) when it doesn't.
+    useEffect(() => {
+        if (!selectedColor) return;
+
+        const colorImage = (selectedVariant && selectedVariant.color_id === selectedColor.id && selectedVariant.image_path)
+            ? selectedVariant.image_path
+            : variants.find(v => v.color_id === selectedColor.id && v.image_path)?.image_path;
+
+        if (colorImage) {
+            setActiveImage(colorImage);
+        }
+    }, [selectedColor, selectedVariant]);
+
     // Calculate dynamic pricing
     const basePriceNum = parseFloat(product.base_price);
     const modifierNum = selectedVariant ? parseFloat(selectedVariant.price_modifier) : 0;

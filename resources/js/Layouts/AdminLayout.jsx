@@ -3,8 +3,9 @@ import { Link, usePage, useForm } from '@inertiajs/react';
 import {
     LayoutDashboard, Tag, Laptop, Palette, Layers, Ruler, Image,
     ShoppingBag, Globe, LogOut, Menu, X, ChevronRight, CheckCircle, AlertCircle,
-    Sparkles, MessageSquare, Wrench, Paintbrush, CreditCard, Settings2
+    Sparkles, MessageSquare, Wrench, Paintbrush, CreditCard, Settings2, User
 } from 'lucide-react';
+import ThemeToggle from '@/Components/ThemeToggle';
 
 export default function AdminLayout({ children }) {
     const { auth, flash } = usePage().props;
@@ -110,15 +111,23 @@ export default function AdminLayout({ children }) {
                         </div>
                     </div>
                     
-                    <div className="mt-4 grid grid-cols-2 gap-2">
-                        <Link 
-                            href="/" 
+                    <Link
+                        href={route('profile.edit')}
+                        className="mt-3 flex items-center justify-center space-x-1.5 py-2 text-[10px] font-bold rounded-lg border border-gray-200 dark:border-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors"
+                    >
+                        <User className="w-3 h-3" />
+                        <span>Account &amp; Password</span>
+                    </Link>
+
+                    <div className="mt-2 grid grid-cols-2 gap-2">
+                        <Link
+                            href="/"
                             className="flex items-center justify-center space-x-1.5 py-2 text-[10px] font-bold rounded-lg border border-gray-200 dark:border-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors"
                         >
                             <Globe className="w-3 h-3" />
                             <span>Live Store</span>
                         </Link>
-                        <button 
+                        <button
                             onClick={handleLogout}
                             className="flex items-center justify-center space-x-1.5 py-2 text-[10px] font-bold rounded-lg bg-[#FDF2F2] hover:bg-[#FDE2E2] text-[#D32F2F] transition-colors"
                         >
@@ -147,6 +156,7 @@ export default function AdminLayout({ children }) {
                         <span className="px-2 py-0.5 rounded-full bg-green-100 dark:bg-green-900/35 text-green-700 dark:text-green-300 font-medium">
                             System Online
                         </span>
+                        <ThemeToggle />
                     </div>
                 </header>
 

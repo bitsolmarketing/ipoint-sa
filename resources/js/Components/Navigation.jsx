@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { Link, usePage, useForm } from '@inertiajs/react';
 import { Search, ShoppingBag, User, X, Menu, Settings, LogOut, Store, Truck, MapPin, ShieldCheck, Clock, XCircle, Wrench, Scale } from 'lucide-react';
 import CartDrawer from './CartDrawer';
+import ThemeToggle from './ThemeToggle';
 import { themeColor } from '@/theme';
 
 // Apple glyph as an inline SVG — the  private-use character does not render off Apple devices.
@@ -315,6 +316,9 @@ export default function Navigation() {
                             <Truck className="w-4 h-4" />
                             <span>Track Order</span>
                         </a>
+
+                        {/* Light/dark mode */}
+                        <ThemeToggle className="text-white hover:bg-white/10" />
 
                         {/* Search toggle */}
                         <button

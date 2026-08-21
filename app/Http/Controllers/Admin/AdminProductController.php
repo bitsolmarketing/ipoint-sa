@@ -12,6 +12,7 @@ use App\Models\Size;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
 use Inertia\Inertia;
 
@@ -72,6 +73,7 @@ class AdminProductController extends Controller
             'variants' => 'required|array|min:1',
             'variants.*.color_id' => 'nullable|exists:colors,id',
             'variants.*.size_id' => 'nullable|exists:sizes,id',
+            'variants.*.image_path' => 'nullable|string',
             'variants.*.sku' => 'required|string|unique:product_variants,sku',
             'variants.*.price_modifier' => 'required|numeric',
             'variants.*.stock' => 'required|integer|min:0',
@@ -110,6 +112,7 @@ class AdminProductController extends Controller
                     'product_id' => $product->id,
                     'color_id' => $var['color_id'],
                     'size_id' => $var['size_id'],
+                    'image_path' => $var['image_path'] ?? null,
                     'sku' => $var['sku'],
                     'price_modifier' => $var['price_modifier'],
                     'stock' => $var['stock'],
@@ -173,6 +176,7 @@ class AdminProductController extends Controller
             'variants' => 'required|array|min:1',
             'variants.*.color_id' => 'nullable|exists:colors,id',
             'variants.*.size_id' => 'nullable|exists:sizes,id',
+            'variants.*.image_path' => 'nullable|string',
             'variants.*.sku' => 'required|string',
             'variants.*.price_modifier' => 'required|numeric',
             'variants.*.stock' => 'required|integer|min:0',
@@ -228,6 +232,7 @@ class AdminProductController extends Controller
                     'product_id' => $product->id,
                     'color_id' => $var['color_id'],
                     'size_id' => $var['size_id'],
+                    'image_path' => $var['image_path'] ?? null,
                     'sku' => $var['sku'],
                     'price_modifier' => $var['price_modifier'],
                     'stock' => $var['stock'],
@@ -309,8 +314,15 @@ class AdminProductController extends Controller
             }
 
             if (! is_writable($dir)) {
+                Log::error('Image upload failed: no writable destination.', [
+                    'persistent_dir' => $persistentDir,
+                    'fallback_dir' => $dir,
+                    'folder' => $folder,
+                ]);
+
                 return response()->json([
-                    'error' => "Neither the persistent media folder nor uploads/{$folder} is writable on the server. Set permissions to 755.",
+                    'error' => "Upload folder is not writable on the server. Set permissions to 775 on both "
+                        . "\"{$persistentDir}\" and \"{$dir}\" (see DEPLOY-HOSTINGER.md, Step 6).",
                 ], 500);
             }
 
@@ -318,6 +330,8 @@ class AdminProductController extends Controller
 
             return response()->json(['url' => '/uploads/' . $folder . '/' . $filename]);
         } catch (\Throwable $e) {
+            Log::error('Image upload threw an exception.', ['message' => $e->getMessage()]);
+
             return response()->json(['error' => 'Upload failed: ' . $e->getMessage()], 500);
         }
     }
