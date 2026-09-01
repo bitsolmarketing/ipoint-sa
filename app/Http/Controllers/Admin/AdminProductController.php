@@ -13,11 +13,33 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\Validator;
 use Inertia\Inertia;
 
 class AdminProductController extends Controller
 {
+    /**
+     * Columns the variant form needs that may not exist yet if a deploy has
+     * landed on this host (Git pull) before its migration has been run.
+     */
+    private const REQUIRED_VARIANT_COLUMNS = ['image_path'];
+
+    /**
+     * Per-variant-image columns missing from `product_variants` on this
+     * database, if any — surfaced via PendingMigrationNotice instead of
+     * letting the form submit crash with a raw SQL error.
+     *
+     * @return string[]
+     */
+    private function pendingVariantMigration(): array
+    {
+        return array_values(array_filter(
+            self::REQUIRED_VARIANT_COLUMNS,
+            fn (string $column) => ! rescue(fn () => Schema::hasColumn('product_variants', $column), false, false)
+        ));
+    }
+
     /**
      * Display a listing of products.
      */
@@ -44,7 +66,8 @@ class AdminProductController extends Controller
             'sizes' => Size::orderBy('name')->get(),
             'attributeGroups' => AttributeGroup::where('is_active', true)->with('values')->orderBy('sort_order')->get(),
             'isEdit' => false,
-            'product' => null
+            'product' => null,
+            'pendingMigration' => $this->pendingVariantMigration(),
         ]);
     }
 
@@ -53,6 +76,12 @@ class AdminProductController extends Controller
      */
     public function store(Request $request)
     {
+        if ($pending = $this->pendingVariantMigration()) {
+            return back()->withInput()->with('error', 'Database update required — the "Run database update" '
+                . 'banner on this page needs to be clicked before variant images can be saved (missing: '
+                . implode(', ', $pending) . ').');
+        }
+
         $request->validate([
             'name' => 'required|string|max:150',
             'category_id' => 'nullable|exists:categories,id',
@@ -145,7 +174,8 @@ class AdminProductController extends Controller
             'sizes' => Size::orderBy('name')->get(),
             'attributeGroups' => AttributeGroup::where('is_active', true)->with('values')->orderBy('sort_order')->get(),
             'selectedAttributeValues' => $product->attributeValues->pluck('id')->toArray(),
-            'isEdit' => true
+            'isEdit' => true,
+            'pendingMigration' => $this->pendingVariantMigration(),
         ]);
     }
 
@@ -155,6 +185,12 @@ class AdminProductController extends Controller
     public function update(Request $request, $id)
     {
         $product = Product::findOrFail($id);
+
+        if ($pending = $this->pendingVariantMigration()) {
+            return back()->withInput()->with('error', 'Database update required — the "Run database update" '
+                . 'banner on this page needs to be clicked before variant images can be saved (missing: '
+                . implode(', ', $pending) . ').');
+        }
 
         $request->validate([
             'name' => 'required|string|max:150',

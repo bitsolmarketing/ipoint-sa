@@ -4,8 +4,9 @@ import AdminLayout from '@/Layouts/AdminLayout';
 import { ArrowLeft, Save, Plus, Trash2, HelpCircle, Layers } from 'lucide-react';
 import InputError from '@/Components/InputError';
 import ImageUploader from '@/Components/Admin/ImageUploader';
+import PendingMigrationNotice from '@/Components/Admin/PendingMigrationNotice';
 
-export default function Form({ categories, colors, sizes, product, isEdit, attributeGroups = [], selectedAttributeValues = [] }) {
+export default function Form({ categories, colors, sizes, product, isEdit, attributeGroups = [], selectedAttributeValues = [], pendingMigration = [] }) {
     const { data, setData, post, put, processing, errors, reset } = useForm({
         name: product?.name || '',
         category_id: product?.category_id || '',
@@ -145,6 +146,13 @@ export default function Form({ categories, colors, sizes, product, isEdit, attri
                     <ArrowLeft className="w-4 h-4" />
                     <span>Back to Products</span>
                 </Link>
+
+                {pendingMigration.length > 0 && (
+                    <PendingMigrationNotice
+                        tables={pendingMigration}
+                        description="This deploy added a database column that variant images need, but it has not been created yet, so saving a product will fail until the update runs. Nothing existing is affected — the update only adds the missing column."
+                    />
+                )}
 
                 {/* Header */}
                 <div className="flex justify-between items-center border-b border-gray-100 dark:border-gray-800 pb-4">

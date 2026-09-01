@@ -14,9 +14,12 @@ import { Database, AlertTriangle, Play, Loader2, ChevronDown } from 'lucide-reac
  * is the whole reason this notice is not just a wall of instructions — the
  * manual SSH/SETUP_TOKEN routes are kept below as a fallback.
  *
- * @param {string[]} tables  Names of the missing tables
+ * @param {string[]} tables  Names of the missing tables (or columns)
+ * @param {string}   [description]  Override for the explanatory copy, for
+ *                                  cases where what's missing is a column on
+ *                                  an existing table rather than a whole table
  */
-export default function PendingMigrationNotice({ tables = [] }) {
+export default function PendingMigrationNotice({ tables = [], description }) {
     const { post, processing } = useForm({});
     const [showManual, setShowManual] = useState(false);
 
@@ -40,9 +43,9 @@ export default function PendingMigrationNotice({ tables = [] }) {
                         Database update required
                     </h2>
                     <p className="text-[11px] text-amber-800/80 dark:text-amber-200/70 mt-1 leading-relaxed">
-                        This feature was deployed but its database tables have not been created yet, so the screen is
-                        read-only until the update runs. Nothing on the storefront is affected — it falls back to the
-                        previous behaviour automatically.
+                        {description || 'This feature was deployed but its database tables have not been created yet, so the screen is '
+                            + 'read-only until the update runs. Nothing on the storefront is affected — it falls back to the '
+                            + 'previous behaviour automatically.'}
                     </p>
 
                     <div className="flex items-center gap-1.5 mt-3 flex-wrap">
