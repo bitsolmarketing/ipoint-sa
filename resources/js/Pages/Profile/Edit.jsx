@@ -26,7 +26,7 @@ function TrackingMap({ hereApiKey, city, orderId }) {
         if (name.includes('port elizabeth') || name.includes('gqeberha')) {
             return { lat: -33.9608, lng: 25.6022 }; // Gqeberha
         }
-        return { lat: -26.2041, lng: 28.0473 }; // Default Johannesburg / Sandton
+        return { lat: -26.2041, lng: 28.0473 }; // Default Johannesburg
     };
 
     useEffect(() => {
@@ -42,8 +42,8 @@ function TrackingMap({ hereApiKey, city, orderId }) {
                 mapRef.current.innerHTML = '';
             }
 
-            // Warehouse: iStore Sandton City, Johannesburg
-            const dispatchCoords = { lat: -26.1098, lng: 28.0526 };
+            // Warehouse: iPoint, Village Green Shopping Centre, Greenside, Johannesburg
+            const dispatchCoords = { lat: -26.1458, lng: 28.0075 };
             const destCoords = getCoordinates(city);
 
             // Initialize platform
@@ -126,7 +126,7 @@ function TrackingMap({ hereApiKey, city, orderId }) {
     return (
         <div className="space-y-2.5">
             <div className="flex justify-between items-baseline text-[9px] font-extrabold text-gray-450 uppercase tracking-wider">
-                <span>Dispatch: Sandton City (JHB)</span>
+                <span>Dispatch: Greenside (JHB)</span>
                 <span className="text-[#0066CC] animate-pulse">Live Shipment Tracking Map</span>
                 <span>Destination: {city || 'Your City'}</span>
             </div>

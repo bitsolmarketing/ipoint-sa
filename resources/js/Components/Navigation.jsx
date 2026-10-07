@@ -74,7 +74,8 @@ function TrackingMap({ hereApiKey, city }) {
                 mapRef.current.innerHTML = '';
             }
 
-            const dispatchCoords = { lat: -26.1098, lng: 28.0526 };
+            // Warehouse: iPoint, Village Green Shopping Centre, Greenside, Johannesburg
+            const dispatchCoords = { lat: -26.1458, lng: 28.0075 };
             const destCoords = getCoordinates(city);
 
             const platform = new window.H.service.Platform({
@@ -183,7 +184,7 @@ export default function Navigation() {
     const cartCount = Object.values(cart || {}).reduce((acc, item) => acc + item.quantity, 0);
 
     const storeLocations = [
-        { id: 1, name: 'Sandton City', city: 'Johannesburg' },
+        { id: 1, name: 'Village Green Shopping Centre', city: 'Greenside, Johannesburg' },
         { id: 2, name: 'V&A Waterfront', city: 'Cape Town' },
         { id: 3, name: 'Gateway', city: 'Durban' },
         { id: 4, name: 'Canal Walk', city: 'Cape Town' },

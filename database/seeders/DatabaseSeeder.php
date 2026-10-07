@@ -246,7 +246,7 @@ class DatabaseSeeder extends Seeder
 
         // 5c. Repair service locations (booking flow) — Redesign Guide §8.5
         $repairLocationsData = [
-            ['name' => 'Sandton City', 'address' => 'Shop U60, Sandton City', 'city' => 'Johannesburg', 'slot_capacity' => 10],
+            ['name' => 'Village Green Shopping Centre', 'address' => 'Village Green Shopping Centre, Greenside', 'city' => 'Johannesburg', 'slot_capacity' => 10],
             ['name' => 'V&A Waterfront', 'address' => 'Victoria Wharf, V&A Waterfront', 'city' => 'Cape Town', 'slot_capacity' => 8],
             ['name' => 'Gateway', 'address' => 'Gateway Theatre of Shopping', 'city' => 'Durban', 'slot_capacity' => 6],
             ['name' => 'Menlyn Park', 'address' => 'Menlyn Park Shopping Centre', 'city' => 'Pretoria', 'slot_capacity' => 6],

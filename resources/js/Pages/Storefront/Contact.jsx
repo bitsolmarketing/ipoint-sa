@@ -63,11 +63,11 @@ export default function Contact() {
                         <div className="flex items-start space-x-4 text-xs pt-4 border-t border-gray-100 dark:border-gray-800/80">
                             <MapPin className="w-5 h-5 text-brand flex-shrink-0 mt-0.5" />
                             <div>
-                                <p className="font-bold text-gray-850 dark:text-white">Headquarters</p>
+                                <p className="font-bold text-gray-850 dark:text-white">Our Store</p>
                                 <p className="text-muted dark:text-subtle mt-1">
-                                    Sandton City Office Tower,<br />
-                                    5th Floor, Sandton,<br />
-                                    Johannesburg, 2196
+                                    Village Green Shopping Centre,<br />
+                                    Greenside,<br />
+                                    Johannesburg, 2193
                                 </p>
                             </div>
                         </div>

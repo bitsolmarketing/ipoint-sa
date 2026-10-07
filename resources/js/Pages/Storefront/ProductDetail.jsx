@@ -14,7 +14,7 @@ export default function ProductDetail({ product, relatedProducts }) {
     const [isPostalInputOpen, setIsPostalInputOpen] = useState(false);
 
     const storeLocations = [
-        { id: 1, name: 'Sandton City', city: 'Johannesburg' },
+        { id: 1, name: 'Village Green Shopping Centre', city: 'Greenside, Johannesburg' },
         { id: 2, name: 'V&A Waterfront', city: 'Cape Town' },
         { id: 3, name: 'Gateway', city: 'Durban' },
         { id: 4, name: 'Canal Walk', city: 'Cape Town' },

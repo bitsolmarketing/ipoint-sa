@@ -187,7 +187,7 @@ export default function Index({ bookings, locations, status, statusCounts }) {
                             <div>
                                 <label className="block text-[10px] font-bold text-gray-400 uppercase mb-1.5">Store Name</label>
                                 <input type="text" value={data.name} onChange={(e) => setData('name', e.target.value)} required
-                                    className="w-full text-xs border border-gray-200 dark:border-gray-800 rounded-xl px-3 py-2 bg-gray-50 dark:bg-gray-850 text-[#1d1d1f] dark:text-white" placeholder="e.g. Sandton City" />
+                                    className="w-full text-xs border border-gray-200 dark:border-gray-800 rounded-xl px-3 py-2 bg-gray-50 dark:bg-gray-850 text-[#1d1d1f] dark:text-white" placeholder="e.g. Village Green Shopping Centre" />
                                 <InputError message={errors.name} className="mt-1" />
                             </div>
                             <div>
