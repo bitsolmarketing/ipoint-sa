@@ -1,5 +1,5 @@
 import React, { useState, useMemo } from 'react';
-import { Head, useForm } from '@inertiajs/react';
+import { Head, Link, useForm } from '@inertiajs/react';
 import StorefrontLayout from '@/Layouts/StorefrontLayout';
 import {
     Wrench, ShieldCheck, XCircle, Smartphone, BatteryCharging, Layers,
@@ -417,7 +417,11 @@ export default function Repair({
                     <li>All repairs require a restore, which wipes existing content — please back up beforehand.</li>
                     <li>Repairs carry a workmanship warranty of 90 days, or the remainder of the original warranty, whichever is longer.</li>
                 </ul>
-                <p className="text-[10px] text-subtle mt-6">Exact terms are finalized with you at drop-off.</p>
+                <p className="text-[10px] text-subtle mt-6">
+                    This is a summary. The full{' '}
+                    <Link href="/terms" className="text-brand font-semibold">repair and service terms and conditions</Link>
+                    {' '}apply to every device booked in and are confirmed with you at drop-off.
+                </p>
             </section>
         </StorefrontLayout>
     );

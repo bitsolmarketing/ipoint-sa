@@ -66,6 +66,36 @@ class StorefrontTest extends TestCase
     }
 
     /**
+     * Test the About iPoint page loads.
+     */
+    public function test_about_page_loads_successfully(): void
+    {
+        $response = $this->get('/about');
+        $response->assertStatus(200);
+        $response->assertInertia(fn ($page) => $page->component('Storefront/About'));
+    }
+
+    /**
+     * Test the repair and service terms and conditions page loads.
+     */
+    public function test_terms_page_loads_successfully(): void
+    {
+        $response = $this->get('/terms');
+        $response->assertStatus(200);
+        $response->assertInertia(fn ($page) => $page->component('Storefront/Terms'));
+    }
+
+    /**
+     * Test the returns policy page loads.
+     */
+    public function test_returns_page_loads_successfully(): void
+    {
+        $response = $this->get('/returns');
+        $response->assertStatus(200);
+        $response->assertInertia(fn ($page) => $page->component('Storefront/Returns'));
+    }
+
+    /**
      * Test category listing loading.
      */
     public function test_storefront_category_loads_successfully(): void

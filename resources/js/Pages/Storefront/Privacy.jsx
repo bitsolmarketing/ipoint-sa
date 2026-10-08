@@ -69,6 +69,22 @@ export default function Privacy() {
                         You have the right to request access to the personal data we hold about you, request corrections, or request deletion of your account. Contact us at legal@ipoint.co.za for legal assistance.
                     </p>
                 </section>
+
+                <section className="space-y-3">
+                    <h2 className="text-base font-extrabold text-heading dark:text-white">7. Governing Law and Jurisdiction</h2>
+                    <p>
+                        These Terms and Conditions, and any agreement or transaction concluded between iPOINT Apple and a customer through this website, shall be governed by and interpreted in accordance with the laws of the Republic of South Africa.
+                    </p>
+                    <p>
+                        Without limiting the foregoing, electronic transactions and communications conducted through this website shall be subject to the Electronic Communications and Transactions Act 25 of 2002, as amended, together with all other applicable South African legislation.
+                    </p>
+                    <p>
+                        Where applicable, transactions with consumers shall also be subject to the Consumer Protection Act 68 of 2008, as amended, and the processing of personal information shall be governed by the Protection of Personal Information Act 4 of 2013, as amended.
+                    </p>
+                    <p>
+                        Any dispute arising from or in connection with these Terms and Conditions or a transaction concluded through this website shall be dealt with in accordance with the applicable laws of the Republic of South Africa and before a court having lawful jurisdiction in South Africa.
+                    </p>
+                </section>
             </div>
         </StorefrontLayout>
     );

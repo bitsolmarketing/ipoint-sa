@@ -409,6 +409,10 @@ export default function Services({ products = [], ineligibleLevy = 750, location
                         of the product at our Service Centre. This excludes any bulk deals over five units — iPoint will not
                         facilitate any bulk deal returns. All faulty products are covered by the relevant product warranty.
                     </p>
+                    <p className="text-[11px] text-muted dark:text-muted leading-relaxed">
+                        Every device booked in for repair or service is also subject to our full{' '}
+                        <Link href="/terms" className="text-brand font-semibold">Terms and Conditions</Link>.
+                    </p>
                     <p className="text-[11px] text-subtle dark:text-body pt-2">
                         Questions about a repair already booked?{' '}
                         <Link href="/contact" className="text-brand font-semibold inline-flex items-center gap-0.5">

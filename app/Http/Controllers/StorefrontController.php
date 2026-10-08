@@ -300,6 +300,14 @@ class StorefrontController extends Controller
     }
 
     /**
+     * Display the about page.
+     */
+    public function about()
+    {
+        return Inertia::render('Storefront/About');
+    }
+
+    /**
      * Display the services page.
      */
     public function services()
@@ -318,5 +326,21 @@ class StorefrontController extends Controller
     public function privacy()
     {
         return Inertia::render('Storefront/Privacy');
+    }
+
+    /**
+     * Display the repair and service terms and conditions page.
+     */
+    public function terms()
+    {
+        return Inertia::render('Storefront/Terms');
+    }
+
+    /**
+     * Display the returns policy page.
+     */
+    public function returns()
+    {
+        return Inertia::render('Storefront/Returns');
     }
 }

@@ -52,7 +52,7 @@ export default function Footer() {
         {
             title: 'Quick Links',
             links: [
-                { label: 'About Us', href: '/services' },
+                { label: 'About Us', href: '/about' },
                 { label: 'Contact Us', href: '/contact' },
                 { label: 'Become a Reseller', href: '/services' },
                 { label: 'Careers', href: '/services' },
@@ -63,7 +63,8 @@ export default function Footer() {
             title: 'Support',
             links: [
                 { label: 'Privacy Policy', href: '/privacy' },
-                { label: 'Terms and Conditions', href: '/privacy' },
+                { label: 'Terms and Conditions', href: '/terms' },
+                { label: 'Returns Policy', href: '/returns' },
             ],
         },
     ];

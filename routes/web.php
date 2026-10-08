@@ -34,8 +34,11 @@ Route::post('/products/{id}/reviews', [StorefrontController::class, 'storeReview
 Route::get('/search', [SearchController::class, 'search'])->name('storefront.search');
 Route::get('/api/orders/track/{id}', [StorefrontController::class, 'trackOrderApi'])->name('api.orders.track');
 Route::get('/contact', [StorefrontController::class, 'contact'])->name('storefront.contact');
+Route::get('/about', [StorefrontController::class, 'about'])->name('storefront.about');
 Route::get('/services', [StorefrontController::class, 'services'])->name('storefront.services');
 Route::get('/privacy', [StorefrontController::class, 'privacy'])->name('storefront.privacy');
+Route::get('/terms', [StorefrontController::class, 'terms'])->name('storefront.terms');
+Route::get('/returns', [StorefrontController::class, 'returns'])->name('storefront.returns');
 
 // --- Compare Products Tool (§4.5) ---
 Route::get('/compare', [CompareController::class, 'index'])->name('compare.index');
