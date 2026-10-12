@@ -39,6 +39,7 @@ Route::get('/services', [StorefrontController::class, 'services'])->name('storef
 Route::get('/privacy', [StorefrontController::class, 'privacy'])->name('storefront.privacy');
 Route::get('/terms', [StorefrontController::class, 'terms'])->name('storefront.terms');
 Route::get('/returns', [StorefrontController::class, 'returns'])->name('storefront.returns');
+Route::get('/governing-policy', [StorefrontController::class, 'governing'])->name('storefront.governing');
 
 // --- Compare Products Tool (§4.5) ---
 Route::get('/compare', [CompareController::class, 'index'])->name('compare.index');

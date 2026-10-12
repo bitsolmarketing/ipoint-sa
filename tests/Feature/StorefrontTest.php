@@ -96,6 +96,16 @@ class StorefrontTest extends TestCase
     }
 
     /**
+     * Test the governing policy page loads.
+     */
+    public function test_governing_policy_page_loads_successfully(): void
+    {
+        $response = $this->get('/governing-policy');
+        $response->assertStatus(200);
+        $response->assertInertia(fn ($page) => $page->component('Storefront/Governing'));
+    }
+
+    /**
      * Test category listing loading.
      */
     public function test_storefront_category_loads_successfully(): void

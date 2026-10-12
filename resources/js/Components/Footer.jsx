@@ -53,18 +53,21 @@ export default function Footer() {
             title: 'Quick Links',
             links: [
                 { label: 'About Us', href: '/about' },
-                { label: 'Contact Us', href: '/contact' },
                 { label: 'Become a Reseller', href: '/services' },
                 { label: 'Careers', href: '/services' },
                 { label: 'Locate Reseller', href: '/apple-product-repair' },
+                { label: 'Governing Policy', href: '/governing-policy' },
+                { label: 'Privacy Policy', href: '/privacy' },
+                { label: 'Terms and Conditions', href: '/terms' },
+                { label: 'Returns Policy', href: '/returns' },
             ],
         },
         {
             title: 'Support',
             links: [
-                { label: 'Privacy Policy', href: '/privacy' },
-                { label: 'Terms and Conditions', href: '/terms' },
-                { label: 'Returns Policy', href: '/returns' },
+                { label: 'Contact Us', href: '/contact' },
+                { label: 'Apple Product Repair', href: '/apple-product-repair' },
+                { label: 'Compare Products', href: '/compare' },
             ],
         },
     ];

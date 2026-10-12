@@ -343,4 +343,12 @@ class StorefrontController extends Controller
     {
         return Inertia::render('Storefront/Returns');
     }
+
+    /**
+     * Display the governing law and jurisdiction policy page.
+     */
+    public function governing()
+    {
+        return Inertia::render('Storefront/Governing');
+    }
 }
